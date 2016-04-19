@@ -12,14 +12,14 @@ public class JDBCTool {
 
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
 
-    public void connectToMySql(String name) throws SQLException {
+    public void connectToMySql(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
         if (connections.get(name) != null) {
             return;
         }
-        System.out.println("-------- MySQL JDBC Connection Testing ------------");
+        System.out.println("\n-------- MySQL JDBC Connecting.....  ------------");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -46,7 +46,7 @@ public class JDBCTool {
         }
 
         if (connection != null) {
-            System.out.println("You made it, take control your database now!");
+            System.out.println("Taking control of the database now!");
             //connectTODB = connection;
             connections.put(name, connection);
         } else {
@@ -57,7 +57,7 @@ public class JDBCTool {
 
     }
 
-    public Connection getConnection(String name) throws SQLException {
+    public Connection getConnection(String name)  {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
@@ -65,14 +65,25 @@ public class JDBCTool {
         return connections.get(name);
     }
 
-    public void closeConnect(String name) throws SQLException {
+    public void closeConnect(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
         for (Map.Entry<String, Connection> c : connections.entrySet()) {
             if (c.getKey().equals(name)) {
-                c.getValue().close();
-                connections.remove(c);
+                try {
+					c.getValue().close();
+					connections.remove(c.getKey());
+					System.out.println("\n-------- MySQL JDBC destroyed.....  ------------");
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+                try {
+					c.getValue().isClosed();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         }
     }

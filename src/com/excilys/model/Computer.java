@@ -49,6 +49,8 @@ public class Computer {
 	public void setCompId(int compId) {
 		this.compId = compId;
 	}
-
+	public String toString() {
+		return "ID : "+ id + " Name : " + name + " Introduction : " + intro + " Discontinued : " + disco + " Company ID : " + compId;
+	}
 
 }
