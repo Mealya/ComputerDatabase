@@ -19,7 +19,7 @@ public class JDBCTool {
         if (connections.get(name) != null) {
             return;
         }
-        System.out.println("\n-------- MySQL JDBC Connecting.....  ------------");
+        System.out.println("\n=========== MySQL JDBC Connecting.....  ===========");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -39,7 +39,7 @@ public class JDBCTool {
                             "admincdb", "qwerty1234");
 
         } catch (SQLException e) {
-            //TODO g�rer les throws
+            //TODO gérer les throws
             System.out.println("Connection Failed! Check output console");
             e.printStackTrace();
             return;
@@ -61,7 +61,6 @@ public class JDBCTool {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
-        System.out.println(name);
         return connections.get(name);
     }
 
@@ -74,7 +73,7 @@ public class JDBCTool {
                 try {
 					c.getValue().close();
 					connections.remove(c.getKey());
-					System.out.println("\n-------- MySQL JDBC destroyed.....  ------------");
+					System.out.println("=========== MySQL JDBC destroyed.....  ===========");
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

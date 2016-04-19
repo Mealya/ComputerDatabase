@@ -25,7 +25,7 @@ public class HeavyComputerDB {
 	public List<Computer> getComputers() {
 		List<Computer> result = null;
 		try {
-			result = compDB.getComputers();
+			result = compDB.getAll();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

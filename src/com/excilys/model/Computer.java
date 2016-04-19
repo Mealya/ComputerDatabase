@@ -9,6 +9,10 @@ public class Computer {
 	private Timestamp disco;
 	private int compId;
 	
+        public Computer() {
+            
+        }
+
 	public Computer(int id, String name, Timestamp intro, Timestamp disco,
 			int compId) {
 		super();

@@ -12,7 +12,7 @@ import com.excilys.model.Company;
 /**
  * Created by Angot Maxime on 19/04/16.
  */
-public class CampanyDB {
+public class CampanyDB implements DAO<Company>{
 
 	private Connection connect;
 
@@ -24,7 +24,7 @@ public class CampanyDB {
 		connect = c;
 	}
 	
-	public List<Company> getCompagnies() throws SQLException {
+	public List<Company> getAll() throws SQLException {
 		//Execute a query
 		Statement stmt = connect.createStatement();
 
@@ -45,5 +45,29 @@ public class CampanyDB {
 		}
 		rs.close();
 		return result;
+	}
+
+	@Override
+	public Company get(String name) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void create(Company c) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Company c) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Company c) throws SQLException {
+		// TODO Auto-generated method stub
+		
 	}
 }

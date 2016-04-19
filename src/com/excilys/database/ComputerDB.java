@@ -16,135 +16,136 @@ import com.excilys.model.Computer;
  */
 public class ComputerDB implements DAO<Computer>{
 
-	private Connection connect;
+    private Connection connect;
 
-	public ComputerDB(Connection c) {
-		if (c == null) {
-			throw new IllegalArgumentException("c is null");
-		}
+    public ComputerDB(Connection c) {
+        if (c == null) {
+            throw new IllegalArgumentException("c is null");
+        }
 
-		connect = c;
-	}
-	
-	public void setConnexion(Connection c) {
-		if (c == null) {
-			throw new IllegalArgumentException("c is null");
-		}
-		connect = c;
-	}
-	
-	public String printComputers() throws SQLException {
-		//Execute a query
-		System.out.println("Creating statement...");
-		Statement stmt = connect.createStatement();
+        connect = c;
+    }
 
-		String sql = "SELECT * FROM `computer` ";
-		ResultSet rs = stmt.executeQuery(sql);
-		StringBuilder buff = new StringBuilder();
-		buff.append("\n ======= \n Print computers \n ======= \n");
-		//Extract data from result set
-		while (rs.next()) {
-			//Retrieve by column : id | name | introduced | discontinued | company_id
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			Timestamp first = rs.getTimestamp("introduced");
-			Timestamp last = rs.getTimestamp("discontinued");
-			int compID = rs.getInt("company_id");
+    public void setConnexion(Connection c) {
+        if (c == null) {
+            throw new IllegalArgumentException("c is null");
+        }
+        connect = c;
+    }
+
+    public String printComputers() throws SQLException {
+        //Execute a query
+        System.out.println("Creating statement...");
+        Statement stmt = connect.createStatement();
+
+        String sql = "SELECT * FROM `computer` ";
+        ResultSet rs = stmt.executeQuery(sql);
+        StringBuilder buff = new StringBuilder();
+        buff.append("\n ======= \n Print computers \n ======= \n");
+        //Extract data from result set
+        while (rs.next()) {
+            //Retrieve by column : id | name | introduced | discontinued | company_id
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            Timestamp first = rs.getTimestamp("introduced");
+            Timestamp last = rs.getTimestamp("discontinued");
+            int compID = rs.getInt("company_id");
 
 
-			buff.append("ID: " + id + ", Nom: " + name 
-					+ ", Introduit: " + first + ", Stoppé: " + last +", ID compagnie: " + compID + "\n");
-		}
-		rs.close();
-		return buff.toString();
-	}
+            buff.append("ID: " + id + ", Nom: " + name 
+                    + ", Introduit: " + first + ", Stoppé: " + last +", ID compagnie: " + compID + "\n");
+        }
+        rs.close();
+        return buff.toString();
+    }
 
-	protected List<Computer> getComputers() throws SQLException {
-		//Execute a query
-		Statement stmt = connect.createStatement();
+    @Override
+    public List<Computer> getAll() throws SQLException {
+        //Execute a query
+        Statement stmt = connect.createStatement();
 
-		String sql = "SELECT * FROM `computer` ";
-		ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT * FROM `computer` ";
+        ResultSet rs = stmt.executeQuery(sql);
 
-		List<Computer> result = new ArrayList<>();
+        List<Computer> result = new ArrayList<>();
 
-		//Extract data from result set
-		while (rs.next()) {
-			//Retrieve by column : id | name | introduced | discontinued | company_id
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			Timestamp first = rs.getTimestamp("introduced");
-			Timestamp last = rs.getTimestamp("discontinued");
-			int compID = rs.getInt("company_id");
+        //Extract data from result set
+        while (rs.next()) {
+            //Retrieve by column : id | name | introduced | discontinued | company_id
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            Timestamp first = rs.getTimestamp("introduced");
+            Timestamp last = rs.getTimestamp("discontinued");
+            int compID = rs.getInt("company_id");
 
-			result.add(new Computer(id, name, first, last, compID));
+            result.add(new Computer(id, name, first, last, compID));
 
-		}
-		rs.close();
-		return result;
-	}
+        }
+        rs.close();
+        return result;
+    }
 
-	@Override
-	public Computer get(String nameCompu) throws SQLException {
-		//Execute a query
-		Statement stmt = connect.createStatement();
+    @Override
+    public Computer get(String nameCompu) throws SQLException {
+        //Execute a query
+        Statement stmt = connect.createStatement();
 
-		String sql = "SELECT * FROM `computer` WHERE name=" + nameCompu;
-		ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT * FROM `computer` WHERE name=" + nameCompu;
+        ResultSet rs = stmt.executeQuery(sql);
 
-		Computer result = null;
+        Computer result = null;
 
-		//Extract data from result set
-		while (rs.next()) {
-			int id = rs.getInt("id");
-			String name = rs.getString("name");
-			Timestamp first = rs.getTimestamp("introduced");
-			Timestamp last = rs.getTimestamp("discontinued");
-			int compID = rs.getInt("company_id");
+        //Extract data from result set
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            Timestamp first = rs.getTimestamp("introduced");
+            Timestamp last = rs.getTimestamp("discontinued");
+            int compID = rs.getInt("company_id");
 
-			result = new Computer(id, name, first, last, compID);
+            result = new Computer(id, name, first, last, compID);
 
-		}
-		rs.close();
-		return result;
-	}
-	
-	@Override
-	public void create(Computer comp) throws SQLException {
-		if (comp == null) {
-			throw new IllegalArgumentException("c is null");
-		}
-		Statement stmt = connect.createStatement();
+        }
+        rs.close();
+        return result;
+    }
 
-		String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
-					 +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getCompId()+")";
-		stmt.executeUpdate(sql);
+    @Override
+    public void create(Computer comp) throws SQLException {
+        if (comp == null) {
+            throw new IllegalArgumentException("c is null");
+        }
+        Statement stmt = connect.createStatement();
 
-	}
-	
-	@Override
-	public void update(Computer comp) throws SQLException {
-		if (comp == null) {
-			throw new IllegalArgumentException("c is null");
-		}
-		Statement stmt = connect.createStatement();
+        String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
+                +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getCompId()+")";
+        stmt.executeUpdate(sql);
 
-		String sql = "UPDATE `computer` SET `name` = '"+ comp.getName() +"', `introduced` = '"
-					+ comp.getIntro()+"', `discontinued` = '"+ comp.getDisco()
-					+"', `company_id` = '"+ comp.getCompId()+"' WHERE `computer`.`id` = "+ comp.getId()+";";
-		stmt.executeUpdate(sql);
-	}
-	
-	@Override
-	public void delete(Computer comp) throws SQLException {
-		//
-		if (comp == null) {
-			throw new IllegalArgumentException("c is null");
-		}
-		Statement stmt = connect.createStatement();
+    }
 
-		String sql = "DELETE FROM `computer` WHERE `id` = "+comp.getId()+";";
-		stmt.executeUpdate(sql);
-	}
+    @Override
+    public void update(Computer comp) throws SQLException {
+        if (comp == null) {
+            throw new IllegalArgumentException("c is null");
+        }
+        Statement stmt = connect.createStatement();
+
+        String sql = "UPDATE `computer` SET `name` = '"+ comp.getName() +"', `introduced` = '"
+                + comp.getIntro()+"', `discontinued` = '"+ comp.getDisco()
+                +"', `company_id` = '"+ comp.getCompId()+"' WHERE `computer`.`id` = "+ comp.getId()+";";
+        stmt.executeUpdate(sql);
+    }
+
+    @Override
+    public void delete(Computer comp) throws SQLException {
+        //
+        if (comp == null) {
+            throw new IllegalArgumentException("c is null");
+        }
+        Statement stmt = connect.createStatement();
+
+        String sql = "DELETE FROM `computer` WHERE `id` = "+comp.getId()+";";
+        stmt.executeUpdate(sql);
+    }
 }
 
