@@ -19,7 +19,7 @@ public class JDBCTool {
         if (connections.get(name) != null) {
             return;
         }
-        System.out.println("\n=========== MySQL JDBC Connecting.....  ===========");
+        //System.out.println("\n=========== MySQL JDBC Connecting.....  ===========");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -30,7 +30,7 @@ public class JDBCTool {
             return;
         }
 
-        System.out.println("MySQL JDBC Driver Registered!");
+        //System.out.println("MySQL JDBC Driver Registered!");
         Connection connection = null;
 
         try {
@@ -46,7 +46,7 @@ public class JDBCTool {
         }
 
         if (connection != null) {
-            System.out.println("Taking control of the database now!");
+            //System.out.println("Taking control of the database now!");
             //connectTODB = connection;
             connections.put(name, connection);
         } else {
@@ -71,18 +71,18 @@ public class JDBCTool {
         for (Map.Entry<String, Connection> c : connections.entrySet()) {
             if (c.getKey().equals(name)) {
                 try {
-					c.getValue().close();
-					connections.remove(c.getKey());
-					System.out.println("=========== MySQL JDBC destroyed.....  ===========");
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+                    c.getValue().close();
+                    connections.remove(c.getKey());
+                    //System.out.println("=========== MySQL JDBC destroyed.....  ===========");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 try {
-					c.getValue().isClosed();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                    c.getValue().isClosed();
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
     }

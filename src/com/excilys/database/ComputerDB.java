@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 /**
@@ -86,11 +85,11 @@ public class ComputerDB implements DAO<Computer>{
     }
 
     @Override
-    public Computer get(String nameCompu) throws SQLException {
+    public Computer get(int idComp) throws SQLException {
         //Execute a query
         Statement stmt = connect.createStatement();
 
-        String sql = "SELECT * FROM `computer` WHERE name=" + nameCompu;
+        String sql = "SELECT * FROM `computer` WHERE id=" + idComp;
         ResultSet rs = stmt.executeQuery(sql);
 
         Computer result = null;
@@ -137,14 +136,10 @@ public class ComputerDB implements DAO<Computer>{
     }
 
     @Override
-    public void delete(Computer comp) throws SQLException {
-        //
-        if (comp == null) {
-            throw new IllegalArgumentException("c is null");
-        }
+    public void delete(int comp) throws SQLException {
         Statement stmt = connect.createStatement();
 
-        String sql = "DELETE FROM `computer` WHERE `id` = "+comp.getId()+";";
+        String sql = "DELETE FROM `computer` WHERE `id` = "+comp+";";
         stmt.executeUpdate(sql);
     }
 }

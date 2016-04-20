@@ -48,7 +48,7 @@ public class CampanyDB implements DAO<Company>{
 	}
 
 	@Override
-	public Company get(String name) throws SQLException {
+	public Company get(int id) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +66,7 @@ public class CampanyDB implements DAO<Company>{
 	}
 
 	@Override
-	public void delete(Company c) throws SQLException {
+	public void delete(int id) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}

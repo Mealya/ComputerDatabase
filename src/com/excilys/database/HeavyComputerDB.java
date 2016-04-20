@@ -15,12 +15,13 @@ public class HeavyComputerDB {
 		}
 		compDB = comp;
 	}
+        /*
 	public void setComputerDB(ComputerDB comp) {
 		if (comp == null) {
 			throw new IllegalArgumentException("CompDB is null");
 		}
 		compDB = comp;
-	}
+	}*/
 	
 	public List<Computer> getComputers() {
 		List<Computer> result = null;
@@ -33,10 +34,13 @@ public class HeavyComputerDB {
 		return result;
 	}
 	
-	public Computer getComputer(String nameCompu) {
+	public Computer getComputer(int idCompu) {
+                if (idCompu < 0) {
+                    throw new IllegalArgumentException("Id non valide");
+                }
 		Computer result = null;
 		try {
-			result = compDB.get(nameCompu);
+			result = compDB.get(idCompu);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,6 +49,22 @@ public class HeavyComputerDB {
 	}
 	
 	public void createComputer(Computer c) {
+                if (c == null) {
+                    throw new IllegalArgumentException("c is null");
+                } else {
+                    /*if (c.getName() == null) {
+                        throw new IllegalArgumentException("name of computer is null");
+                    }
+                    if (c.getIntro() == null) {
+                        throw new IllegalArgumentException("intro of computer is null");
+                    }
+                    if (c.getDisco() == null) {
+                        throw new IllegalArgumentException("disco of computer is null");
+                    }
+                    if (c.getCompId() < 1) {
+                        throw new IllegalArgumentException("invalid company id");
+                    }*/
+                }
 		try {
 			compDB.create(c);
 		} catch (SQLException e) {
@@ -62,7 +82,7 @@ public class HeavyComputerDB {
 		}
 	}
 	
-	public void deleteComputer(Computer c) {
+	public void deleteComputer(int c) {
 		try {
 			compDB.delete(c);
 		} catch (SQLException e) {
