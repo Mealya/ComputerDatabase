@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.database.ComputerDB;
-import com.excilys.database.HeavyComputerDB;
+import com.excilys.database.ComputerDAO;
+import com.excilys.database.HeavyComputerDAO;
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Computer;
 import com.excilys.utils.Pageable;
@@ -18,37 +18,38 @@ public class Test {
         JDBCTool tool = new JDBCTool();
         tool.connectToMySql(computerDBName);
 
-        ComputerDB compt = new ComputerDB(tool.getConnection(computerDBName));
-        HeavyComputerDB workingDB = new HeavyComputerDB(compt);
+        ComputerDAO compt = new ComputerDAO();
+        HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
 
         Scanner sc = new Scanner(System.in);
         Scanner sc2 = new Scanner(System.in);
         int choix = -1;
         while (choix != 0) {
-            
+
             System.out.println("\nVeuillez saisir un nombre :");
-            System.out.println("1- GetAll");
-            System.out.println("2- Get : ID (int)");
-            System.out.println("3- Update : ID (int)");
-            System.out.println("4- Create");
-            System.out.println("5- Delete");
+            System.out.println("1- GetAll Java");
+            System.out.println("2- GetAll SQL");
+            System.out.println("3- Get : ID (int)");
+            System.out.println("4- Update : ID (int)");
+            System.out.println("5- Create");
+            System.out.println("6- Delete");
             choix = sc.nextInt();
-            
+
             tool.connectToMySql(computerDBName);
             compt.setConnexion(tool.getConnection(computerDBName));
             List<Computer> data = workingDB.getComputers();
             tool.closeConnect(computerDBName);
-            
+
             switch (choix) {
             case 1 :
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
-                
                 Pageable<Computer> page = new Pageable<Computer>(workingDB.getComputers());
+                tool.closeConnect(computerDBName);
                 page.setPage(0);
                 for (int i = 0; i < page.getMaxPages(); i++) {
                     page.setPage(i);
-                    System.out.println("Index : " + i + " Max page : " + page.getMaxPages());
+                    //System.out.println("Index : " + i + " Max page : " + page.getMaxPages());
                     for (Computer c : page.getListForPage()) {
                         System.out.println("Actual : " + c.getName() + " " + c.getIntro() + " " + c.getDisco() + " " + c.getCompId());
                     }
@@ -56,24 +57,43 @@ public class Test {
                         break;
                     }
                     System.out.println("\nNext page ? 0 : no / other : yes");
-                    
+
                     int pagingExist = sc2.nextInt();
                     if (pagingExist == 0) {
                         break;
                     }
                 }
-                tool.closeConnect(computerDBName);
                 break;
             case 2 : 
-                int idCompu = sc.nextInt();
+                int nbPages = data.size() / 15;
+
+
+                for (int i = 0; i < nbPages; i++) {
+                    tool.connectToMySql(computerDBName);
+                    compt.setConnexion(tool.getConnection(computerDBName));
+                    //System.out.println("Index : " + i + " Max page : " + page.getMaxPages());
+                    for (Computer c : workingDB.getSetComputer((i * 15), 15 + (i * 15))) {
+                        System.out.println("Actual : " + c.getName() + " " + c.getIntro() + " " + c.getDisco() + " " + c.getCompId());
+                    }
+                    tool.closeConnect(computerDBName);
+                    System.out.println("\nNext page ? 0 : no / other : yes");
+
+                    int pagingExist = sc2.nextInt();
+                    if (pagingExist == 0) {
+                        break;
+                    }
+                }
+                break;
+            case 3 : 
+                long idCompu = sc.nextLong();
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
                 System.out.println(workingDB.getComputer(idCompu).toString());
                 tool.closeConnect(computerDBName);
                 break;
-            case 3 : 
+            case 4 : 
                 System.out.println("3- Update : choisir index");
-                int id = sc.nextInt();
+                long id = sc.nextLong();
                 for (Computer c : data) {
                     if (c.getId() == id) {
                         System.out.println("Actual : " + c.getName() + " " + c.getIntro() + " " + c.getDisco() + " " + c.getCompId());
@@ -89,14 +109,14 @@ public class Test {
                 update.setDisco(new Timestamp(sc.nextInt()));
                 System.out.println("ID company :");
                 update.setCompId(sc.nextInt());
-                
+
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.updateComputer(update);
                 tool.closeConnect(computerDBName);
-                
+
                 break;
-            case 4 : 
+            case 5 : 
                 Computer create = new Computer();
                 create.setId(0);
                 System.out.println("Nom :");
@@ -107,22 +127,22 @@ public class Test {
                 create.setDisco(new Timestamp(sc.nextInt()));
                 System.out.println("ID company :");
                 create.setCompId(sc.nextInt());
-                
+
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.createComputer(create);
                 tool.closeConnect(computerDBName);
-                
+
                 break;
-            case 5 : 
-                int idCompuDel = sc.nextInt();
+            case 6 : 
+                long idCompuDel = sc.nextLong();
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.deleteComputer(idCompuDel);
                 tool.closeConnect(computerDBName);
                 break;
             }
-            
+
         }
         sc.close(); 
         sc2.close();
@@ -158,4 +178,4 @@ compt.setConnexion(tool.getConnection(computerDBName));
 computers.get(computers.size()-2).setName("NomEdite");
 workingDB.updateComputer(computers.get(computers.size()-2));
 tool.closeConnect(computerDBName);
-*/
+ */

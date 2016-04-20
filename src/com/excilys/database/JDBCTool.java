@@ -4,12 +4,16 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by Angot Maxime on 19/04/16.
  */
 public class JDBCTool {
 
-
+    private final Logger slf4jLogger = LoggerFactory.getLogger(JDBCTool.class);
+    
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
 
     public void connectToMySql(String name) {
@@ -20,17 +24,20 @@ public class JDBCTool {
             return;
         }
         //System.out.println("\n=========== MySQL JDBC Connecting.....  ===========");
+        slf4jLogger.info("=========== MySQL JDBC Connecting.....  ===========");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             //TODO gérer les throws
-            System.out.println("Where is your MySQL JDBC Driver?");
+            //System.out.println("Where is your MySQL JDBC Driver?");
+            slf4jLogger.error("Where is your MySQL JDBC Driver?");
             e.printStackTrace();
             return;
         }
 
         //System.out.println("MySQL JDBC Driver Registered!");
+        slf4jLogger.info("MySQL JDBC Driver Registered!");
         Connection connection = null;
 
         try {
@@ -40,7 +47,8 @@ public class JDBCTool {
 
         } catch (SQLException e) {
             //TODO gérer les throws
-            System.out.println("Connection Failed! Check output console");
+            //System.out.println("Connection Failed! Check output console");
+            slf4jLogger.error("Connection Failed! Check output console");
             e.printStackTrace();
             return;
         }
@@ -51,7 +59,8 @@ public class JDBCTool {
             connections.put(name, connection);
         } else {
             //TODO gérer les throws
-            System.out.println("Failed to make connection!");
+            //System.out.println("Failed to make connection!");
+            slf4jLogger.error("Failed to make connection!");
             return;
         }
 
@@ -74,13 +83,8 @@ public class JDBCTool {
                     c.getValue().close();
                     connections.remove(c.getKey());
                     //System.out.println("=========== MySQL JDBC destroyed.....  ===========");
+                    slf4jLogger.info("=========== MySQL JDBC destroyed.....  ===========");
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    c.getValue().isClosed();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

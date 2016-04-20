@@ -12,11 +12,11 @@ import com.excilys.model.Company;
 /**
  * Created by Angot Maxime on 19/04/16.
  */
-public class CampanyDB implements DAO<Company>{
+public class CampanyDAO implements DAO<Company>{
 
 	private Connection connect;
 
-	public CampanyDB(Connection c) throws SQLException {
+	public CampanyDAO(Connection c) throws SQLException {
 		if (c == null) {
 			throw new IllegalArgumentException("c is null");
 		}
@@ -48,7 +48,7 @@ public class CampanyDB implements DAO<Company>{
 	}
 
 	@Override
-	public Company get(int id) throws SQLException {
+	public Company get(long id) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -66,7 +66,7 @@ public class CampanyDB implements DAO<Company>{
 	}
 
 	@Override
-	public void delete(int id) throws SQLException {
+	public void delete(long id) throws SQLException {
 		// TODO Auto-generated method stub
 		
 	}

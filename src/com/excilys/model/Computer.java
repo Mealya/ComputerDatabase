@@ -3,7 +3,7 @@ package com.excilys.model;
 import java.sql.Timestamp;
 
 public class Computer {
-	private int id;
+	private long id;
 	private String name;
 	private Timestamp intro;
 	private Timestamp disco;
@@ -13,7 +13,7 @@ public class Computer {
             
         }
 
-	public Computer(int id, String name, Timestamp intro, Timestamp disco,
+	public Computer(long id, String name, Timestamp intro, Timestamp disco,
 			int compId) {
 		super();
 		this.id = id;
@@ -23,10 +23,10 @@ public class Computer {
 		this.compId = compId;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {

@@ -1,23 +1,23 @@
 package com.excilys.model;
 
 public class Company {
-	private int id;
+	private long id;
 	private String name;
 	
         public Company() {
             
         }
 
-	public Company(int id, String name) {
+	public Company(long id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getName() {
