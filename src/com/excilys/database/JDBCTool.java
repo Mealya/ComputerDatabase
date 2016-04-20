@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Created by Angot Maxime on 19/04/16.
+ * 
+ * @author Angot Maxime
  */
 public class JDBCTool {
 
@@ -16,6 +18,10 @@ public class JDBCTool {
     
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
 
+    /**
+     * Create an object Connection with a DB name
+     * @param name The name of the database
+     */
     public void connectToMySql(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
@@ -65,7 +71,12 @@ public class JDBCTool {
         }
 
     }
-
+    
+    /**
+     * Return the connection object linked to a name
+     * @param name The name of the database
+     * @return Connection object
+     */
     public Connection getConnection(String name)  {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
@@ -73,6 +84,10 @@ public class JDBCTool {
         return connections.get(name);
     }
 
+    /**
+     * Close the Connection linked to a name
+     * @param name The name of the data base
+     */
     public void closeConnect(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
