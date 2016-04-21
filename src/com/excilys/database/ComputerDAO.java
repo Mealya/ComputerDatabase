@@ -124,7 +124,13 @@ public class ComputerDAO implements DAO<Computer>{
         Statement stmt = connect.createStatement();
 
         String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
-                +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getCompId()+")";
+                +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getCompId()+");";
+        sql = sql.replaceAll("'null'", "NULL");
+        
+        if (comp.getId() == 0) {
+            sql = sql.replaceAll("0\\);", "NULL\\);");
+        }
+        System.out.println(sql);
         stmt.executeUpdate(sql);
 
     }

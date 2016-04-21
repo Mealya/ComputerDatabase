@@ -1,6 +1,7 @@
 package test;
 
 import java.sql.Timestamp;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -104,11 +105,24 @@ public class Test {
                 System.out.println("Nom :");
                 update.setName(sc.next());
                 System.out.println("Introduced :");
-                update.setIntro(new Timestamp(sc.nextInt()));
+                try {
+                    update.setIntro(new Timestamp(sc.nextInt()));
+                } catch (InputMismatchException e) {
+                    update.setIntro(null);
+                }
                 System.out.println("Disco :");
-                update.setDisco(new Timestamp(sc.nextInt()));
+                
+                try {
+                    update.setDisco(new Timestamp(sc.nextInt()));
+                } catch (InputMismatchException e) {
+                    update.setDisco(null);
+                }
                 System.out.println("ID company :");
-                update.setCompId(sc.nextInt());
+                
+                try {
+                    update.setCompId(sc.nextInt());
+                } catch (InputMismatchException e) {
+                }
 
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
@@ -121,12 +135,30 @@ public class Test {
                 create.setId(0);
                 System.out.println("Nom :");
                 create.setName(sc.next());
+                
                 System.out.println("Introduced :");
-                create.setIntro(new Timestamp(sc.nextInt()));
-                System.out.println("Disco :");
-                create.setDisco(new Timestamp(sc.nextInt()));
+                try {
+                    create.setIntro(new Timestamp(sc.nextInt()));
+                } catch (InputMismatchException e) {
+                    create.setIntro(null);
+                    sc = new Scanner(System.in);
+                }
+                
+                System.out.println("Disco :");             
+                try {
+                    create.setDisco(new Timestamp(sc.nextInt()));
+                } catch (InputMismatchException e) {
+                    create.setDisco(null);
+                    sc = new Scanner(System.in);
+                }
+                
                 System.out.println("ID company :");
-                create.setCompId(sc.nextInt());
+                try {
+                    create.setCompId(sc.nextInt());
+                } catch (InputMismatchException e) {
+                    sc = new Scanner(System.in);
+                }
+
 
                 tool.connectToMySql(computerDBName);
                 compt.setConnexion(tool.getConnection(computerDBName));
