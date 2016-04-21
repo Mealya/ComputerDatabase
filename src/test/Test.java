@@ -5,10 +5,10 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.database.ComputerDAO;
-import com.excilys.database.HeavyComputerDAO;
+import com.excilys.dao.ComputerDAO;
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Computer;
+import com.excilys.service.HeavyComputerDAO;
 import com.excilys.utils.Pageable;
 
 public class Test {

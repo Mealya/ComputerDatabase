@@ -1,4 +1,4 @@
-package com.excilys.database;
+package com.excilys.dao;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

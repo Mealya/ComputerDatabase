@@ -1,8 +1,9 @@
-package com.excilys.database;
+package com.excilys.service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+import com.excilys.dao.ComputerDAO;
 import com.excilys.model.Computer;
 
 public class HeavyComputerDAO {
