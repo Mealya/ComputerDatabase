@@ -7,20 +7,26 @@ public class Computer {
     private String name;
     private Timestamp intro;
     private Timestamp disco;
-    private int compId;
-
-    public Computer() {
-
-    }
+    private Company comp;
 
     public Computer(long id, String name, Timestamp intro, Timestamp disco,
-            int compId) {
+            Company comp) {
         super();
         this.id = id;
         this.name = name;
         this.intro = intro;
         this.disco = disco;
-        this.compId = compId;
+        this.comp = comp;
+    }
+
+    @Override
+    public String toString() {
+        return "Computer [id=" + id + ", name=" + name + ", intro=" + intro
+                + ", disco=" + disco + ", comp=" + comp + "]";
+    }
+
+    public Computer() {
+
     }
 
     public long getId() {
@@ -55,24 +61,19 @@ public class Computer {
         this.disco = disco;
     }
 
-    public int getCompId() {
-        return compId;
+    public Company getComp() {
+        return comp;
     }
 
-    public void setCompId(int compId) {
-        this.compId = compId;
-    }
-
-    public String toString() {
-        return "ID : " + id + " Name : " + name + " Introduction : " + intro
-                + " Discontinued : " + disco + " Company ID : " + compId;
+    public void setComp(Company comp) {
+        this.comp = comp;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + compId;
+        result = prime * result + ((comp == null) ? 0 : comp.hashCode());
         result = prime * result + ((disco == null) ? 0 : disco.hashCode());
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((intro == null) ? 0 : intro.hashCode());
@@ -89,7 +90,10 @@ public class Computer {
         if (getClass() != obj.getClass())
             return false;
         Computer other = (Computer) obj;
-        if (compId != other.compId)
+        if (comp == null) {
+            if (other.comp != null)
+                return false;
+        } else if (!comp.equals(other.comp))
             return false;
         if (disco == null) {
             if (other.disco != null)

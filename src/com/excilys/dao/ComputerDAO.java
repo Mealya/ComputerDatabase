@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
 /**
@@ -62,7 +63,7 @@ public class ComputerDAO implements DAO<Computer>{
         }
         //Execute a query
         Statement stmt = connect.createStatement();
-
+        
         // SELECT c.id, c.name, c.introduced, c.discontinued, com.name FROM computer c INNER JOIN company com ON com.id = company_id
         String sql = "SELECT * FROM `computer` ;";
         ResultSet rs = stmt.executeQuery(sql);
@@ -72,13 +73,16 @@ public class ComputerDAO implements DAO<Computer>{
         //Extract data from result set
         while (rs.next()) {
             //Retrieve by column : id | name | introduced | discontinued | company_id
-            long id = rs.getInt("id");
-            String name = rs.getString("name");
-            Timestamp first = rs.getTimestamp("introduced");
-            Timestamp last = rs.getTimestamp("discontinued");
-            int compID = rs.getInt("company_id");
-
-            result.add(new Computer(id, name, first, last, compID));
+            Computer compuTemp = new Computer();
+            compuTemp.setId(rs.getInt("id"));
+            compuTemp.setName(rs.getString("name"));
+            compuTemp.setIntro(rs.getTimestamp("introduced"));
+            compuTemp.setDisco(rs.getTimestamp("discontinued"));
+            
+            CompanyDAO compDAO = new CompanyDAO(connect); 
+            Company c = compDAO.get(rs.getInt("company_id"));
+            compuTemp.setComp(c);
+            result.add(compuTemp);
 
         }
         rs.close();
@@ -96,21 +100,23 @@ public class ComputerDAO implements DAO<Computer>{
         String sql = "SELECT * FROM `computer` WHERE id=" + idComp+";";
         ResultSet rs = stmt.executeQuery(sql);
 
-        Computer result = null;
+        Computer compuTemp = null;
 
         //Extract data from result set
         while (rs.next()) {
-            long id = rs.getInt("id");
-            String name = rs.getString("name");
-            Timestamp first = rs.getTimestamp("introduced");
-            Timestamp last = rs.getTimestamp("discontinued");
-            int compID = rs.getInt("company_id");
-
-            result = new Computer(id, name, first, last, compID);
+            compuTemp = new Computer();
+            compuTemp.setId(rs.getInt("id"));
+            compuTemp.setName(rs.getString("name"));
+            compuTemp.setIntro(rs.getTimestamp("introduced"));
+            compuTemp.setDisco(rs.getTimestamp("discontinued"));
+            
+            CompanyDAO compDAO = new CompanyDAO(connect); 
+            Company c = compDAO.get(rs.getInt("company_id"));
+            compuTemp.setComp(c);
 
         }
         rs.close();
-        return result;
+        return compuTemp;
     }
 
     @Override
@@ -124,7 +130,7 @@ public class ComputerDAO implements DAO<Computer>{
         Statement stmt = connect.createStatement();
 
         String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
-                +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getCompId()+");";
+                +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getComp().getId()+");";
         
         sql = sql.replaceAll("'null'", "NULL");
         if (comp.getId() == 0) {
@@ -146,7 +152,7 @@ public class ComputerDAO implements DAO<Computer>{
 
         String sql = "UPDATE `computer` SET `name` = '"+ comp.getName() +"', `introduced` = '"
                 + comp.getIntro()+"', `discontinued` = '"+ comp.getDisco()
-                +"', `company_id` = '"+ comp.getCompId()+"' WHERE `computer`.`id` = "+ comp.getId()+";";
+                +"', `company_id` = '"+ comp.getComp().getId()+"' WHERE `computer`.`id` = "+ comp.getId()+";";
         sql = sql.replaceAll("'null'", "NULL");
         if (comp.getId() == 0) {
             sql = sql.replaceAll("0\\);", "NULL\\);");
@@ -186,13 +192,16 @@ public class ComputerDAO implements DAO<Computer>{
         //Extract data from result set
         while (rs.next()) {
             //Retrieve by column : id | name | introduced | discontinued | company_id
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
-            Timestamp first = rs.getTimestamp("introduced");
-            Timestamp last = rs.getTimestamp("discontinued");
-            int compID = rs.getInt("company_id");
-
-            result.add(new Computer(id, name, first, last, compID));
+            Computer compuTemp = new Computer();
+            compuTemp.setId(rs.getInt("id"));
+            compuTemp.setName(rs.getString("name"));
+            compuTemp.setIntro(rs.getTimestamp("introduced"));
+            compuTemp.setDisco(rs.getTimestamp("discontinued"));
+            
+            CompanyDAO compDAO = new CompanyDAO(connect); 
+            Company c = compDAO.get(rs.getInt("company_id"));
+            compuTemp.setComp(c);
+            result.add(compuTemp);
 
         }
         rs.close();
