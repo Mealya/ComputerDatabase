@@ -109,6 +109,7 @@ public class Test {
                     update.setIntro(new Timestamp(sc.nextInt()));
                 } catch (InputMismatchException e) {
                     update.setIntro(null);
+                    sc = new Scanner(System.in);
                 }
                 System.out.println("Disco :");
                 
@@ -116,12 +117,14 @@ public class Test {
                     update.setDisco(new Timestamp(sc.nextInt()));
                 } catch (InputMismatchException e) {
                     update.setDisco(null);
+                    sc = new Scanner(System.in);
                 }
                 System.out.println("ID company :");
                 
                 try {
                     update.setCompId(sc.nextInt());
                 } catch (InputMismatchException e) {
+                    sc = new Scanner(System.in);
                 }
 
                 tool.connectToMySql(computerDBName);
@@ -174,6 +177,7 @@ public class Test {
                 tool.closeConnect(computerDBName);
                 break;
             }
+            sc = new Scanner(System.in);
 
         }
         sc.close(); 

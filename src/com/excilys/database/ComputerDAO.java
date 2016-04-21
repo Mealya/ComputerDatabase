@@ -125,12 +125,11 @@ public class ComputerDAO implements DAO<Computer>{
 
         String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
                 +comp.getName()+"', '"+comp.getIntro()+"', '"+comp.getDisco()+"',"+comp.getCompId()+");";
-        sql = sql.replaceAll("'null'", "NULL");
         
+        sql = sql.replaceAll("'null'", "NULL");
         if (comp.getId() == 0) {
             sql = sql.replaceAll("0\\);", "NULL\\);");
         }
-        System.out.println(sql);
         stmt.executeUpdate(sql);
 
     }
@@ -148,6 +147,10 @@ public class ComputerDAO implements DAO<Computer>{
         String sql = "UPDATE `computer` SET `name` = '"+ comp.getName() +"', `introduced` = '"
                 + comp.getIntro()+"', `discontinued` = '"+ comp.getDisco()
                 +"', `company_id` = '"+ comp.getCompId()+"' WHERE `computer`.`id` = "+ comp.getId()+";";
+        sql = sql.replaceAll("'null'", "NULL");
+        if (comp.getId() == 0) {
+            sql = sql.replaceAll("0\\);", "NULL\\);");
+        }
         stmt.executeUpdate(sql);
     }
 
