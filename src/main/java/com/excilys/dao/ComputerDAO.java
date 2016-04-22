@@ -1,11 +1,8 @@
 package com.excilys.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +62,7 @@ public class ComputerDAO implements DAO<Computer> {
                     COMPUTER_DB_NAME).prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
-            result = new ArrayList<>();
+            result = new ArrayList<Computer>();
 
             // Extract data from result set
             while (rs.next()) {

@@ -1,16 +1,13 @@
 package com.excilys.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
-import com.excilys.model.Computer;
 
 /**
  * Created by Angot Maxime on 19/04/16.
@@ -42,7 +39,7 @@ public class CompanyDAO implements DAO<Company> {
 
             ResultSet rs = stmt.executeQuery();
 
-            result = new ArrayList<>();
+            result = new ArrayList<Company>();
 
             // Extract data from result set
             while (rs.next()) {
