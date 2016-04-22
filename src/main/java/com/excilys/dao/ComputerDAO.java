@@ -23,6 +23,7 @@ public class ComputerDAO implements DAO<Computer> {
         if (c == null) {
             throw new IllegalArgumentException("Tool is null");
         }
+        
         toolConnexion = c;
         // toolConnexion.linkToMySql();
     }
