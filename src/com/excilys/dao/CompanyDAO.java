@@ -15,13 +15,12 @@ import com.excilys.model.Computer;
 /**
  * Created by Angot Maxime on 19/04/16.
  */
-public class CompanyDAO implements DAO<Company>{
-
+public class CompanyDAO implements DAO<Company> {
 
     private final String COMPUTER_DB_NAME = "computer-database-db";
     private JDBCTool toolConnexion;
 
-    public CompanyDAO(JDBCTool c) throws SQLException {
+    public CompanyDAO(JDBCTool c) {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
         }
@@ -29,62 +28,71 @@ public class CompanyDAO implements DAO<Company>{
         toolConnexion = c;
     }
 
-    public List<Company> getAll() throws SQLException {
+    public List<Company> getAll() {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion");
         }
         toolConnexion.connect(COMPUTER_DB_NAME);
-        //Execute a query
-        String sql = "SELECT * FROM `company` ";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
+        List<Company> result = null;
+        try {
+            // Execute a query
+            String sql = "SELECT * FROM `company` ";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
 
-        ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
-        List<Company> result = new ArrayList<>();
+            result = new ArrayList<>();
 
-        //Extract data from result set
-        while (rs.next()) {
-            //Retrieve by column : id | name | introduced | discontinued | company_id
-            int id = rs.getInt("id");
-            String name = rs.getString("name");
+            // Extract data from result set
+            while (rs.next()) {
+                // Retrieve by column : id | name | introduced | discontinued |
+                // company_id
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
 
-            result.add(new Company(id, name));
+                result.add(new Company(id, name));
 
+            }
+            rs.close();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
         }
-        rs.close();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return result;
     }
 
     @Override
-    public Company get(long id) throws SQLException {
+    public Company get(long id) {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion");
         }
-        
-        toolConnexion.connect(COMPUTER_DB_NAME);
-
-        String sql = "SELECT * FROM `company` WHERE id= ? ;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
-        stmt.setLong(1, id);
-
-        ResultSet rs = stmt.executeQuery();
-
         Company compa = null;
+        try {
+            toolConnexion.connect(COMPUTER_DB_NAME);
 
-        //Extract data from result set
-        while (rs.next()) {
-            compa = new Company();
-            compa.setId(rs.getInt("id"));
-            compa.setName(rs.getString("name"));
+            String sql = "SELECT * FROM `company` WHERE id= ? ;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            stmt.setLong(1, id);
 
+            ResultSet rs = stmt.executeQuery();
 
+            // Extract data from result set
+            while (rs.next()) {
+                compa = new Company();
+                compa.setId(rs.getInt("id"));
+                compa.setName(rs.getString("name"));
+
+            }
+            rs.close();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
         }
-        rs.close();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return compa;
     }
-    
+
     @Deprecated
     @Override
     public void create(Company c) throws SQLException {

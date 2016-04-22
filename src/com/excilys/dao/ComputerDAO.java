@@ -34,7 +34,7 @@ public class ComputerDAO implements DAO<Computer> {
         return toolConnexion;
     }
 
-    private List<Company> initCompanies() throws SQLException {
+    private List<Company> initCompanies() {
         if (cacheCompanies == null) {
             CompanyDAO comA = new CompanyDAO(toolConnexion);
             cacheCompanies = comA.getAll();
@@ -43,102 +43,114 @@ public class ComputerDAO implements DAO<Computer> {
     }
 
     @Override
-    public List<Computer> getAll() throws SQLException {
+    public List<Computer> getAll() {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-        initCompanies();
-        toolConnexion.connect(COMPUTER_DB_NAME);
-        // Execute a query
-        /*
-         * PreparedStatement stmt = connection.getConnection(COMPUTER_DB_NAME).
-         * 
-         * // SELECT c.id, c.name, c.introduced, c.discontinued, com.name FROM
-         * // computer c INNER JOIN company com ON com.id = company_id String
-         * sql = ResultSet rs = stmt.executeQuery(sql);
-         */
-        String sql = "SELECT * FROM `computer`;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME)
-                .prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery();
+        List<Computer> result = null;
+        try {
+            initCompanies();
+            toolConnexion.connect(COMPUTER_DB_NAME);
+            // Execute a query
+            /*
+             * PreparedStatement stmt =
+             * connection.getConnection(COMPUTER_DB_NAME).
+             * 
+             * // SELECT c.id, c.name, c.introduced, c.discontinued, com.name
+             * FROM // computer c INNER JOIN company com ON com.id = company_id
+             * String sql = ResultSet rs = stmt.executeQuery(sql);
+             */
+            String sql = "SELECT * FROM `computer`;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
 
-        List<Computer> result = new ArrayList<>();
+            result = new ArrayList<>();
 
-        // Extract data from result set
-        while (rs.next()) {
-            // Retrieve by column : id | name | introduced | discontinued |
-            // company_id
-            Computer compuTemp = new Computer();
-            compuTemp.setId(rs.getLong("id"));
-            compuTemp.setName(rs.getString("name"));
-            compuTemp.setIntro(rs.getTimestamp("introduced"));
-            compuTemp.setDisco(rs.getTimestamp("discontinued"));
+            // Extract data from result set
+            while (rs.next()) {
+                // Retrieve by column : id | name | introduced | discontinued |
+                // company_id
+                Computer compuTemp = new Computer();
+                compuTemp.setId(rs.getLong("id"));
+                compuTemp.setName(rs.getString("name"));
+                compuTemp.setIntro(rs.getTimestamp("introduced"));
+                compuTemp.setDisco(rs.getTimestamp("discontinued"));
 
-            // CompanyDAO compDAO = new CompanyDAO(toolConnexion);
-            // Company c = compDAO.get(rs.getInt("company_id"));
-            for (Company c : cacheCompanies) {
-                if (c.getId() == rs.getLong("company_id")) {
-                    compuTemp.setComp(c);
+                // CompanyDAO compDAO = new CompanyDAO(toolConnexion);
+                // Company c = compDAO.get(rs.getInt("company_id"));
+                for (Company c : cacheCompanies) {
+                    if (c.getId() == rs.getLong("company_id")) {
+                        compuTemp.setComp(c);
+                    }
                 }
-            }
-            result.add(compuTemp);
+                result.add(compuTemp);
 
+            }
+            rs.close();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
         }
-        rs.close();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return result;
     }
 
     @Override
-    public Computer get(long idComp) throws SQLException {
+    public Computer get(long idComp) {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-        initCompanies();
-        toolConnexion.connect(COMPUTER_DB_NAME);
-        // Execute a query
-
-        /*
-         * Statement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME)
-         * .createStatement();
-         * 
-         * String sql = "SELECT * FROM `computer` WHERE id=" + idComp + ";";
-         * ResultSet rs = stmt.executeQuery(sql);
-         */
-
-        String sql = "SELECT * FROM `computer` WHERE id = ? ;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME)
-                .prepareStatement(sql);
-        stmt.setLong(1, idComp);
-        ResultSet rs = stmt.executeQuery();
 
         Computer compuTemp = null;
+        try {
+            initCompanies();
+            toolConnexion.connect(COMPUTER_DB_NAME);
+            // Execute a query
 
-        // Extract data from result set
-        while (rs.next()) {
-            compuTemp = new Computer();
-            compuTemp.setId(rs.getLong("id"));
-            compuTemp.setName(rs.getString("name"));
-            compuTemp.setIntro(rs.getTimestamp("introduced"));
-            compuTemp.setDisco(rs.getTimestamp("discontinued"));
+            /*
+             * Statement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME)
+             * .createStatement();
+             * 
+             * String sql = "SELECT * FROM `computer` WHERE id=" + idComp + ";";
+             * ResultSet rs = stmt.executeQuery(sql);
+             */
 
-            // CompanyDAO compDAO = new CompanyDAO(connection);
-            // Company c = compDAO.get(rs.getInt("company_id"));
-            for (Company c : cacheCompanies) {
-                if (c.getId() == rs.getLong("company_id")) {
-                    compuTemp.setComp(c);
+            String sql = "SELECT * FROM `computer` WHERE id = ? ;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            stmt.setLong(1, idComp);
+            ResultSet rs = stmt.executeQuery();
+
+            compuTemp = null;
+
+            // Extract data from result set
+            while (rs.next()) {
+                compuTemp = new Computer();
+                compuTemp.setId(rs.getLong("id"));
+                compuTemp.setName(rs.getString("name"));
+                compuTemp.setIntro(rs.getTimestamp("introduced"));
+                compuTemp.setDisco(rs.getTimestamp("discontinued"));
+
+                // CompanyDAO compDAO = new CompanyDAO(connection);
+                // Company c = compDAO.get(rs.getInt("company_id"));
+                for (Company c : cacheCompanies) {
+                    if (c.getId() == rs.getLong("company_id")) {
+                        compuTemp.setComp(c);
+                    }
                 }
+
             }
 
+            rs.close();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
         }
-
-        rs.close();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return compuTemp;
     }
 
     @Override
-    public void create(Computer comp) throws SQLException {
+    public void create(Computer comp) {
         if (comp == null) {
             throw new IllegalArgumentException("c is null");
         }
@@ -151,132 +163,154 @@ public class ComputerDAO implements DAO<Computer> {
          * toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
          * stmt.setLong(1, idComp); ResultSet rs = stmt.executeQuery();
          */
+        try {
+            toolConnexion.connect(COMPUTER_DB_NAME);
 
-        toolConnexion.connect(COMPUTER_DB_NAME);
+            String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
 
-        String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            /*
+             * String sql =
+             * "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
+             * + comp.getName() + "', '" + comp.getIntro() + "', '" +
+             * comp.getDisco() + "'," + comp.getComp().getId() + ");";
+             * 
+             * sql = sql.replaceAll("'null'", "NULL"); if (comp.getId() == 0) {
+             * sql = sql.replaceAll("0\\);", "NULL\\);"); }
+             */
+            stmt.setString(1, comp.getName());
+            stmt.setTimestamp(2, comp.getIntro());
+            stmt.setTimestamp(3, comp.getDisco());
+            stmt.setObject(4, comp.getComp().getId());
 
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME)
-                .prepareStatement(sql);
-        /*
-         * String sql =
-         * "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
-         * + comp.getName() + "', '" + comp.getIntro() + "', '" +
-         * comp.getDisco() + "'," + comp.getComp().getId() + ");";
-         * 
-         * sql = sql.replaceAll("'null'", "NULL"); if (comp.getId() == 0) { sql
-         * = sql.replaceAll("0\\);", "NULL\\);"); }
-         */
-        stmt.setString(1, comp.getName());
-        stmt.setTimestamp(2, comp.getIntro());
-        stmt.setTimestamp(3, comp.getDisco());
-        stmt.setObject(4, comp.getComp().getId());
-
-        stmt.executeUpdate();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            stmt.executeUpdate();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
+        }
     }
 
     @Override
-    public void update(Computer comp) throws SQLException {
+    public void update(Computer comp) {
         if (comp == null) {
             throw new IllegalArgumentException("c is null");
         }
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-        toolConnexion.connect(COMPUTER_DB_NAME);
-        String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ?, WHERE `computer`.`id` = ?;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
-        stmt.setString(1, comp.getName());
-        stmt.setTimestamp(2, comp.getIntro());
-        stmt.setTimestamp(2, comp.getDisco());
-        stmt.setObject(3, comp.getComp().getId());
-        stmt.setLong(4, comp.getId());
-        /*
-        sql = sql.replaceAll("'null'", "NULL");
-        if (comp.getId() == 0) {
-            sql = sql.replaceAll("0\\);", "NULL\\);");
-        }*/
-        stmt.executeUpdate();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        try {
+            toolConnexion.connect(COMPUTER_DB_NAME);
+            String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ?, WHERE `computer`.`id` = ?;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            stmt.setString(1, comp.getName());
+            stmt.setTimestamp(2, comp.getIntro());
+            stmt.setTimestamp(2, comp.getDisco());
+            stmt.setObject(3, comp.getComp().getId());
+            stmt.setLong(4, comp.getId());
+            /*
+             * sql = sql.replaceAll("'null'", "NULL"); if (comp.getId() == 0) {
+             * sql = sql.replaceAll("0\\);", "NULL\\);"); }
+             */
+            stmt.executeUpdate();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
+        }
     }
 
     @Override
-    public void delete(long comp) throws SQLException {
+    public void delete(long comp) {
         if (comp < 0) {
             throw new IllegalArgumentException("Comp negative");
         }
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-        toolConnexion.connect(COMPUTER_DB_NAME);
+        try {
+            toolConnexion.connect(COMPUTER_DB_NAME);
 
-        String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
-        stmt.setLong(1, comp);
-        stmt.executeUpdate();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            stmt.setLong(1, comp);
+            stmt.executeUpdate();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
+        }
     }
 
-    public List<Computer> getSet(int low, int height) throws SQLException {
+    public List<Computer> getSet(int low, int height) {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
         if (low < 0 || height < 0) {
             throw new IllegalArgumentException("Negative param");
         }
-        initCompanies();
-        toolConnexion.connect(COMPUTER_DB_NAME);
+        List<Computer> result = null;
+        try {
+            initCompanies();
+            toolConnexion.connect(COMPUTER_DB_NAME);
 
-        String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
-        stmt.setInt(1, low);
-        stmt.setInt(2, height);
-        
-        ResultSet rs = stmt.executeQuery();
+            String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
+            stmt.setInt(1, low);
+            stmt.setInt(2, height);
 
-        List<Computer> result = new ArrayList<>();
+            ResultSet rs = stmt.executeQuery();
 
-        // Extract data from result set
-        while (rs.next()) {
-            // Retrieve by column : id | name | introduced | discontinued |
-            // company_id
-            Computer compuTemp = new Computer();
-            compuTemp.setId(rs.getLong("id"));
-            compuTemp.setName(rs.getString("name"));
-            compuTemp.setIntro(rs.getTimestamp("introduced"));
-            compuTemp.setDisco(rs.getTimestamp("discontinued"));
+            result = new ArrayList<>();
 
-            // CompanyDAO compDAO = new CompanyDAO(connection);
-            // Company c = compDAO.get(rs.getInt("company_id"));
-            for (Company c : cacheCompanies) {
-                if (c.getId() == rs.getLong("company_id")) {
-                    compuTemp.setComp(c);
+            // Extract data from result set
+            while (rs.next()) {
+                // Retrieve by column : id | name | introduced | discontinued |
+                // company_id
+                Computer compuTemp = new Computer();
+                compuTemp.setId(rs.getLong("id"));
+                compuTemp.setName(rs.getString("name"));
+                compuTemp.setIntro(rs.getTimestamp("introduced"));
+                compuTemp.setDisco(rs.getTimestamp("discontinued"));
+
+                // CompanyDAO compDAO = new CompanyDAO(connection);
+                // Company c = compDAO.get(rs.getInt("company_id"));
+                for (Company c : cacheCompanies) {
+                    if (c.getId() == rs.getLong("company_id")) {
+                        compuTemp.setComp(c);
+                    }
                 }
-            }
-            result.add(compuTemp);
+                result.add(compuTemp);
 
+            }
+            rs.close();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
         }
-        rs.close();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return result;
     }
 
-    public long getSizeTable() throws SQLException {
+    public long getSizeTable() {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-        toolConnexion.connect(COMPUTER_DB_NAME);
+        try {
+            toolConnexion.connect(COMPUTER_DB_NAME);
 
-        String sql = "SELECT COUNT(*) FROM `computer`;";
-        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
+            String sql = "SELECT COUNT(*) FROM `computer`;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    COMPUTER_DB_NAME).prepareStatement(sql);
 
-        
-        ResultSet rs = stmt.executeQuery();
-        toolConnexion.closeConnect(COMPUTER_DB_NAME);
-        
-        while (rs.next()) {
-           return rs.getLong("COUNT(*)");
+            ResultSet rs = stmt.executeQuery();
+            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+
+            while (rs.next()) {
+                return rs.getLong("COUNT(*)");
+            }
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
         }
         return 0;
     }

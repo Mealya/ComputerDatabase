@@ -65,12 +65,7 @@ public class Test {
                 break;
             case 2:
                 long nbPages = 0;
-                try {
-                    nbPages = compt.getSizeTable() / 15;
-                } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
+                nbPages = compt.getSizeTable() / 15;
 
                 for (int i = 0; i < nbPages; i++) {
 

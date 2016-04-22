@@ -28,8 +28,7 @@ public class JDBCTool {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            slf4jLogger.error("Where is your MySQL JDBC Driver?");
-            e.printStackTrace();
+            slf4jLogger.error("Where is your MySQL JDBC Driver? : " + e.getMessage());
             return;
         }
         slf4jLogger.info("MySQL JDBC Driver Registered!");
@@ -50,8 +49,8 @@ public class JDBCTool {
                             "admincdb", "qwerty1234");
 
         } catch (SQLException e) {
-            slf4jLogger.error("Connection Failed! Check output console");
-            e.printStackTrace();
+            slf4jLogger.error("Connection Failed! " + e.getMessage());
+            
             return;
         }
 
@@ -90,7 +89,7 @@ public class JDBCTool {
                     connections.remove(c.getKey());
                     slf4jLogger.info("=========== MySQL JDBC destroyed.....  ===========");
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    slf4jLogger.error("Deconnection failed! " + e.getMessage());
                 }
             }
         }

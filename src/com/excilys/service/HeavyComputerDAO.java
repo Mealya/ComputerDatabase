@@ -16,22 +16,15 @@ public class HeavyComputerDAO {
         }
         compDB = comp;
     }
+
     /*
-	public void setComputerDB(ComputerDB comp) {
-		if (comp == null) {
-			throw new IllegalArgumentException("CompDB is null");
-		}
-		compDB = comp;
-	}*/
+     * public void setComputerDB(ComputerDB comp) { if (comp == null) { throw
+     * new IllegalArgumentException("CompDB is null"); } compDB = comp; }
+     */
 
     public List<Computer> getComputers() {
         List<Computer> result = null;
-        try {
-            result = compDB.getAll();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        result = compDB.getAll();
         return result;
     }
 
@@ -40,12 +33,7 @@ public class HeavyComputerDAO {
             throw new IllegalArgumentException("Id non valide");
         }
         Computer result = null;
-        try {
-            result = compDB.get(idCompu);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        result = compDB.get(idCompu);
         return result;
     }
 
@@ -53,52 +41,29 @@ public class HeavyComputerDAO {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
         } else {
-            /*if (c.getName() == null) {
-                        throw new IllegalArgumentException("name of computer is null");
-                    }
-                    if (c.getIntro() == null) {
-                        throw new IllegalArgumentException("intro of computer is null");
-                    }
-                    if (c.getDisco() == null) {
-                        throw new IllegalArgumentException("disco of computer is null");
-                    }
-                    if (c.getCompId() < 1) {
-                        throw new IllegalArgumentException("invalid company id");
-                    }*/
+            /*
+             * if (c.getName() == null) { throw new
+             * IllegalArgumentException("name of computer is null"); } if
+             * (c.getIntro() == null) { throw new
+             * IllegalArgumentException("intro of computer is null"); } if
+             * (c.getDisco() == null) { throw new
+             * IllegalArgumentException("disco of computer is null"); } if
+             * (c.getCompId() < 1) { throw new
+             * IllegalArgumentException("invalid company id"); }
+             */
         }
-        try {
-            compDB.create(c);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        compDB.create(c);
     }
 
     public void updateComputer(Computer c) {
-        try {
-            compDB.update(c);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        compDB.update(c);
     }
 
     public void deleteComputer(long c) {
-        try {
-            compDB.delete(c);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        compDB.delete(c);
     }
-    
+
     public List<Computer> getSetComputer(int low, int height) {
-        try {
-            return compDB.getSet(low, height);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
+        return compDB.getSet(low, height);
     }
 }
