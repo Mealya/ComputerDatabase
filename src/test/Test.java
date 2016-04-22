@@ -1,5 +1,6 @@
 package test;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -38,58 +39,48 @@ public class Test {
             System.out.println("6- Delete");
             choix = sc.nextInt();
 
-            
-            //compt.setConnexion(tool.getConnection(computerDBName));
-            List<Computer> data = workingDB.getComputers();
-            tool.closeConnect(computerDBName);
+            // compt.setConnexion(tool.getConnection(computerDBName));
+            // List<Computer> data = workingDB.getComputers();
+            // tool.closeConnect(computerDBName);
 
             switch (choix) {
             case 1:
                 /*
-                //compt.setConnexion(tool.getConnection(computerDBName));
-                Pageable<Computer> page = new Pageable<Computer>(
-                        workingDB.getComputers());
-                tool.closeConnect(computerDBName);
-                page.setPage(0);
-                for (int i = 0; i < page.getMaxPages(); i++) {
-                    page.setPage(i);
-                    // System.out.println("Index : " + i + " Max page : " +
-                    // page.getMaxPages());
-                    for (Computer c : page.getListForPage()) {
-                        System.out.print(c.getName() + " "
-                                + c.getIntro() + " " + c.getDisco() + " "
-                                );
-                        if (c.getComp() != null) {
-                            System.out.println(c.getComp().getName());
-                        } else {
-                            System.out.print("\n");
-                        }
-                    }
-                    if (page.getMaxPages() == (i - 1)) {
-                        break;
-                    }
-                    System.out.println("\nNext page ? 0 : no / other : yes");
-
-                    int pagingExist = sc2.nextInt();
-                    if (pagingExist == 0) {
-                        break;
-                    }
-                }
-                */
+                 * //compt.setConnexion(tool.getConnection(computerDBName));
+                 * Pageable<Computer> page = new Pageable<Computer>(
+                 * workingDB.getComputers()); tool.closeConnect(computerDBName);
+                 * page.setPage(0); for (int i = 0; i < page.getMaxPages(); i++)
+                 * { page.setPage(i); // System.out.println("Index : " + i +
+                 * " Max page : " + // page.getMaxPages()); for (Computer c :
+                 * page.getListForPage()) { System.out.print(c.getName() + " " +
+                 * c.getIntro() + " " + c.getDisco() + " " ); if (c.getComp() !=
+                 * null) { System.out.println(c.getComp().getName()); } else {
+                 * System.out.print("\n"); } } if (page.getMaxPages() == (i -
+                 * 1)) { break; }
+                 * System.out.println("\nNext page ? 0 : no / other : yes");
+                 * 
+                 * int pagingExist = sc2.nextInt(); if (pagingExist == 0) {
+                 * break; } }
+                 */
                 break;
             case 2:
-                int nbPages = data.size() / 15;
+                long nbPages = 0;
+                try {
+                    nbPages = compt.getSizeTable() / 15;
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
 
                 for (int i = 0; i < nbPages; i++) {
-                    
-                    //compt.setConnexion(tool.getConnection(computerDBName));
+
+                    // compt.setConnexion(tool.getConnection(computerDBName));
                     // System.out.println("Index : " + i + " Max page : " +
                     // page.getMaxPages());
                     for (Computer c : workingDB.getSetComputer((i * 15),
                             15 + (i * 15))) {
-                        System.out.print(c.getName() + " "
-                                + c.getIntro() + " " + c.getDisco() + " "
-                                );
+                        System.out.print(c.getName() + " " + c.getIntro() + " "
+                                + c.getDisco() + " ");
                         if (c.getComp() != null) {
                             System.out.println(c.getComp().getName());
                         } else {
@@ -108,24 +99,21 @@ public class Test {
             case 3:
                 System.out.println("Choisir un ID : ");
                 long idCompu = sc.nextLong();
-                
-                //compt.setConnexion(tool.getConnection(computerDBName));
+
+                // compt.setConnexion(tool.getConnection(computerDBName));
                 System.out.println(workingDB.getComputer(idCompu).toString());
                 tool.closeConnect(computerDBName);
                 break;
             case 4:
                 System.out.println("3- Update : choisir index");
                 long id = sc.nextLong();
-                for (Computer c : data) {
-                    if (c.getId() == id) {
-                        System.out.print("Actual : " + c.getName() + " "
-                                + c.getIntro() + " " + c.getDisco() + " "
-                                );
-                        if (c.getComp() != null) {
-                            System.out.println(c.getComp().getName());
-                        }
-                    }
+                Computer temp = workingDB.getComputer(id);
+                System.out.print("Actual : " + temp.getName() + " "
+                        + temp.getIntro() + " " + temp.getDisco() + " ");
+                if (temp.getComp() != null) {
+                    System.out.println(temp.getComp().getName());
                 }
+
                 Computer update = new Computer();
                 update.setId(id);
                 System.out.println("Nom :");
@@ -155,8 +143,7 @@ public class Test {
                     sc = new Scanner(System.in);
                 }
 
-                
-                //compt.setConnexion(tool.getConnection(computerDBName));
+                // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.updateComputer(update);
                 tool.closeConnect(computerDBName);
 
@@ -192,16 +179,15 @@ public class Test {
                     sc = new Scanner(System.in);
                 }
 
-                
-                //compt.setConnexion(tool.getConnection(computerDBName));
+                // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.createComputer(create);
                 tool.closeConnect(computerDBName);
 
                 break;
             case 6:
                 long idCompuDel = sc.nextLong();
-                
-                //compt.setConnexion(tool.getConnection(computerDBName));
+
+                // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.deleteComputer(idCompuDel);
                 tool.closeConnect(computerDBName);
                 break;

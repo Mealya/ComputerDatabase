@@ -1,6 +1,7 @@
 package com.excilys.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,26 +19,26 @@ public class CompanyDAO implements DAO<Company>{
 
 
     private final String COMPUTER_DB_NAME = "computer-database-db";
-    private JDBCTool connection;
+    private JDBCTool toolConnexion;
 
     public CompanyDAO(JDBCTool c) throws SQLException {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
         }
 
-        connection = c;
+        toolConnexion = c;
     }
 
     public List<Company> getAll() throws SQLException {
-        if (connection == null) {
+        if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion");
         }
-        connection.connect(COMPUTER_DB_NAME);
+        toolConnexion.connect(COMPUTER_DB_NAME);
         //Execute a query
-        Statement stmt = connection.getConnection(COMPUTER_DB_NAME).createStatement();
-
         String sql = "SELECT * FROM `company` ";
-        ResultSet rs = stmt.executeQuery(sql);
+        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
+
+        ResultSet rs = stmt.executeQuery();
 
         List<Company> result = new ArrayList<>();
 
@@ -47,27 +48,27 @@ public class CompanyDAO implements DAO<Company>{
             int id = rs.getInt("id");
             String name = rs.getString("name");
 
-
             result.add(new Company(id, name));
 
         }
         rs.close();
-        connection.closeConnect(COMPUTER_DB_NAME);
+        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return result;
     }
 
     @Override
     public Company get(long id) throws SQLException {
-        if (connection == null) {
+        if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion");
         }
         
-        connection.connect(COMPUTER_DB_NAME);
-        //Execute a query
-        Statement stmt = connection.getConnection(COMPUTER_DB_NAME).createStatement();
+        toolConnexion.connect(COMPUTER_DB_NAME);
 
-        String sql = "SELECT * FROM `company` WHERE id=" + id +";";
-        ResultSet rs = stmt.executeQuery(sql);
+        String sql = "SELECT * FROM `company` WHERE id= ? ;";
+        PreparedStatement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
+        stmt.setLong(1, id);
+
+        ResultSet rs = stmt.executeQuery();
 
         Company compa = null;
 
@@ -80,7 +81,7 @@ public class CompanyDAO implements DAO<Company>{
 
         }
         rs.close();
-        connection.closeConnect(COMPUTER_DB_NAME);
+        toolConnexion.closeConnect(COMPUTER_DB_NAME);
         return compa;
     }
     
