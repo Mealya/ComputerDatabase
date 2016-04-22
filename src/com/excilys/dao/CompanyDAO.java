@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -15,19 +16,25 @@ import com.excilys.model.Computer;
  */
 public class CompanyDAO implements DAO<Company>{
 
-    private Connection connect;
 
-    public CompanyDAO(Connection c) throws SQLException {
+    private final String COMPUTER_DB_NAME = "computer-database-db";
+    private JDBCTool connection;
+
+    public CompanyDAO(JDBCTool c) throws SQLException {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
         }
 
-        connect = c;
+        connection = c;
     }
 
     public List<Company> getAll() throws SQLException {
+        if (connection == null) {
+            throw new IllegalStateException("Pas de connexion");
+        }
+        connection.connect(COMPUTER_DB_NAME);
         //Execute a query
-        Statement stmt = connect.createStatement();
+        Statement stmt = connection.getConnection(COMPUTER_DB_NAME).createStatement();
 
         String sql = "SELECT * FROM `company` ";
         ResultSet rs = stmt.executeQuery(sql);
@@ -45,16 +52,19 @@ public class CompanyDAO implements DAO<Company>{
 
         }
         rs.close();
+        connection.closeConnect(COMPUTER_DB_NAME);
         return result;
     }
 
     @Override
     public Company get(long id) throws SQLException {
-        if (connect == null) {
+        if (connection == null) {
             throw new IllegalStateException("Pas de connexion");
         }
+        
+        connection.connect(COMPUTER_DB_NAME);
         //Execute a query
-        Statement stmt = connect.createStatement();
+        Statement stmt = connection.getConnection(COMPUTER_DB_NAME).createStatement();
 
         String sql = "SELECT * FROM `company` WHERE id=" + id +";";
         ResultSet rs = stmt.executeQuery(sql);
@@ -70,6 +80,7 @@ public class CompanyDAO implements DAO<Company>{
 
         }
         rs.close();
+        connection.closeConnect(COMPUTER_DB_NAME);
         return compa;
     }
     

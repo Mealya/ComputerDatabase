@@ -18,9 +18,10 @@ public class Test {
         String computerDBName = "computer-database-db";
 
         JDBCTool tool = new JDBCTool();
-        tool.connectToMySql(computerDBName);
+        tool.linkToMySql();
 
         ComputerDAO compt = new ComputerDAO();
+        compt.setConnexion(tool);
         HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
 
         Scanner sc = new Scanner(System.in);
@@ -37,15 +38,15 @@ public class Test {
             System.out.println("6- Delete");
             choix = sc.nextInt();
 
-            tool.connectToMySql(computerDBName);
-            compt.setConnexion(tool.getConnection(computerDBName));
+            
+            //compt.setConnexion(tool.getConnection(computerDBName));
             List<Computer> data = workingDB.getComputers();
             tool.closeConnect(computerDBName);
 
             switch (choix) {
             case 1:
-                tool.connectToMySql(computerDBName);
-                compt.setConnexion(tool.getConnection(computerDBName));
+                /*
+                //compt.setConnexion(tool.getConnection(computerDBName));
                 Pageable<Computer> page = new Pageable<Computer>(
                         workingDB.getComputers());
                 tool.closeConnect(computerDBName);
@@ -74,13 +75,14 @@ public class Test {
                         break;
                     }
                 }
+                */
                 break;
             case 2:
                 int nbPages = data.size() / 15;
 
                 for (int i = 0; i < nbPages; i++) {
-                    tool.connectToMySql(computerDBName);
-                    compt.setConnexion(tool.getConnection(computerDBName));
+                    
+                    //compt.setConnexion(tool.getConnection(computerDBName));
                     // System.out.println("Index : " + i + " Max page : " +
                     // page.getMaxPages());
                     for (Computer c : workingDB.getSetComputer((i * 15),
@@ -106,8 +108,8 @@ public class Test {
             case 3:
                 System.out.println("Choisir un ID : ");
                 long idCompu = sc.nextLong();
-                tool.connectToMySql(computerDBName);
-                compt.setConnexion(tool.getConnection(computerDBName));
+                
+                //compt.setConnexion(tool.getConnection(computerDBName));
                 System.out.println(workingDB.getComputer(idCompu).toString());
                 tool.closeConnect(computerDBName);
                 break;
@@ -153,8 +155,8 @@ public class Test {
                     sc = new Scanner(System.in);
                 }
 
-                tool.connectToMySql(computerDBName);
-                compt.setConnexion(tool.getConnection(computerDBName));
+                
+                //compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.updateComputer(update);
                 tool.closeConnect(computerDBName);
 
@@ -190,16 +192,16 @@ public class Test {
                     sc = new Scanner(System.in);
                 }
 
-                tool.connectToMySql(computerDBName);
-                compt.setConnexion(tool.getConnection(computerDBName));
+                
+                //compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.createComputer(create);
                 tool.closeConnect(computerDBName);
 
                 break;
             case 6:
                 long idCompuDel = sc.nextLong();
-                tool.connectToMySql(computerDBName);
-                compt.setConnexion(tool.getConnection(computerDBName));
+                
+                //compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.deleteComputer(idCompuDel);
                 tool.closeConnect(computerDBName);
                 break;

@@ -22,54 +22,45 @@ public class JDBCTool {
      * Create an object Connection with a DB name
      * @param name The name of the database
      */
-    public void connectToMySql(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name must not be null");
-        }
-        if (connections.get(name) != null) {
-            return;
-        }
-        //System.out.println("\n=========== MySQL JDBC Connecting.....  ===========");
+    public void linkToMySql() {
         slf4jLogger.info("=========== MySQL JDBC Connecting.....  ===========");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            //TODO gérer les throws
-            //System.out.println("Where is your MySQL JDBC Driver?");
             slf4jLogger.error("Where is your MySQL JDBC Driver?");
             e.printStackTrace();
             return;
         }
-
-        //System.out.println("MySQL JDBC Driver Registered!");
         slf4jLogger.info("MySQL JDBC Driver Registered!");
+    }
+    
+    public void connect(String nameDB) {
+        if (nameDB == null) {
+            throw new IllegalArgumentException("Name must not be null");
+        }
+        if (connections.get(nameDB) != null) {
+            return;
+        }
         Connection connection = null;
 
         try {
             connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/"+ name +"?zeroDateTimeBehavior=convertToNull",
+                    .getConnection("jdbc:mysql://localhost:3306/"+ nameDB +"?zeroDateTimeBehavior=convertToNull",
                             "admincdb", "qwerty1234");
 
         } catch (SQLException e) {
-            //TODO gérer les throws
-            //System.out.println("Connection Failed! Check output console");
             slf4jLogger.error("Connection Failed! Check output console");
             e.printStackTrace();
             return;
         }
 
         if (connection != null) {
-            //System.out.println("Taking control of the database now!");
-            //connectTODB = connection;
-            connections.put(name, connection);
+            connections.put(nameDB, connection);
         } else {
-            //TODO gérer les throws
-            //System.out.println("Failed to make connection!");
             slf4jLogger.error("Failed to make connection!");
             return;
         }
-
     }
     
     /**
@@ -97,7 +88,6 @@ public class JDBCTool {
                 try {
                     c.getValue().close();
                     connections.remove(c.getKey());
-                    //System.out.println("=========== MySQL JDBC destroyed.....  ===========");
                     slf4jLogger.info("=========== MySQL JDBC destroyed.....  ===========");
                 } catch (SQLException e) {
                     e.printStackTrace();
