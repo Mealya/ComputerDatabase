@@ -69,6 +69,10 @@ public class Computer {
         this.comp = comp;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -81,37 +85,61 @@ public class Computer {
         return result;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+
+        if (getClass() != obj.getClass()) {
             return false;
+        }
+
         Computer other = (Computer) obj;
         if (comp == null) {
-            if (other.comp != null)
+            if (other.comp != null) {
                 return false;
-        } else if (!comp.equals(other.comp))
+            }
+        } else if (!comp.equals(other.comp)) {
             return false;
+        }
+
         if (disco == null) {
-            if (other.disco != null)
+            if (other.disco != null) {
                 return false;
-        } else if (!disco.equals(other.disco))
+            }
+        } else if (!disco.equals(other.disco)) {
             return false;
-        if (id != other.id)
+        }
+
+        if (id != other.id) {
             return false;
+        }
+
         if (intro == null) {
-            if (other.intro != null)
+            if (other.intro != null) {
                 return false;
-        } else if (!intro.equals(other.intro))
+            }
+        } else if (!intro.equals(other.intro)) {
             return false;
+        }
+
         if (name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
-        } else if (!name.equals(other.name))
+            }
+        } else if (!name.equals(other.name)) {
             return false;
+        }
+
         return true;
     }
 

@@ -3,16 +3,15 @@ package com.excilys.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-
 public interface DAO<T> {
 
-	public List<T> getAll() throws SQLException;
-	
-	public T get(long id) throws SQLException;
-	
-	public void create(T c) throws SQLException;
-	
-	public void update(T c) throws SQLException;
-	
-	public void delete(long c) throws SQLException;
+    List<T> getAll() throws SQLException;
+
+    T get(long id) throws SQLException;
+
+    void create(T c) throws SQLException;
+
+    void update(T c) throws SQLException;
+
+    void delete(long c) throws SQLException;
 }

@@ -15,17 +15,29 @@ import com.excilys.model.Computer;
  */
 public class ComputerDAO implements DAO<Computer> {
 
-    private final String COMPUTER_DB_NAME = "computer-database-db";
+    private String computer_db_name = "computer-database-db";
+    private boolean isTesting = false;
+    
     private JDBCTool toolConnexion;
     private static List<Company> cacheCompanies = null;
 
-    public void setConnexion(JDBCTool c) {
+    public ComputerDAO(JDBCTool c) {
         if (c == null) {
             throw new IllegalArgumentException("Tool is null");
         }
         
         toolConnexion = c;
         // toolConnexion.linkToMySql();
+    }
+    
+    public void switchDB() {
+        if (isTesting) {
+            isTesting = true;
+            computer_db_name = "computer-database-db-test";
+        } else {
+            isTesting = false;
+            computer_db_name = "computer-database-db";
+        }
     }
 
     public JDBCTool getConnexion() {
@@ -48,11 +60,11 @@ public class ComputerDAO implements DAO<Computer> {
         List<Computer> result = null;
         try {
             initCompanies();
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
             // Execute a query
             /*
              * PreparedStatement stmt =
-             * connection.getConnection(COMPUTER_DB_NAME).
+             * connection.getConnection(computer_db_name).
              * 
              * // SELECT c.id, c.name, c.introduced, c.discontinued, com.name
              * FROM // computer c INNER JOIN company com ON com.id = company_id
@@ -60,7 +72,7 @@ public class ComputerDAO implements DAO<Computer> {
              */
             String sql = "SELECT * FROM `computer`;";
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
             result = new ArrayList<Computer>();
@@ -86,7 +98,7 @@ public class ComputerDAO implements DAO<Computer> {
 
             }
             rs.close();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
@@ -102,11 +114,11 @@ public class ComputerDAO implements DAO<Computer> {
         Computer compuTemp = null;
         try {
             initCompanies();
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
             // Execute a query
 
             /*
-             * Statement stmt = toolConnexion.getConnection(COMPUTER_DB_NAME)
+             * Statement stmt = toolConnexion.getConnection(computer_db_name)
              * .createStatement();
              * 
              * String sql = "SELECT * FROM `computer` WHERE id=" + idComp + ";";
@@ -115,7 +127,7 @@ public class ComputerDAO implements DAO<Computer> {
 
             String sql = "SELECT * FROM `computer` WHERE id = ? ;";
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
             stmt.setLong(1, idComp);
             ResultSet rs = stmt.executeQuery();
 
@@ -140,7 +152,7 @@ public class ComputerDAO implements DAO<Computer> {
             }
 
             rs.close();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
@@ -158,16 +170,16 @@ public class ComputerDAO implements DAO<Computer> {
         /*
          * String sql = "SELECT * FROM `computer` WHERE id = ? ;";
          * PreparedStatement stmt =
-         * toolConnexion.getConnection(COMPUTER_DB_NAME).prepareStatement(sql);
+         * toolConnexion.getConnection(computer_db_name).prepareStatement(sql);
          * stmt.setLong(1, idComp); ResultSet rs = stmt.executeQuery();
          */
         try {
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
 
             String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
 
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
             /*
              * String sql =
              * "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES ('"
@@ -183,7 +195,7 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.setObject(4, comp.getComp().getId());
 
             stmt.executeUpdate();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
@@ -198,10 +210,10 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalStateException("Pas de connexion tool");
         }
         try {
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
             String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ?, WHERE `computer`.`id` = ?;";
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
             stmt.setString(1, comp.getName());
             stmt.setTimestamp(2, comp.getIntro());
             stmt.setTimestamp(2, comp.getDisco());
@@ -212,7 +224,7 @@ public class ComputerDAO implements DAO<Computer> {
              * sql = sql.replaceAll("0\\);", "NULL\\);"); }
              */
             stmt.executeUpdate();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
@@ -227,14 +239,14 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalStateException("Pas de connexion tool");
         }
         try {
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
 
             String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
             stmt.setLong(1, comp);
             stmt.executeUpdate();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
@@ -250,11 +262,11 @@ public class ComputerDAO implements DAO<Computer> {
         List<Computer> result = null;
         try {
             initCompanies();
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
 
             String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
             stmt.setInt(1, low);
             stmt.setInt(2, height);
 
@@ -283,7 +295,7 @@ public class ComputerDAO implements DAO<Computer> {
 
             }
             rs.close();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
@@ -295,14 +307,14 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalStateException("Pas de connexion tool");
         }
         try {
-            toolConnexion.connect(COMPUTER_DB_NAME);
+            toolConnexion.connect(computer_db_name);
 
             String sql = "SELECT COUNT(*) FROM `computer`;";
             PreparedStatement stmt = toolConnexion.getConnection(
-                    COMPUTER_DB_NAME).prepareStatement(sql);
+                    computer_db_name).prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
-            toolConnexion.closeConnect(COMPUTER_DB_NAME);
+            toolConnexion.closeConnect(computer_db_name);
 
             while (rs.next()) {
                 return rs.getLong("COUNT(*)");

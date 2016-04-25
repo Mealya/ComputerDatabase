@@ -112,7 +112,7 @@ public class Pageable<T> {
       }
 
       // now work out where the sub-list should start and end
-      startingIndex = pageSize * (page-1);
+      startingIndex = pageSize * (page - 1);
       if (startingIndex < 0) {
         startingIndex = 0;
       }
@@ -138,7 +138,7 @@ public class Pageable<T> {
      */
     public int getPreviousPage() {
       if (page > 1) {
-        return page-1;
+        return page - 1;
       } else {
         return 0;
       }
@@ -151,7 +151,7 @@ public class Pageable<T> {
      */
     public int getNextPage() {
       if (page < maxPages) {
-        return page+1;
+        return page + 1;
       } else {
         return 0;
       }

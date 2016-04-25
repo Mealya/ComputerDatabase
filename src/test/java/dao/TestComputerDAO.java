@@ -7,11 +7,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.ComputerDAO;
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
+import com.excilys.model.Computer;
 
-public class TestCompanyDAO {
+public class TestComputerDAO {
 
     // private JDBCTool tool;
 
@@ -24,12 +25,12 @@ public class TestCompanyDAO {
     @Test
     public void test_Constructor_Throw_Exception() {
         // Given
-        CompanyDAO compa = null;
+        ComputerDAO comp = null;
         JDBCTool testFail = null;
 
         try {
             // When
-            compa = new CompanyDAO(testFail);
+            comp = new ComputerDAO(testFail);
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             // Then
@@ -41,12 +42,12 @@ public class TestCompanyDAO {
     public void test_GetAll() {
         // Given
         JDBCTool tool = new JDBCTool();
-        CompanyDAO compa = new CompanyDAO(tool);
-        compa.switchDB();
-        List<Company> listResult = null;
+        ComputerDAO comp = new ComputerDAO(tool);
+        comp.switchDB();
+        List<Computer> listResult = null;
 
         // When
-        listResult = compa.getAll();
+        listResult = comp.getAll();
 
         // Then
         if (listResult == null) {
@@ -56,17 +57,17 @@ public class TestCompanyDAO {
         }
 
     }
-
+    /*
     @Test
     public void test_GetId() {
         // Given
-        Company comp = new Company();
-        comp.setId(1);
-        comp.setName("Apple Inc.");
+        Computer comp = new Computer();
+        comp.setId(1);ezs
+        comp.setName("Apple Inc.");sdf
         JDBCTool tool = new JDBCTool();
-        CompanyDAO compaDAO = new CompanyDAO(tool);
+        ComputerDAO compaDAO = new ComputerDAO(tool);
         compaDAO.switchDB();
-        Company result = null;
+        Computer result = null;
 
         // When
         result = compaDAO.get(1);
@@ -111,4 +112,5 @@ public class TestCompanyDAO {
         }
 
     }
+    */
 }

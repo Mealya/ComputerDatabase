@@ -18,8 +18,7 @@ public class Test {
         JDBCTool tool = new JDBCTool();
         tool.linkToMySql();
 
-        ComputerDAO compt = new ComputerDAO();
-        compt.setConnexion(tool);
+        ComputerDAO compt = new ComputerDAO(tool);
         HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
 
         Scanner sc = new Scanner(System.in);

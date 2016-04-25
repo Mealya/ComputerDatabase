@@ -1,6 +1,9 @@
 package com.excilys.database;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,9 +21,7 @@ public class JDBCTool {
     
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
 
-    /**
-     * Create an object Connection with a DB name
-     * @param name The name of the database
+    /** Create an object Connection with a DB name.
      */
     public void linkToMySql() {
         slf4jLogger.info("=========== MySQL JDBC Connecting.....  ===========");
@@ -45,7 +46,7 @@ public class JDBCTool {
 
         try {
             connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/"+ nameDB +"?zeroDateTimeBehavior=convertToNull",
+                    .getConnection("jdbc:mysql://localhost:3306/" + nameDB + "?zeroDateTimeBehavior=convertToNull",
                             "admincdb", "qwerty1234");
 
         } catch (SQLException e) {

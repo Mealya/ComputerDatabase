@@ -1,6 +1,6 @@
 package com.excilys.service;
 
-import java.sql.SQLException;
+
 import java.util.List;
 
 import com.excilys.dao.ComputerDAO;
@@ -40,8 +40,8 @@ public class HeavyComputerDAO {
     public void createComputer(Computer c) {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
-        } else {
-            /*
+        } /*else {
+            
              * if (c.getName() == null) { throw new
              * IllegalArgumentException("name of computer is null"); } if
              * (c.getIntro() == null) { throw new
@@ -50,8 +50,8 @@ public class HeavyComputerDAO {
              * IllegalArgumentException("disco of computer is null"); } if
              * (c.getCompId() < 1) { throw new
              * IllegalArgumentException("invalid company id"); }
-             */
-        }
+             *
+        }*/
         compDB.create(c);
     }
 
