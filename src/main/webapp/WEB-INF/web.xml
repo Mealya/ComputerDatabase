@@ -11,6 +11,10 @@
 		<servlet-name>Dashboard</servlet-name>
 		<servlet-class>com.excilys.controller.Dashboard</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>AddComputer</servlet-name>
+		<servlet-class>com.excilys.controller.AddComputer</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Index</servlet-name>
@@ -20,9 +24,13 @@
 		<servlet-name>Index2</servlet-name>
 		<url-pattern>/Index2</url-pattern>
 	</servlet-mapping>
-		<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>Dashboard</servlet-name>
 		<url-pattern>/dash</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AddComputer</servlet-name>
+		<url-pattern>/add</url-pattern>
 	</servlet-mapping>
 
 	<error-page>

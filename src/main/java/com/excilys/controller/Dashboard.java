@@ -22,7 +22,6 @@ public class Dashboard extends HttpServlet {
         int size = 15;
         if (request.getParameter("size") != null) {
             size = Integer.parseInt((String) request.getParameter("size"));
-            System.out.println(size);
         } 
         String nbComputers;
         
