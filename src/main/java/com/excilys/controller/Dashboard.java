@@ -23,6 +23,12 @@ public class Dashboard extends HttpServlet {
         if (request.getParameter("size") != null) {
             size = Integer.parseInt((String) request.getParameter("size"));
         } 
+
+        if (request.getParameter("added") != null) {
+            request.setAttribute("added", 1);
+        }
+        
+        
         String nbComputers;
         
         JDBCTool tool = new JDBCTool();

@@ -1,7 +1,6 @@
 package com.excilys.controller;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -18,30 +17,50 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyComputerDAO;
 
+public class EditComputer extends HttpServlet {
 
-public class AddComputer extends HttpServlet {
+    private static final long serialVersionUID = -6582045182381493078L;
 
-    private static final long serialVersionUID = 1818795394032861086L;
-    
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        // TODO check fail cast
+        request.setAttribute("id", id);
+
         JDBCTool tool = new JDBCTool();
         tool.linkToMySql();
 
-        CompanyDAO compt = new CompanyDAO(tool);
-        
-        List<Company> companies = compt.getAll();
+        ComputerDAO compt = new ComputerDAO(tool);
+        HeavyComputerDAO work = new HeavyComputerDAO(compt);
+        CompanyDAO compa = new CompanyDAO(tool);
+
+        List<Company> companies = compa.getAll();
         request.setAttribute("companies", companies);
-        
-        request.setAttribute("added", 2);
-        this.getServletContext().getRequestDispatcher("/vues/raw/views/addComputer.jsp")
+        Computer temp = work.getComputer(id);
+        if (temp.getName() != null) {
+            request.setAttribute("name", temp.getName());
+        }
+        if (temp.getIntro() != null) {
+            request.setAttribute("intro", temp.getIntro());
+        }
+        if (temp.getDisco() != null) {
+            request.setAttribute("disco", temp.getDisco());
+        }
+        if (temp.getComp() != null) {
+            request.setAttribute("idCompa", temp.getComp().getId());
+        }
+
+        this.getServletContext()
+                .getRequestDispatcher("/vues/raw/views/editComputer.jsp")
                 .forward(request, response);
     }
-    
+
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Computer computer = new Computer();
+Computer computer = new Computer();
         
+
+        computer.setId(Long.parseLong(request.getParameter("id")));
         computer.setName(request.getParameter("computerName"));
        
         Timestamp time = null;
@@ -63,6 +82,8 @@ public class AddComputer extends HttpServlet {
           
         }
         computer.setDisco(time);
+        
+
 
         Company compTemp = new Company();
         compTemp.setId(Integer.parseInt(request.getParameter("companyId")));
@@ -72,21 +93,9 @@ public class AddComputer extends HttpServlet {
         tool.linkToMySql();
         ComputerDAO compDAO = new ComputerDAO(tool);
         HeavyComputerDAO serv = new HeavyComputerDAO(compDAO);
-        serv.createComputer(computer);
-        
-        
-        
-        
-        
-        CompanyDAO compt = new CompanyDAO(tool);
-        
-        List<Company> companies = compt.getAll();
-        request.setAttribute("companies", companies);
-        
-        request.setAttribute("added", 1);
-        this.getServletContext().getRequestDispatcher("/vues/raw/views/addComputer.jsp")
-        .forward(request, response);
-        
+        serv.updateComputer(computer);
+
+
+        response.sendRedirect("/ComputerDatabaseMaven/dash?added=1");
     }
 }
-

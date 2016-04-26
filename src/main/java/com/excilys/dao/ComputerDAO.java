@@ -213,14 +213,16 @@ public class ComputerDAO implements DAO<Computer> {
         }
         try {
             toolConnexion.connect(computer_db_name);
-            String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ?, WHERE `computer`.`id` = ?;";
+            String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ? WHERE `computer`.`id` = ?;";
+            //String sql = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, WHERE id = ?;";
+
             PreparedStatement stmt = toolConnexion.getConnection(
                     computer_db_name).prepareStatement(sql);
             stmt.setString(1, comp.getName());
             stmt.setTimestamp(2, comp.getIntro());
-            stmt.setTimestamp(2, comp.getDisco());
-            stmt.setObject(3, comp.getComp().getId());
-            stmt.setLong(4, comp.getId());
+            stmt.setTimestamp(3, comp.getDisco());
+            stmt.setLong(4, comp.getComp().getId());
+            stmt.setLong(5, comp.getId());
             /*
              * sql = sql.replaceAll("'null'", "NULL"); if (comp.getId() == 0) {
              * sql = sql.replaceAll("0\\);", "NULL\\);"); }
