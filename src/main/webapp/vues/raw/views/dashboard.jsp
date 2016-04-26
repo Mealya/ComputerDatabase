@@ -1,3 +1,5 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.excilys.model.Computer" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,6 +80,36 @@
                 </thead>
                 <!-- Browse attribute computers -->
                 <tbody id="results">
+                	<% 
+
+						List<Computer> computers = (List<Computer>) request.getAttribute("computers");
+						for (Computer c : computers) {
+    						out.println("<tr>");
+							out.println("<td class=\"editMode\">");
+                            out.println("<input type=\"checkbox\" name=\"cb\" class=\"cb\" value=\"0\">");
+                       		out.println("</td>");
+                        	out.println("<td>");
+                            	out.println("<a href=\"editComputer.html\" onclick=\"\">"+ c.getName() +"</a>");
+                        	out.println("</td>");
+                        	if (c.getIntro() != null) {
+                            	out.println("<td>" + c.getIntro().toLocalDateTime().toLocalDate() + "</td>");
+                        	} else {
+                            	out.println("<td> </td>");
+                        	}
+                        	if (c.getDisco() != null) {
+                            	out.println("<td>" + c.getDisco().toLocalDateTime().toLocalDate() + "</td>");
+                        	} else {
+                            	out.println("<td> </td>");
+                        	}
+                        	if (c.getComp() != null) {
+                            	out.println("<td>" + c.getComp().getName() + "</td>");
+                        	} else {
+                            	out.println("<td> </td>");
+                        	}
+                        	out.println("</tr>");
+						}
+    				%>
+    				<!-- 
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
@@ -90,6 +122,8 @@
                         <td>Apple Inc.</td>
 
                     </tr>
+                    -->
+                    <!-- 
                     <tr>
                         <td class="editMode">
                             <input type="checkbox" name="cb" class="cb" value="0">
@@ -222,7 +256,7 @@
                         <td>Nintendo</td>
 
                     </tr>
-                    
+                     -->
                 </tbody>
             </table>
         </div>
