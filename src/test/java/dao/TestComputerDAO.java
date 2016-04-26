@@ -34,7 +34,7 @@ public class TestComputerDAO {
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             // Then
-            assertEquals(e.getMessage(), "c is null");
+            assertEquals(e.getMessage(), "Tool is null");
         }
     }
 
@@ -57,13 +57,20 @@ public class TestComputerDAO {
         }
 
     }
-    /*
+    
     @Test
     public void test_GetId() {
-        // Given
+        // Given 1 MacBook Pro 15.4 inch NULLNULL1
         Computer comp = new Computer();
-        comp.setId(1);ezs
-        comp.setName("Apple Inc.");sdf
+        comp.setId(1);
+        comp.setName("MacBook Pro 15.4 inch");
+        comp.setIntro(null);
+        comp.setDisco(null);
+        Company c = new Company();
+        c.setId(1);
+        c.setName("Apple Inc.");
+        comp.setComp(c);
+        
         JDBCTool tool = new JDBCTool();
         ComputerDAO compaDAO = new ComputerDAO(tool);
         compaDAO.switchDB();
@@ -75,18 +82,22 @@ public class TestComputerDAO {
         // Then
         assertEquals(result.getId(), comp.getId());
         assertEquals(result.getName(), comp.getName());
+        assertEquals(result.getDisco(), comp.getDisco());
+        assertEquals(result.getIntro(), comp.getIntro());
+        assertEquals(result.getComp().getId(), comp.getComp().getId());
+        assertEquals(result.getComp().getName(), comp.getComp().getName());
     }
 
     @Test
     public void test_GetId_Throw_Exception_Id_Neg() {
         // Given
         JDBCTool tool = new JDBCTool();
-        CompanyDAO compaDAO = new CompanyDAO(tool);
-        compaDAO.switchDB();
+        ComputerDAO compDAO = new ComputerDAO(tool);
+        compDAO.switchDB();
 
         try {
             // When
-            compaDAO.get(-1);
+            compDAO.get(-1);
             fail("Should throw an exception");
         } catch (IllegalArgumentException e) {
             // Then
@@ -99,12 +110,12 @@ public class TestComputerDAO {
     public void test_GetId_Throw_Exception_Id_0() {
         // Given
         JDBCTool tool = new JDBCTool();
-        CompanyDAO compaDAO = new CompanyDAO(tool);
-        compaDAO.switchDB();
+        ComputerDAO compDAO = new ComputerDAO(tool);
+        compDAO.switchDB();
 
         try {
             // When
-            compaDAO.get(0);
+            compDAO.get(0);
             fail("Should throw an exception");
         } catch (IllegalArgumentException e) {
             // Then
@@ -112,5 +123,5 @@ public class TestComputerDAO {
         }
 
     }
-    */
+    
 }

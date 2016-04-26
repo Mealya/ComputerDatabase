@@ -1,7 +1,7 @@
-package test;
+package cli;
 
 public interface Foo {
-    public default void foo() {
+    default void foo() {
         System.out.println("Default implementation of foo()");
     }
 }

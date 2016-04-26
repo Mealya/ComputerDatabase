@@ -1,6 +1,5 @@
 package com.excilys.database;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,10 +17,11 @@ import org.slf4j.LoggerFactory;
 public class JDBCTool {
 
     private final Logger slf4jLogger = LoggerFactory.getLogger(JDBCTool.class);
-    
+
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
 
-    /** Create an object Connection with a DB name.
+    /**
+     * Create an object Connection with a DB name.
      */
     public void linkToMySql() {
         slf4jLogger.info("=========== MySQL JDBC Connecting.....  ===========");
@@ -29,12 +29,13 @@ public class JDBCTool {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            slf4jLogger.error("Where is your MySQL JDBC Driver? : " + e.getMessage());
+            slf4jLogger.error("Where is your MySQL JDBC Driver? : "
+                    + e.getMessage());
             return;
         }
         slf4jLogger.info("MySQL JDBC Driver Registered!");
     }
-    
+
     public void connect(String nameDB) {
         if (nameDB == null) {
             throw new IllegalArgumentException("Name must not be null");
@@ -45,13 +46,14 @@ public class JDBCTool {
         Connection connection = null;
 
         try {
-            connection = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/" + nameDB + "?zeroDateTimeBehavior=convertToNull",
-                            "admincdb", "qwerty1234");
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/" + nameDB
+                    + "?zeroDateTimeBehavior=convertToNull",
+                    "admincdb", "qwerty1234");
 
         } catch (SQLException e) {
             slf4jLogger.error("Connection Failed! " + e.getMessage());
-            
+
             return;
         }
 
@@ -62,13 +64,15 @@ public class JDBCTool {
             return;
         }
     }
-    
+
     /**
      * Return the connection object linked to a name
-     * @param name The name of the database
+     * 
+     * @param name
+     *            The name of the database
      * @return Connection object
      */
-    public Connection getConnection(String name)  {
+    public Connection getConnection(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
@@ -77,7 +81,9 @@ public class JDBCTool {
 
     /**
      * Close the Connection linked to a name
-     * @param name The name of the data base
+     * 
+     * @param name
+     *            The name of the data base
      */
     public void closeConnect(String name) {
         if (name == null) {
@@ -88,7 +94,8 @@ public class JDBCTool {
                 try {
                     c.getValue().close();
                     connections.remove(c.getKey());
-                    slf4jLogger.info("=========== MySQL JDBC destroyed.....  ===========");
+                    slf4jLogger
+                    .info("=========== MySQL JDBC destroyed.....  ===========");
                 } catch (SQLException e) {
                     slf4jLogger.error("Deconnection failed! " + e.getMessage());
                 }
@@ -96,4 +103,3 @@ public class JDBCTool {
         }
     }
 }
-

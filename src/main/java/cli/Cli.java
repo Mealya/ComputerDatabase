@@ -1,4 +1,4 @@
-package test;
+package cli;
 
 import java.sql.Timestamp;
 import java.util.InputMismatchException;
@@ -10,7 +10,7 @@ import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyComputerDAO;
 
-public class Test {
+public class Cli {
 
     public static void main(String[] argv) {
         String computerDBName = "computer-database-db";

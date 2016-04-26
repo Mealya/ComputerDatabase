@@ -1,13 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
-<web-app> 
-	<display-name>TestTomcat</display-name> 
-	<servlet> 
-		<servlet-name>Test</servlet-name> 
-		<servlet-class>com.developpez.tomcat.Test</servlet-class> 
-	</servlet> 
-	<servlet-mapping> 
-		<servlet-name>Test</servlet-name> 
-		<url-pattern>/Test</url-pattern> 
-	</servlet-mapping> 
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+	<servlet>
+		<servlet-name>Index</servlet-name>
+		<servlet-class>com.excilys.controller.Hello</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Index2</servlet-name>
+		<servlet-class>com.excilys.controller.HelloServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Dashboard</servlet-name>
+		<servlet-class>com.excilys.controller.Dashboard</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Index</servlet-name>
+		<url-pattern>/Index</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Index2</servlet-name>
+		<url-pattern>/Index2</url-pattern>
+	</servlet-mapping>
+		<servlet-mapping>
+		<servlet-name>Dashboard</servlet-name>
+		<url-pattern>/dash</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<location>/vues/raw/views/404.html</location>
+	</error-page>
 </web-app>
+
+<!-- <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE web-app PUBLIC "-//Sun 
+	Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
+	<web-app> <display-name>TestTomcat</display-name> <servlet> <servlet-name>Test</servlet-name> 
+	<servlet-class>com.excilys.controller.HelloServlet</servlet-class> </servlet> 
+	<servlet-mapping> <servlet-name>Test</servlet-name> <url-pattern>/Test</url-pattern> 
+	</servlet-mapping> </web-app> -->

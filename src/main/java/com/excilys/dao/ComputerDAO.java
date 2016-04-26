@@ -110,7 +110,9 @@ public class ComputerDAO implements DAO<Computer> {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-
+        if (idComp <= 0) {
+            throw new IllegalArgumentException("ID should not be negative or 0");
+        }
         Computer compuTemp = null;
         try {
             initCompanies();
@@ -314,11 +316,12 @@ public class ComputerDAO implements DAO<Computer> {
                     computer_db_name).prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
-            toolConnexion.closeConnect(computer_db_name);
+            
 
             while (rs.next()) {
                 return rs.getLong("COUNT(*)");
             }
+            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }
