@@ -283,9 +283,9 @@
         </ul>
 
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <button type="button" onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=10';" class="btn btn-default">10</button>
+            <button type="button" onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=50';" class="btn btn-default">50</button>
+            <button type="button" onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=100';" class="btn btn-default">100</button>
         </div>
 
     </footer>

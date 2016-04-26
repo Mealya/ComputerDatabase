@@ -19,6 +19,11 @@ public class Dashboard extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int size = 15;
+        if (request.getParameter("size") != null) {
+            size = Integer.parseInt((String) request.getParameter("size"));
+            System.out.println(size);
+        } 
         String nbComputers;
         
         JDBCTool tool = new JDBCTool();
@@ -30,7 +35,10 @@ public class Dashboard extends HttpServlet {
         nbComputers = String.valueOf(compt.getSizeTable());
         
         List<Computer> computers = null;
-        computers = workingDB.getSetComputer(0, 15);
+        
+        int low = 0;
+        int height = 0;
+        computers = workingDB.getSetComputer(low, height + size);
         
         request.setAttribute("computers", computers);
         request.setAttribute("nbComputers", nbComputers);

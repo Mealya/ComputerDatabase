@@ -65,3 +65,6 @@ local.properties
 
 .project
 .settings
+
+*/target/*
+*/target/**
