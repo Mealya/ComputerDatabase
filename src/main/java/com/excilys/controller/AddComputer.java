@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.dao.CompanyDAO;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.database.JDBCTool;
@@ -21,6 +24,7 @@ import com.excilys.service.HeavyComputerDAO;
 
 public class AddComputer extends HttpServlet {
 
+    private final Logger slf4jLogger = LoggerFactory.getLogger(AddComputer.class);
     private static final long serialVersionUID = 1818795394032861086L;
     
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,7 +54,7 @@ public class AddComputer extends HttpServlet {
             java.util.Date parsedDate = dateFormat.parse(request.getParameter("introduced"));
             time = new java.sql.Timestamp(parsedDate.getTime());
         } catch(Exception e) {
-          
+            slf4jLogger.info("Bad entry for introduced : " + e.getMessage());
         }
         computer.setIntro(time);
         
@@ -60,13 +64,18 @@ public class AddComputer extends HttpServlet {
             java.util.Date parsedDate = dateFormat.parse(request.getParameter("discontinued"));
             time = new java.sql.Timestamp(parsedDate.getTime());
         } catch(Exception e) {
-          
+            slf4jLogger.info("Bad entry for discovered : " + e.getMessage());
         }
         computer.setDisco(time);
 
-        Company compTemp = new Company();
-        compTemp.setId(Integer.parseInt(request.getParameter("companyId")));
-        computer.setComp(compTemp);
+        Company compTemp = null;
+        long idCompa = Long.parseLong(request.getParameter("companyId"));
+        if (idCompa != 0) {
+            compTemp = new Company();
+            compTemp.setId(idCompa);
+            computer.setComp(compTemp);
+        }
+
         
         JDBCTool tool = new JDBCTool();
         tool.linkToMySql();

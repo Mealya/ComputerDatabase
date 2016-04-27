@@ -19,35 +19,35 @@ public class Dashboard extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    
+        int page = 1;
         int size = 15;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
         if (request.getParameter("size") != null) {
             size = Integer.parseInt((String) request.getParameter("size"));
-        } 
-
-        if (request.getParameter("added") != null) {
-            request.setAttribute("added", 1);
         }
-        
-        
+
         String nbComputers;
-        
+
         JDBCTool tool = new JDBCTool();
         tool.linkToMySql();
 
         ComputerDAO compt = new ComputerDAO(tool);
         HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
-        
+
         nbComputers = String.valueOf(compt.getSizeTable());
-        
+
         List<Computer> computers = null;
-        
-        int low = 0;
-        int height = 0;
-        computers = workingDB.getSetComputer(low, height + size);
-        
+
+        int low = (page * size) - size;
+        computers = workingDB.getSetComputer(low, size);
+
         request.setAttribute("computers", computers);
         request.setAttribute("nbComputers", nbComputers);
-        this.getServletContext().getRequestDispatcher("/vues/raw/views/dashboard.jsp")
+        this.getServletContext()
+                .getRequestDispatcher("/vues/raw/views/dashboard.jsp")
                 .forward(request, response);
     }
 }

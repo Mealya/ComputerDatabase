@@ -85,9 +85,13 @@ Computer computer = new Computer();
         
 
 
-        Company compTemp = new Company();
-        compTemp.setId(Integer.parseInt(request.getParameter("companyId")));
-        computer.setComp(compTemp);
+        Company compTemp = null;
+        long idCompa = Long.parseLong(request.getParameter("companyId"));
+        if (idCompa != 0) {
+            compTemp = new Company();
+            compTemp.setId(idCompa);
+            computer.setComp(compTemp);
+        }
         
         JDBCTool tool = new JDBCTool();
         tool.linkToMySql();

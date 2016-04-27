@@ -194,7 +194,12 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.setString(1, comp.getName());
             stmt.setTimestamp(2, comp.getIntro());
             stmt.setTimestamp(3, comp.getDisco());
-            stmt.setObject(4, comp.getComp().getId());
+            if (comp.getComp() == null) {
+                stmt.setObject(4, null);
+            } else {
+                stmt.setObject(4, comp.getComp().getId());
+            }
+
 
             stmt.executeUpdate();
             toolConnexion.closeConnect(computer_db_name);
@@ -221,7 +226,11 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.setString(1, comp.getName());
             stmt.setTimestamp(2, comp.getIntro());
             stmt.setTimestamp(3, comp.getDisco());
-            stmt.setLong(4, comp.getComp().getId());
+            if (comp.getComp() == null) {
+                stmt.setObject(4, null);
+            } else {
+                stmt.setObject(4, comp.getComp().getId());
+            }
             stmt.setLong(5, comp.getId());
             /*
              * sql = sql.replaceAll("'null'", "NULL"); if (comp.getId() == 0) {
