@@ -13,9 +13,7 @@
 	media="screen">
 <link href="vues/raw/css/main.css" rel="stylesheet" media="screen">
 
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -27,13 +25,17 @@
 
 	<section id="main">
 		<div class="container">
-			<% 
-                		if (request.getAttribute("added") != null) {
-                    		if ((int) request.getAttribute("added") == 1) {
-                        		out.println("<p class=\"alert alert-success\">Computer edited !</p>");
-                    		}
-                		}
-                	%>
+			<%
+
+			    if (request.getParameter("return") != null) {
+			        Integer choix = Integer.parseInt(request.getParameter("return"));
+			        if (choix == 1) {
+			            out.println("<p class=\"alert alert-success\">Computer edited !</p>");
+			        } else {
+			            out.println("<p class=\"alert alert-success\">Computer(s) deleted !</p>");
+			        }
+			    }
+			%>
 			<h1 id="homeTitle">
 				<% 
 					String attribut = (String) request.getAttribute("nbComputers");
@@ -60,7 +62,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action="/ComputerDatabaseMaven/delete" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -98,7 +100,7 @@
                             out.println("<input type=\"checkbox\" name=\"cb\" class=\"cb\" value=\"" + c.getId() + "\">");
                        		out.println("</td>");
                         	out.println("<td>");
-                            	out.println("<a href=\"/ComputerDatabaseMaven/editComputer?id=" + c.getId() + "\" onclick=\"\">"+ c.getName() +"</a>");
+                            	out.println("<a href=\"/ComputerDatabaseMaven/edit?id=" + c.getId() + "\" onclick=\"\">"+ c.getName() +"</a>");
                         	out.println("</td>");
                         	if (c.getIntro() != null) {
                             	out.println("<td>" + c.getIntro().toLocalDateTime().toLocalDate() + "</td>");
@@ -151,6 +153,8 @@
 					class="btn btn-default">100</button>
 			</div>
 	</footer>
-
+	<script src="vues/raw/js/jquery.min.js"></script>
+	<script src="vues/raw/js/bootstrap.min.js"></script>
+	<script src="vues/raw/js/dashboard.js"></script>
 </body>
 </html>

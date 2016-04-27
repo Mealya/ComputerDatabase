@@ -96,6 +96,6 @@ Computer computer = new Computer();
         serv.updateComputer(computer);
 
 
-        response.sendRedirect("/ComputerDatabaseMaven/dash?added=1");
+        response.sendRedirect("/ComputerDatabaseMaven/dash?return=1");
     }
 }
