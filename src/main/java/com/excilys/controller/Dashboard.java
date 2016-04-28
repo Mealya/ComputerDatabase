@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.dao.ComputerDAO;
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Computer;
@@ -15,18 +18,31 @@ import com.excilys.service.HeavyComputerDAO;
 
 public class Dashboard extends HttpServlet {
 
+    private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
     private static final long serialVersionUID = 1L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
+
         int page = 1;
         int size = 15;
         if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+            } catch (NumberFormatException e) {
+                slf4jLogger.info("Bad parameter for page");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
         }
         if (request.getParameter("size") != null) {
-            size = Integer.parseInt((String) request.getParameter("size"));
+            try {
+                page = Integer.parseInt(request.getParameter("size"));
+            } catch (NumberFormatException e) {
+                slf4jLogger.info("Bad parameter for size");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
         }
 
         String nbComputers;
@@ -46,8 +62,7 @@ public class Dashboard extends HttpServlet {
 
         request.setAttribute("computers", computers);
         request.setAttribute("nbComputers", nbComputers);
-        
-        
+
         this.getServletContext()
                 .getRequestDispatcher("/vues/raw/views/dashboard.jsp")
                 .forward(request, response);
