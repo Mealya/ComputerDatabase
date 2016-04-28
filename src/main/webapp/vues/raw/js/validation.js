@@ -30,12 +30,12 @@ $(function() {
 		if (!validateString($(this).val())) {
 			$(this).parent().first().addClass('has-error');
 			$(this).parent().first().removeClass('has-success');
-
+			$("#computerNamel").removeClass('glyphicon-ok').addClass('glyphicon-remove');
 			name = false;
 		} else {
 			$(this).parent().first().addClass('has-success');
 			$(this).parent().first().removeClass('has-error');
-
+			$("#computerNamel").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 			name = true;
 		}
 
@@ -45,13 +45,17 @@ $(function() {
 	$('#introduced').on('input', function() {
 		if (!validateDate($(this).val())) {
 			$(this).parent().first().addClass('has-error');
-			$(this).parent().first().removeClass('has-success');
-
+			$(this).parent().first().removeClass('has-success'); 
+			$(this).parent().first().removeClass('has-warning');
+			$("#introducedl").removeClass('glyphicon-warning-sign');
+			$("#introducedl").removeClass('glyphicon-ok').addClass('glyphicon-remove');
 			introduced = false;
 		} else {
 			$(this).parent().first().addClass('has-success');
 			$(this).parent().first().removeClass('has-error');
-
+			$(this).parent().first().removeClass('has-warning');
+			$("#introducedl").removeClass('glyphicon-warning-sign');
+			$("#introducedl").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 			introduced = true;
 		}
 
@@ -62,12 +66,16 @@ $(function() {
 		if (!validateDate($(this).val())) {
 			$(this).parent().first().addClass('has-error');
 			$(this).parent().first().removeClass('has-success');
-
+			$(this).parent().first().removeClass('has-warning');
+			$("#discontinuedl").removeClass('glyphicon-warning-sign');
+			$("#discontinuedl").removeClass('glyphicon-ok').addClass('glyphicon-remove');
 			discontinued = false;
 		} else {
 			$(this).parent().first().addClass('has-success');
 			$(this).parent().first().removeClass('has-error');
-
+			$(this).parent().first().removeClass('has-warning');
+			$("#discontinuedl").removeClass('glyphicon-warning-sign');
+			$("#discontinuedl").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 			discontinued = true;
 		}
 

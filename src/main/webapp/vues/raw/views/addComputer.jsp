@@ -11,7 +11,14 @@
 <link href="vues/raw/css/font-awesome.css" rel="stylesheet"
 	media="screen">
 <link href="vues/raw/css/main.css" rel="stylesheet" media="screen">
-
+<style type="text/css">
+.has-warning .control-label,
+.has-warning .help-block,
+.has-warning .form-control-feedback
+ {
+    color: #f39c12;
+}
+</style>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -34,23 +41,26 @@
 					<h1>Add Computer</h1>
 					<form action="/ComputerDatabaseMaven/add" method="POST">
 						<fieldset>
-							<div class="form-group">
+							<div class="form-group has-error has-feedback">
 								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
+									type="text" class="form-control control-label" id="computerName"
 									name="computerName" placeholder="Computer name"> <span
 									class="glyphicon form-control-feedback" id="computerName"></span>
+									<span class="glyphicon glyphicon-remove form-control-feedback" id="computerNamel"></span>
 							</div>
-							<div class="form-group">
+							<div class="form-group has-warning has-feedback">
 								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control" id="introduced"
+									type="date" class="form-control control-label" id="introduced"
 									name="introduced" placeholder="Introduced date">
+									<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="introducedl"></span>
 							</div>
-							<div class="form-group">
+							<div class="form-group has-warning has-feedback">
 								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control" id="discontinued"
+									type="date" class="form-control control-label" id="discontinued"
 									name="discontinued" placeholder="Discontinued date">
+									<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="discontinuedl"></span>
 							</div>
-							<div class="form-group">
+							<div class="form-group has-feedback">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">-- Empty --</option>
