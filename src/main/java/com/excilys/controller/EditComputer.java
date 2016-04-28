@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.dao.CompanyDAO;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.database.JDBCTool;
@@ -19,12 +22,26 @@ import com.excilys.service.HeavyComputerDAO;
 
 public class EditComputer extends HttpServlet {
 
+    private final Logger slf4jLogger = LoggerFactory.getLogger(EditComputer.class);
     private static final long serialVersionUID = -6582045182381493078L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        // TODO check fail cast
+        int id = -1;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            slf4jLogger.info("Bad parameter for id");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+        
+        if (id <= 0) {
+            slf4jLogger.info("Request with id : " + id);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
         request.setAttribute("id", id);
 
         JDBCTool tool = new JDBCTool();

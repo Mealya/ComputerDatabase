@@ -1,7 +1,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="com.excilys.model.Computer"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
@@ -66,7 +66,8 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="/ComputerDatabaseMaven/delete" method="POST">
+		<form id="deleteForm" action="/ComputerDatabaseMaven/delete"
+			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -132,6 +133,7 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
+				<!-- Gestion du cas précédent -->
 				<c:if test="${param.page != null}">
 					<c:if test="${param.page != 1}">
 						<li><a
@@ -140,6 +142,8 @@
 						</a></li>
 					</c:if>
 				</c:if>
+
+				<!-- Gestion du cas par défaut sans num page -->
 				<c:if test="${param.page == null}">
 					<c:forEach begin="1" end="5" var="i">
 						<c:choose>
@@ -151,11 +155,16 @@
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
-					<li><a href="/ComputerDatabaseMaven/dash?page=2"
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-					</a></li>
+
+					<c:if test="${nbComputers > 15}">
+						<li><a href="/ComputerDatabaseMaven/dash?page=2"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</c:if>
+
 				</c:if>
 
+				<!-- Gestion du cas page = 1 -->
 				<c:if test="${param.page == 1}">
 					<c:forEach begin="1" end="${param.page + 4}" var="i">
 						<c:choose>
@@ -167,12 +176,14 @@
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
-					<li><a
-						href="/ComputerDatabaseMaven/dash?page=${param.page + 1}"
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-					</a></li>
+					<c:if test="${nbComputers > 15}">
+						<li><a href="/ComputerDatabaseMaven/dash?page=2"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</c:if>
 				</c:if>
 
+				<!-- Gestion du cas page = 2 -->
 				<c:if test="${param.page == 2}">
 					<c:forEach begin="1" end="${param.page + 3}" var="i">
 						<c:choose>
@@ -184,12 +195,14 @@
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
-					<li><a
-						href="/ComputerDatabaseMaven/dash?page=${param.page + 1}"
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-					</a></li>
+					<c:if test="${nbComputers > 30}">
+						<li><a href="/ComputerDatabaseMaven/dash?page=3"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</c:if>
 				</c:if>
 
+				<!-- Gestion du cas page > 2 -->
 				<c:if test="${param.page > 2}">
 					<c:forEach begin="${param.page - 2}" end="${param.page + 2}"
 						var="i">
@@ -198,56 +211,35 @@
 								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
 							</c:when>
 							<c:otherwise>
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
+								<c:if test="${nbComputers > (15 * i)}">
+									<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
+								</c:if>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
-					<li><a
-						href="/ComputerDatabaseMaven/dash?page=${param.page + 1}"
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-					</a></li>
+					<c:if test="${nbComputers > (15 * param.page)}">
+						<li><a
+							href="/ComputerDatabaseMaven/dash?page=${param.page + 1}"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</c:if>
 				</c:if>
-
 			</ul>
 
-
+			<!-- Boutons taille des pages -->
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<c:choose>
-					<c:when test="${param.page != null}">
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=10&page=${param.page}';"
-							class="btn btn-default">10</button>
-					</c:when>
-					<c:otherwise>
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=10';"
-							class="btn btn-default">10</button>
-					</c:otherwise>
-				</c:choose>
-				<c:choose>
-					<c:when test="${param.page != null}">
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=50&page=${param.page}';"
-							class="btn btn-default">50</button>
-					</c:when>
-					<c:otherwise>
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=50';"
-							class="btn btn-default">50</button>
-					</c:otherwise>
-				</c:choose>
-				<c:choose>
-					<c:when test="${param.page != null}">
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=100&page=${param.page}';"
-							class="btn btn-default">100</button>
-					</c:when>
-					<c:otherwise>
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=100';"
-							class="btn btn-default">100</button>
-					</c:otherwise>
-				</c:choose>
+				<button type="button"
+					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=10';"
+					class="btn btn-default">10</button>
+
+				<button type="button"
+					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=50';"
+					class="btn btn-default">50</button>
+
+				<button type="button"
+					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=100';"
+					class="btn btn-default">100</button>
+
 			</div>
 		</div>
 	</footer>

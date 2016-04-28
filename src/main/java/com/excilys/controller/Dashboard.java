@@ -46,6 +46,8 @@ public class Dashboard extends HttpServlet {
 
         request.setAttribute("computers", computers);
         request.setAttribute("nbComputers", nbComputers);
+        
+        
         this.getServletContext()
                 .getRequestDispatcher("/vues/raw/views/dashboard.jsp")
                 .forward(request, response);
