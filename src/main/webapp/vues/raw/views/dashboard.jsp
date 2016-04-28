@@ -3,6 +3,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -217,6 +220,12 @@
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
+					<fmt:parseNumber var="iFormat" integerOnly="true" type="number" value="${nbComputers / 15}" />
+					<c:if test="${param.page == iFormat }">						
+						<c:if test="${nbComputers % 15 != 0 }">						
+							<li><a href="/ComputerDatabaseMaven/dash?page=${iFormat + 1}">${iFormat + 1}</a></li>
+						</c:if>
+					</c:if>
 					<c:if test="${nbComputers > (15 * param.page)}">
 						<li><a
 							href="/ComputerDatabaseMaven/dash?page=${param.page + 1}"

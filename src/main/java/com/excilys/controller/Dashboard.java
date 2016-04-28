@@ -49,7 +49,7 @@ public class Dashboard extends HttpServlet {
         
         long computersLong = workingDB.getSizeTable();
         nbComputers = String.valueOf(computersLong);
-        if (computersLong < page * 15) {
+        if (computersLong < (page - 1) * 15) {
             slf4jLogger.info("Bad parameter for size");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
