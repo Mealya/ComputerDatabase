@@ -4,17 +4,17 @@ package com.excilys.service;
 import java.util.List;
 
 import com.excilys.dao.ComputerDAO;
+import com.excilys.database.JDBCTool;
 import com.excilys.model.Computer;
 
 public class HeavyComputerDAO {
 
     private ComputerDAO compDB;
 
-    public HeavyComputerDAO(ComputerDAO comp) {
-        if (comp == null) {
-            throw new IllegalArgumentException("CompDB is null");
-        }
-        compDB = comp;
+    public HeavyComputerDAO() {
+        JDBCTool tool = new JDBCTool();
+        tool.linkToMySql();
+        compDB = new ComputerDAO(tool);
     }
 
     /*
@@ -56,14 +56,33 @@ public class HeavyComputerDAO {
     }
 
     public void updateComputer(Computer c) {
+        if (c == null) {
+            throw new IllegalArgumentException("c is null");
+        }
         compDB.update(c);
     }
 
     public void deleteComputer(long c) {
+        if (c <= 0) {
+            throw new IllegalArgumentException("c is negative or 0");
+        }
         compDB.delete(c);
     }
 
     public List<Computer> getSetComputer(int low, int height) {
+        /*if (low >= height) {
+            throw new IllegalArgumentException("low >= height");
+        }
+        if (low < 0) {
+            throw new IllegalArgumentException("low is negative");
+        }
+        if (height < 0) {
+            throw new IllegalArgumentException("low is negative");
+        }*/
         return compDB.getSet(low, height);
+    }
+    
+    public long getSizeTable() {
+        return compDB.getSizeTable();
     }
 }

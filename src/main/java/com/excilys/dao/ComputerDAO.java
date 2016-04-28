@@ -31,7 +31,7 @@ public class ComputerDAO implements DAO<Computer> {
     }
     
     public void switchDB() {
-        if (isTesting) {
+        if (!isTesting) {
             isTesting = true;
             computer_db_name = "computer-database-db-test";
         } else {

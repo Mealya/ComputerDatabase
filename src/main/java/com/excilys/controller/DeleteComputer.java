@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
 import com.excilys.service.HeavyComputerDAO;
 
 
@@ -23,11 +21,7 @@ public class DeleteComputer extends HttpServlet {
      
         String result[] = (params.split(",")); 
 
-        JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
-
-        ComputerDAO compt = new ComputerDAO(tool);
-        HeavyComputerDAO work = new HeavyComputerDAO(compt);
+        HeavyComputerDAO work = new HeavyComputerDAO();
         for (String c : result) {
             work.deleteComputer(Long.parseLong(c));
         }

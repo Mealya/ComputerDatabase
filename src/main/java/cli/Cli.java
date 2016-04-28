@@ -19,7 +19,7 @@ public class Cli {
         tool.linkToMySql();
 
         ComputerDAO compt = new ComputerDAO(tool);
-        HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
+        HeavyComputerDAO workingDB = new HeavyComputerDAO();
 
         Scanner sc = new Scanner(System.in);
         Scanner sc2 = new Scanner(System.in);

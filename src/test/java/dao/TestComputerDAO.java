@@ -60,10 +60,9 @@ public class TestComputerDAO {
     
     @Test
     public void test_GetId() {
-        // Given 1 MacBook Pro 15.4 inch NULLNULL1
         Computer comp = new Computer();
         comp.setId(1);
-        comp.setName("MacBook Pro 15.4 inch");
+        comp.setName("MacBook Pro 15.4 inch2");
         comp.setIntro(null);
         comp.setDisco(null);
         Company c = new Company();

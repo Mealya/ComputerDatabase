@@ -13,11 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.dao.CompanyDAO;
-import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.service.HeavyCompanyDAO;
 import com.excilys.service.HeavyComputerDAO;
 
 
@@ -28,12 +26,9 @@ public class AddComputer extends HttpServlet {
     
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
-
-        CompanyDAO compt = new CompanyDAO(tool);
+        HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
         
-        List<Company> companies = compt.getAll();
+        List<Company> companies = workCompt.getCompanies();
         request.setAttribute("companies", companies);
         
         request.setAttribute("added", 2);
@@ -76,19 +71,15 @@ public class AddComputer extends HttpServlet {
         }
 
         
-        JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
-        ComputerDAO compDAO = new ComputerDAO(tool);
-        HeavyComputerDAO serv = new HeavyComputerDAO(compDAO);
+
+        HeavyComputerDAO serv = new HeavyComputerDAO();
         serv.createComputer(computer);
         
         
+
+        HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
         
-        
-        
-        CompanyDAO compt = new CompanyDAO(tool);
-        
-        List<Company> companies = compt.getAll();
+        List<Company> companies = workCompt.getCompanies();
         request.setAttribute("companies", companies);
         
         request.setAttribute("added", 1);

@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyComputerDAO;
 
@@ -47,13 +45,9 @@ public class Dashboard extends HttpServlet {
 
         String nbComputers;
 
-        JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
-
-        ComputerDAO compt = new ComputerDAO(tool);
-        HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
+        HeavyComputerDAO workingDB = new HeavyComputerDAO();
         
-        long computersLong = compt.getSizeTable();
+        long computersLong = workingDB.getSizeTable();
         nbComputers = String.valueOf(computersLong);
         if (computersLong < page * 15) {
             slf4jLogger.info("Bad parameter for size");

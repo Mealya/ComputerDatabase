@@ -13,11 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.dao.CompanyDAO;
-import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.service.HeavyCompanyDAO;
 import com.excilys.service.HeavyComputerDAO;
 
 public class EditComputer extends HttpServlet {
@@ -44,14 +42,12 @@ public class EditComputer extends HttpServlet {
 
         request.setAttribute("id", id);
 
-        JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
+        HeavyComputerDAO work = new HeavyComputerDAO();
+        
 
-        ComputerDAO compt = new ComputerDAO(tool);
-        HeavyComputerDAO work = new HeavyComputerDAO(compt);
-        CompanyDAO compa = new CompanyDAO(tool);
-
-        List<Company> companies = compa.getAll();
+        HeavyCompanyDAO workCompa = new HeavyCompanyDAO();
+        
+        List<Company> companies = workCompa.getCompanies();
         request.setAttribute("companies", companies);
         Computer temp = work.getComputer(id);
         if (temp.getName() != null) {
@@ -110,10 +106,7 @@ Computer computer = new Computer();
             computer.setComp(compTemp);
         }
         
-        JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
-        ComputerDAO compDAO = new ComputerDAO(tool);
-        HeavyComputerDAO serv = new HeavyComputerDAO(compDAO);
+        HeavyComputerDAO serv = new HeavyComputerDAO();
         serv.updateComputer(computer);
 
 
