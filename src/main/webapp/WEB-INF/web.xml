@@ -3,14 +3,6 @@
 	version="3.0">
 	xmlns="http://java.sun.com/xml/ns/javaee" version="3.0">
 	<servlet>
-		<servlet-name>Index</servlet-name>
-		<servlet-class>com.excilys.controller.Hello</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>Index2</servlet-name>
-		<servlet-class>com.excilys.controller.HelloServlet</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>Dashboard</servlet-name>
 		<servlet-class>com.excilys.controller.Dashboard</servlet-class>
 	</servlet>
@@ -27,14 +19,7 @@
 		<servlet-class>com.excilys.controller.DeleteComputer</servlet-class>
 	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>Index</servlet-name>
-		<url-pattern>/Index</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>Index2</servlet-name>
-		<url-pattern>/Index2</url-pattern>
-	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>Dashboard</servlet-name>
 		<url-pattern>/dash</url-pattern>

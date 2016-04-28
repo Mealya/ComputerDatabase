@@ -85,7 +85,7 @@ Computer computer = new Computer();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsedDate = dateFormat.parse(request.getParameter("introduced"));
             time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch(Exception e) {
+        } catch (Exception e) {
           
         }
         computer.setIntro(time);
@@ -95,7 +95,7 @@ Computer computer = new Computer();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsedDate = dateFormat.parse(request.getParameter("discontinued"));
             time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch(Exception e) {
+        } catch (Exception e) {
           
         }
         computer.setDisco(time);

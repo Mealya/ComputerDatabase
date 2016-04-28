@@ -1,7 +1,6 @@
 package com.excilys.controller;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -53,7 +52,7 @@ public class AddComputer extends HttpServlet {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsedDate = dateFormat.parse(request.getParameter("introduced"));
             time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch(Exception e) {
+        } catch (Exception e) {
             slf4jLogger.info("Bad entry for introduced : " + e.getMessage());
         }
         computer.setIntro(time);
@@ -63,7 +62,7 @@ public class AddComputer extends HttpServlet {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date parsedDate = dateFormat.parse(request.getParameter("discontinued"));
             time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch(Exception e) {
+        } catch (Exception e) {
             slf4jLogger.info("Bad entry for discovered : " + e.getMessage());
         }
         computer.setDisco(time);

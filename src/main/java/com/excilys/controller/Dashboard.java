@@ -52,9 +52,14 @@ public class Dashboard extends HttpServlet {
 
         ComputerDAO compt = new ComputerDAO(tool);
         HeavyComputerDAO workingDB = new HeavyComputerDAO(compt);
-
-        nbComputers = String.valueOf(compt.getSizeTable());
-
+        
+        long computersLong = compt.getSizeTable();
+        nbComputers = String.valueOf(computersLong);
+        if (computersLong < page * 15) {
+            slf4jLogger.info("Bad parameter for size");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         List<Computer> computers = null;
 
         int low = (page * size) - size;
