@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
 
@@ -13,6 +16,8 @@ import com.excilys.model.Company;
  * Created by Angot Maxime on 19/04/16.
  */
 public class CompanyDAO implements DAO<Company> {
+    
+    private final Logger slf4jLogger = LoggerFactory.getLogger(CompanyDAO.class);
 
     private String computer_db_name = "computer-database-db";
     private boolean isTesting = false;
@@ -64,10 +69,11 @@ public class CompanyDAO implements DAO<Company> {
                 result.add(new Company(id, name));
 
             }
-            rs.close();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return result;
     }
@@ -99,31 +105,13 @@ public class CompanyDAO implements DAO<Company> {
 
             }
             rs.close();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return compa;
     }
 
-    @Deprecated
-    @Override
-    public void create(Company c) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Deprecated
-    @Override
-    public void update(Company c) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Deprecated
-    @Override
-    public void delete(long id) throws SQLException {
-        // TODO Auto-generated method stub
-
-    }
 }

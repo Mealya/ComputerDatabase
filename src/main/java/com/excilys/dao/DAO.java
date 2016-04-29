@@ -5,13 +5,23 @@ import java.util.List;
 
 public interface DAO<T> {
 
-    List<T> getAll() throws SQLException;
+    default List<T> getAll() throws SQLException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 
-    T get(long id) throws SQLException;
+    default T get(long id) throws SQLException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 
-    void create(T c) throws SQLException;
+    default void create(T c) throws SQLException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 
-    void update(T c) throws SQLException;
+    default void update(T c) throws SQLException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 
-    void delete(long c) throws SQLException;
+    default void delete(long c) throws SQLException {
+        throw new UnsupportedOperationException("Not implemented");
+    }
 }

@@ -19,15 +19,20 @@ public class JDBCTool {
     private final Logger slf4jLogger = LoggerFactory.getLogger(JDBCTool.class);
 
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
-
+    private static Class<?> DB_driver = null;
+    
+    private final static Object LOCK_CREATE = new Object();
+    private final static Object LOCK_DELETE = new Object();
+    private final static Object LOCK_DRIVER = new Object();
+    
     /**
      * Create an object Connection with a DB name.
      */
-    public void linkToMySql() {
+    private void linkToMySql() {
         slf4jLogger.info("=========== MySQL JDBC Connecting.....  ===========");
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            DB_driver = Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             slf4jLogger.error("Where is your MySQL JDBC Driver? : "
                     + e.getMessage());
@@ -40,11 +45,20 @@ public class JDBCTool {
         if (nameDB == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
-        if (connections.get(nameDB) != null) {
-            return;
+        synchronized(LOCK_CREATE) {
+            if (connections.get(nameDB) != null) {
+                return;
+            }
         }
+        if (DB_driver == null) {
+            synchronized (LOCK_DRIVER) {
+                if (DB_driver == null) {
+                    linkToMySql();
+                }
+            }
+        }
+        
         Connection connection = null;
-
         try {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/" + nameDB
@@ -63,6 +77,7 @@ public class JDBCTool {
             slf4jLogger.error("Failed to make connection!");
             return;
         }
+        slf4jLogger.info("=========== MySQL JDBC created.....  ===========");
     }
 
     /**
@@ -76,7 +91,18 @@ public class JDBCTool {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
-        return connections.get(name);
+        synchronized (LOCK_DELETE) {
+            Connection c = connections.get(name);
+            try {
+                if (c.isClosed()) {
+                    connect(name);
+                }
+            } catch (SQLException e) {
+                slf4jLogger.error("Failed to make connection! " + e.getMessage());
+            }
+            return connections.get(name);
+        }
+         
     }
 
     /**
@@ -89,15 +115,18 @@ public class JDBCTool {
         if (name == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
-        for (Map.Entry<String, Connection> c : connections.entrySet()) {
-            if (c.getKey().equals(name)) {
-                try {
-                    c.getValue().close();
-                    connections.remove(c.getKey());
-                    slf4jLogger
-                    .info("=========== MySQL JDBC destroyed.....  ===========");
-                } catch (SQLException e) {
-                    slf4jLogger.error("Deconnection failed! " + e.getMessage());
+        synchronized (LOCK_DELETE) {
+            for (Map.Entry<String, Connection> c : connections.entrySet()) {
+                if (c.getKey().equals(name)) {
+                    try {
+                        c.getValue().close();
+                        connections.remove(c.getKey());
+                        slf4jLogger
+                                .info("=========== MySQL JDBC destroyed.....  ===========");
+                    } catch (SQLException e) {
+                        slf4jLogger.error("Deconnection failed! "
+                                + e.getMessage());
+                    }
                 }
             }
         }

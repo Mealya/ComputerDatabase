@@ -13,7 +13,7 @@ public class HeavyComputerDAO {
 
     public HeavyComputerDAO() {
         JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
+        //tool.linkToMySql();
         compDB = new ComputerDAO(tool);
     }
 

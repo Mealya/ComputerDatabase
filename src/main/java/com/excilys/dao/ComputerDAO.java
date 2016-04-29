@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.database.JDBCTool;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
@@ -15,6 +18,8 @@ import com.excilys.model.Computer;
  */
 public class ComputerDAO implements DAO<Computer> {
 
+    private final Logger slf4jLogger = LoggerFactory.getLogger(ComputerDAO.class);
+    
     private String computer_db_name = "computer-database-db";
     private boolean isTesting = false;
     
@@ -40,9 +45,10 @@ public class ComputerDAO implements DAO<Computer> {
         }
     }
 
+    /*
     public JDBCTool getConnexion() {
         return toolConnexion;
-    }
+    }*/
 
     private List<Company> initCompanies() {
         if (cacheCompanies == null) {
@@ -98,12 +104,15 @@ public class ComputerDAO implements DAO<Computer> {
 
             }
             rs.close();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return result;
     }
+    
     public Computer get(String name) {  
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
@@ -143,9 +152,11 @@ public class ComputerDAO implements DAO<Computer> {
             }
 
             rs.close();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return compuTemp;
     }
@@ -199,9 +210,11 @@ public class ComputerDAO implements DAO<Computer> {
             }
 
             rs.close();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return compuTemp;
     }
@@ -247,9 +260,11 @@ public class ComputerDAO implements DAO<Computer> {
 
 
             stmt.executeUpdate();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
     }
 
@@ -282,9 +297,10 @@ public class ComputerDAO implements DAO<Computer> {
              * sql = sql.replaceAll("0\\);", "NULL\\);"); }
              */
             stmt.executeUpdate();
-            toolConnexion.closeConnect(computer_db_name);
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
     }
 
@@ -304,9 +320,12 @@ public class ComputerDAO implements DAO<Computer> {
                     computer_db_name).prepareStatement(sql);
             stmt.setLong(1, comp);
             stmt.executeUpdate();
-            toolConnexion.closeConnect(computer_db_name);
+
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
     }
 
@@ -353,9 +372,12 @@ public class ComputerDAO implements DAO<Computer> {
 
             }
             rs.close();
-            toolConnexion.closeConnect(computer_db_name);
+            
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        } finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return result;
     }
@@ -377,9 +399,12 @@ public class ComputerDAO implements DAO<Computer> {
             while (rs.next()) {
                 return rs.getLong("COUNT(*)");
             }
-            toolConnexion.closeConnect(computer_db_name);
+            
         } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        } finally {
+            toolConnexion.closeConnect(computer_db_name);
         }
         return 0;
     }

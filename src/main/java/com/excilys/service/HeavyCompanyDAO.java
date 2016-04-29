@@ -12,7 +12,7 @@ public class HeavyCompanyDAO {
 
     public HeavyCompanyDAO() {
         JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
+        //tool.linkToMySql();
         compaDB = new CompanyDAO(tool);
     }
 

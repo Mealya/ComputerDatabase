@@ -16,7 +16,7 @@ public class Cli {
         String computerDBName = "computer-database-db";
 
         JDBCTool tool = new JDBCTool();
-        tool.linkToMySql();
+        //tool.linkToMySql();
 
         ComputerDAO compt = new ComputerDAO(tool);
         HeavyComputerDAO workingDB = new HeavyComputerDAO();
