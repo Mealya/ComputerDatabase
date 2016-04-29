@@ -104,7 +104,52 @@ public class ComputerDAO implements DAO<Computer> {
         }
         return result;
     }
+    public Computer get(String name) {  
+        if (toolConnexion == null) {
+            throw new IllegalStateException("Pas de connexion tool");
+        }
+        if (name == null) {
+            throw new IllegalArgumentException("Name should not be null");
+        }
+        Computer compuTemp = null;
+        try {
+            initCompanies();
+            toolConnexion.connect(computer_db_name);
+            // Execute a query
 
+
+            String sql = "SELECT * FROM `computer` WHERE name = ? ;";
+            PreparedStatement stmt = toolConnexion.getConnection(
+                    computer_db_name).prepareStatement(sql);
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+
+            compuTemp = null;
+
+            // Extract data from result set
+            while (rs.next()) {
+                compuTemp = new Computer();
+                compuTemp.setId(rs.getLong("id"));
+                compuTemp.setName(rs.getString("name"));
+                compuTemp.setIntro(rs.getTimestamp("introduced"));
+                compuTemp.setDisco(rs.getTimestamp("discontinued"));
+
+                for (Company c : cacheCompanies) {
+                    if (c.getId() == rs.getLong("company_id")) {
+                        compuTemp.setComp(c);
+                    }
+                }
+
+            }
+
+            rs.close();
+            toolConnexion.closeConnect(computer_db_name);
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
+        }
+        return compuTemp;
+    }
+    
     @Override
     public Computer get(long idComp) {
         if (toolConnexion == null) {

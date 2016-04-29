@@ -23,7 +23,12 @@ public class DeleteComputer extends HttpServlet {
 
         HeavyComputerDAO work = new HeavyComputerDAO();
         for (String c : result) {
-            work.deleteComputer(Long.parseLong(c));
+            try {
+                work.deleteComputer(Long.parseLong(c));
+            } catch (NumberFormatException e) {
+                response.sendRedirect("/ComputerDatabaseMaven/dash");
+                return;
+            }
         }
         
         response.sendRedirect("/ComputerDatabaseMaven/dash?return=2");

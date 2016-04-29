@@ -37,6 +37,7 @@
 		<url-pattern>/delete</url-pattern>
 	</servlet-mapping>
 
+
 	<error-page>
 		<location>/vues/raw/views/404.html</location>
 	</error-page>

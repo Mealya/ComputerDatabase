@@ -47,6 +47,7 @@
 					String attribut = (String) request.getAttribute("nbComputers");
 					out.println("<input type=\"hidden\" name=\"nbcompu\" value=\"" + (String) request.getAttribute("nbComputers") + "\">");
 					out.println(attribut);
+
     			%>
 				Computers found
 			</h1>
@@ -102,6 +103,9 @@
 					<% 
 
 						List<Computer> computers = (List<Computer>) request.getAttribute("computers");
+        				if (computers.size() == 0) {
+            				out.println("<tr><td class=\"editMode\">Aucune donnée</td><td>Aucune donnée</td><td>Aucune donnée</td><td>Aucune donnée</td><td>Aucune donnée</td>");
+        				}
 						for (Computer c : computers) {
     						out.println("<tr>");
 							out.println("<td class=\"editMode\">");
@@ -221,7 +225,7 @@
 						</c:choose>
 					</c:forEach>
 					<fmt:parseNumber var="iFormat" integerOnly="true" type="number" value="${nbComputers / 15}" />
-					<c:if test="${param.page == iFormat }">						
+					<c:if test="${param.page == iFormat}">						
 						<c:if test="${nbComputers % 15 != 0 }">						
 							<li><a href="/ComputerDatabaseMaven/dash?page=${iFormat + 1}">${iFormat + 1}</a></li>
 						</c:if>

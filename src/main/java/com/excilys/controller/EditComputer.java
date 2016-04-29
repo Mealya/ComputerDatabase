@@ -20,7 +20,8 @@ import com.excilys.service.HeavyComputerDAO;
 
 public class EditComputer extends HttpServlet {
 
-    private final Logger slf4jLogger = LoggerFactory.getLogger(EditComputer.class);
+    private final Logger slf4jLogger = LoggerFactory
+            .getLogger(EditComputer.class);
     private static final long serialVersionUID = -6582045182381493078L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +34,7 @@ public class EditComputer extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        
+
         if (id <= 0) {
             slf4jLogger.info("Request with id : " + id);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -43,10 +44,9 @@ public class EditComputer extends HttpServlet {
         request.setAttribute("id", id);
 
         HeavyComputerDAO work = new HeavyComputerDAO();
-        
 
         HeavyCompanyDAO workCompa = new HeavyCompanyDAO();
-        
+
         List<Company> companies = workCompa.getCompanies();
         request.setAttribute("companies", companies);
         Computer temp = work.getComputer(id);
@@ -70,33 +70,32 @@ public class EditComputer extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-Computer computer = new Computer();
-        
+        Computer computer = new Computer();
 
         computer.setId(Long.parseLong(request.getParameter("id")));
         computer.setName(request.getParameter("computerName"));
-       
+
         Timestamp time = null;
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(request.getParameter("introduced"));
+            java.util.Date parsedDate = dateFormat.parse(request
+                    .getParameter("introduced"));
             time = new java.sql.Timestamp(parsedDate.getTime());
         } catch (Exception e) {
-          
+
         }
         computer.setIntro(time);
-        
+
         time = null;
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(request.getParameter("discontinued"));
+            java.util.Date parsedDate = dateFormat.parse(request
+                    .getParameter("discontinued"));
             time = new java.sql.Timestamp(parsedDate.getTime());
         } catch (Exception e) {
-          
+
         }
         computer.setDisco(time);
-        
-
 
         Company compTemp = null;
         long idCompa = Long.parseLong(request.getParameter("companyId"));
@@ -105,10 +104,9 @@ Computer computer = new Computer();
             compTemp.setId(idCompa);
             computer.setComp(compTemp);
         }
-        
+
         HeavyComputerDAO serv = new HeavyComputerDAO();
         serv.updateComputer(computer);
-
 
         response.sendRedirect("/ComputerDatabaseMaven/dash?return=1");
     }

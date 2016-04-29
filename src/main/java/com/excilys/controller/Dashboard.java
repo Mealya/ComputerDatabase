@@ -42,6 +42,10 @@ public class Dashboard extends HttpServlet {
                 return;
             }
         }
+        String search = null;
+        if (request.getParameter("search") != null) {
+            search = request.getParameter("search");
+        }
 
         String nbComputers;
 
@@ -58,6 +62,15 @@ public class Dashboard extends HttpServlet {
 
         int low = (page * size) - size;
         computers = workingDB.getSetComputer(low, size);
+        if (request.getParameter("search") != null) {
+            for (int i = 0; i < computers.size(); i++) {
+                if (!computers.get(i).getName().equals(search)) {
+                    computers.remove(i);
+                    i--;
+                }
+            }
+        }
+
 
         request.setAttribute("computers", computers);
         request.setAttribute("nbComputers", nbComputers);

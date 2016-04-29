@@ -36,7 +36,16 @@ public class HeavyComputerDAO {
         result = compDB.get(idCompu);
         return result;
     }
-
+    
+    public Computer getComputer(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Id non valide");
+        }
+        Computer result = null;
+        result = compDB.get(name);
+        return result;
+    }
+    
     public void createComputer(Computer c) {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
