@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.excilys.dao.CompanyDAO;
-import com.excilys.database.JDBCTool;
+import com.excilys.database.BasicJdbc;
 import com.excilys.model.Company;
 
 public class TestCompanyDAO {
@@ -25,11 +25,11 @@ public class TestCompanyDAO {
     public void test_Constructor_Throw_Exception() {
         // Given
         CompanyDAO compa = null;
-        JDBCTool testFail = null;
+        BasicJdbc testFail = null;
 
         try {
             // When
-            compa = new CompanyDAO(testFail);
+            compa = new CompanyDAO();
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             // Then
@@ -40,9 +40,8 @@ public class TestCompanyDAO {
     @Test
     public void test_GetAll() {
         // Given
-        JDBCTool tool = new JDBCTool();
-        CompanyDAO compa = new CompanyDAO(tool);
-        compa.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        CompanyDAO compa = new CompanyDAO();
         List<Company> listResult = null;
 
         // When
@@ -63,9 +62,8 @@ public class TestCompanyDAO {
         Company comp = new Company();
         comp.setId(1);
         comp.setName("Apple Inc.");
-        JDBCTool tool = new JDBCTool();
-        CompanyDAO compaDAO = new CompanyDAO(tool);
-        compaDAO.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        CompanyDAO compaDAO = new CompanyDAO();
         Company result = null;
 
         // When
@@ -79,9 +77,8 @@ public class TestCompanyDAO {
     @Test
     public void test_GetId_Throw_Exception_Id_Neg() {
         // Given
-        JDBCTool tool = new JDBCTool();
-        CompanyDAO compaDAO = new CompanyDAO(tool);
-        compaDAO.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        CompanyDAO compaDAO = new CompanyDAO();
 
         try {
             // When
@@ -97,9 +94,8 @@ public class TestCompanyDAO {
     @Test
     public void test_GetId_Throw_Exception_Id_0() {
         // Given
-        JDBCTool tool = new JDBCTool();
-        CompanyDAO compaDAO = new CompanyDAO(tool);
-        compaDAO.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        CompanyDAO compaDAO = new CompanyDAO();
 
         try {
             // When

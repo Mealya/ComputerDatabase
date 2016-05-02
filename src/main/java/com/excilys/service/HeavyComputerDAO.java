@@ -4,7 +4,7 @@ package com.excilys.service;
 import java.util.List;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
+import com.excilys.database.BasicJdbc;
 import com.excilys.model.Computer;
 
 public class HeavyComputerDAO {
@@ -12,9 +12,7 @@ public class HeavyComputerDAO {
     private ComputerDAO compDB;
 
     public HeavyComputerDAO() {
-        JDBCTool tool = new JDBCTool();
-        //tool.linkToMySql();
-        compDB = new ComputerDAO(tool);
+        compDB = new ComputerDAO();
     }
 
     /*

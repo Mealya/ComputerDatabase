@@ -5,14 +5,14 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.excilys.database.JDBCTool;
+import com.excilys.database.BasicJdbc;
 
 public class TestJdbcTool {
 
     @Test
     public void test_Connect_Throw_Exception() {
         //Given
-        JDBCTool tool = new JDBCTool();
+        BasicJdbc tool = new BasicJdbc();
         String name = null;
         
         try {
@@ -28,12 +28,12 @@ public class TestJdbcTool {
     @Test
     public void test_getConnection_Throw_Exception() {
         //Given
-        JDBCTool tool = new JDBCTool();
+        BasicJdbc tool = new BasicJdbc();
         String name = null;
         
         try {
           //When
-            tool.getConnection(name);
+            tool.getConnection();
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             //Then
@@ -44,12 +44,12 @@ public class TestJdbcTool {
     @Test
     public void test_closeConnect_Throw_Exception() {
         //Given
-        JDBCTool tool = new JDBCTool();
+        BasicJdbc tool = new BasicJdbc();
         String name = null;
         
         try {
           //When
-            tool.closeConnect(name);
+            tool.closeConnect();
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             //Then

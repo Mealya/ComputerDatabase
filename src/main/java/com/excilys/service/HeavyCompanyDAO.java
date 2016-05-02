@@ -3,7 +3,7 @@ package com.excilys.service;
 import java.util.List;
 
 import com.excilys.dao.CompanyDAO;
-import com.excilys.database.JDBCTool;
+import com.excilys.database.BasicJdbc;
 import com.excilys.model.Company;
 
 public class HeavyCompanyDAO {
@@ -11,9 +11,9 @@ public class HeavyCompanyDAO {
     private CompanyDAO compaDB;
 
     public HeavyCompanyDAO() {
-        JDBCTool tool = new JDBCTool();
+       
         //tool.linkToMySql();
-        compaDB = new CompanyDAO(tool);
+        compaDB = new CompanyDAO();
     }
 
     public List<Company> getCompanies() {

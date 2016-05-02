@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
+import com.excilys.database.BasicJdbc;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyComputerDAO;
@@ -15,10 +15,7 @@ public class Cli {
     public static void main(String[] argv) {
         String computerDBName = "computer-database-db";
 
-        JDBCTool tool = new JDBCTool();
-        //tool.linkToMySql();
-
-        ComputerDAO compt = new ComputerDAO(tool);
+        ComputerDAO compt = new ComputerDAO();
         HeavyComputerDAO workingDB = new HeavyComputerDAO();
 
         Scanner sc = new Scanner(System.in);
@@ -78,7 +75,6 @@ public class Cli {
                             System.out.print("\n");
                         }
                     }
-                    tool.closeConnect(computerDBName);
                     System.out.println("\nNext page ? 0 : no / other : yes");
 
                     int pagingExist = sc2.nextInt();
@@ -93,7 +89,6 @@ public class Cli {
 
                 // compt.setConnexion(tool.getConnection(computerDBName));
                 System.out.println(workingDB.getComputer(idCompu).toString());
-                tool.closeConnect(computerDBName);
                 break;
             case 4:
                 System.out.println("3- Update : choisir index");
@@ -136,7 +131,6 @@ public class Cli {
 
                 // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.updateComputer(update);
-                tool.closeConnect(computerDBName);
 
                 break;
             case 5:
@@ -172,7 +166,6 @@ public class Cli {
 
                 // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.createComputer(create);
-                tool.closeConnect(computerDBName);
 
                 break;
             case 6:
@@ -180,7 +173,6 @@ public class Cli {
 
                 // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.deleteComputer(idCompuDel);
-                tool.closeConnect(computerDBName);
                 break;
             }
             sc = new Scanner(System.in);

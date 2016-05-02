@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.database.JDBCTool;
+import com.excilys.database.BasicJdbc;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -26,11 +26,11 @@ public class TestComputerDAO {
     public void test_Constructor_Throw_Exception() {
         // Given
         ComputerDAO comp = null;
-        JDBCTool testFail = null;
+        BasicJdbc testFail = null;
 
         try {
             // When
-            comp = new ComputerDAO(testFail);
+            comp = new ComputerDAO();
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             // Then
@@ -41,9 +41,8 @@ public class TestComputerDAO {
     @Test
     public void test_GetAll() {
         // Given
-        JDBCTool tool = new JDBCTool();
-        ComputerDAO comp = new ComputerDAO(tool);
-        comp.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        ComputerDAO comp = new ComputerDAO();
         List<Computer> listResult = null;
 
         // When
@@ -70,9 +69,8 @@ public class TestComputerDAO {
         c.setName("Apple Inc.");
         comp.setComp(c);
         
-        JDBCTool tool = new JDBCTool();
-        ComputerDAO compaDAO = new ComputerDAO(tool);
-        compaDAO.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        ComputerDAO compaDAO = new ComputerDAO();
         Computer result = null;
 
         // When
@@ -90,10 +88,8 @@ public class TestComputerDAO {
     @Test
     public void test_GetId_Throw_Exception_Id_Neg() {
         // Given
-        JDBCTool tool = new JDBCTool();
-        ComputerDAO compDAO = new ComputerDAO(tool);
-        compDAO.switchDB();
-
+        BasicJdbc tool = new BasicJdbc();
+        ComputerDAO compDAO = new ComputerDAO();
         try {
             // When
             compDAO.get(-1);
@@ -108,9 +104,8 @@ public class TestComputerDAO {
     @Test
     public void test_GetId_Throw_Exception_Id_0() {
         // Given
-        JDBCTool tool = new JDBCTool();
-        ComputerDAO compDAO = new ComputerDAO(tool);
-        compDAO.switchDB();
+        BasicJdbc tool = new BasicJdbc();
+        ComputerDAO compDAO = new ComputerDAO();
 
         try {
             // When

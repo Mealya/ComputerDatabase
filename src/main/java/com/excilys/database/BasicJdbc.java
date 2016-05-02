@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Angot Maxime
  */
-public class JDBCTool {
+public class BasicJdbc implements VirtualJdbc {
 
-    private final Logger slf4jLogger = LoggerFactory.getLogger(JDBCTool.class);
+    private final Logger slf4jLogger = LoggerFactory.getLogger(BasicJdbc.class);
 
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
     private static Class<?> DB_driver = null;
@@ -24,6 +24,8 @@ public class JDBCTool {
     private final static Object LOCK_CREATE = new Object();
     private final static Object LOCK_DELETE = new Object();
     private final static Object LOCK_DRIVER = new Object();
+    
+    private String name = "computer-database-db";
     
     /**
      * Create an object Connection with a DB name.
@@ -36,7 +38,7 @@ public class JDBCTool {
         } catch (ClassNotFoundException e) {
             slf4jLogger.error("Where is your MySQL JDBC Driver? : "
                     + e.getMessage());
-            return;
+            throw new ExceptionDB("Where is your MySQL JDBC Driver? : " +  e.getMessage());
         }
         slf4jLogger.info("MySQL JDBC Driver Registered!");
     }
@@ -68,18 +70,25 @@ public class JDBCTool {
         } catch (SQLException e) {
             slf4jLogger.error("Connection Failed! " + e.getMessage());
 
-            return;
+            throw new ExceptionDB("Connection Failed! " +  e.getMessage());
         }
 
         if (connection != null) {
             connections.put(nameDB, connection);
         } else {
             slf4jLogger.error("Failed to make connection!");
-            return;
+            throw new ExceptionDB("Failed to make connection !");
         }
         slf4jLogger.info("=========== MySQL JDBC created.....  ===========");
     }
-
+    
+    public void setConnectionName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name must not be null");
+        }
+        this.name = name;
+    }
+    
     /**
      * Return the connection object linked to a name
      * 
@@ -87,12 +96,14 @@ public class JDBCTool {
      *            The name of the database
      * @return Connection object
      */
-    public Connection getConnection(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name must not be null");
-        }
+    public Connection getConnection() {
+       
         synchronized (LOCK_DELETE) {
             Connection c = connections.get(name);
+            if (c == null) {
+                connect(name);
+                c = connections.get(name);
+            }
             try {
                 if (c.isClosed()) {
                     connect(name);
@@ -111,10 +122,7 @@ public class JDBCTool {
      * @param name
      *            The name of the data base
      */
-    public void closeConnect(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Name must not be null");
-        }
+    public void closeConnect() {
         synchronized (LOCK_DELETE) {
             for (Map.Entry<String, Connection> c : connections.entrySet()) {
                 if (c.getKey().equals(name)) {
