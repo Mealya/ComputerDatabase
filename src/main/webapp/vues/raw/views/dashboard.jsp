@@ -31,24 +31,16 @@
 
 	<section id="main">
 		<div class="container">
-			<%
-
-			    if (request.getParameter("return") != null) {
-			        Integer choix = Integer.parseInt(request.getParameter("return"));
-			        if (choix == 1) {
-			            out.println("<p class=\"alert alert-success\">Computer edited !</p>");
-			        } else {
-			            out.println("<p class=\"alert alert-success\">Computer(s) deleted !</p>");
-			        }
-			    }
-			%>
+			 
+					<c:if test="${param.retourn == 1}">
+						<p class="alert alert-success">Computer edited !</p>
+					</c:if>
+					<c:if test="${param.retourn == 2}">
+						<p class="alert alert-success">Computer(s) deleted !</p>
+					</c:if>
+				 
 			<h1 id="homeTitle">
-				<% 
-					String attribut = (String) request.getAttribute("nbComputers");
-					out.println("<input type=\"hidden\" name=\"nbcompu\" value=\"" + (String) request.getAttribute("nbComputers") + "\">");
-					out.println(attribut);
-
-    			%>
+				<c:out value="${nbComputers}" />
 				Computers found
 			</h1>
 			<div id="actions" class="form-horizontal">
@@ -100,39 +92,16 @@
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<% 
-
-						List<Computer> computers = (List<Computer>) request.getAttribute("computers");
-        				if (computers.size() == 0) {
-            				out.println("<tr><td class=\"editMode\">Aucune donnée</td><td>Aucune donnée</td><td>Aucune donnée</td><td>Aucune donnée</td><td>Aucune donnée</td>");
-        				}
-						for (Computer c : computers) {
-    						out.println("<tr>");
-							out.println("<td class=\"editMode\">");
-                            out.println("<input type=\"checkbox\" name=\"cb\" class=\"cb\" value=\"" + c.getId() + "\">");
-                       		out.println("</td>");
-                        	out.println("<td>");
-                            	out.println("<a href=\"/ComputerDatabaseMaven/edit?id=" + c.getId() + "\" onclick=\"\">"+ c.getName() +"</a>");
-                        	out.println("</td>");
-                        	if (c.getIntro() != null) {
-                            	out.println("<td>" + c.getIntro().toLocalDateTime().toLocalDate() + "</td>");
-                        	} else {
-                            	out.println("<td> </td>");
-                        	}
-                        	if (c.getDisco() != null) {
-                            	out.println("<td>" + c.getDisco().toLocalDateTime().toLocalDate() + "</td>");
-                        	} else {
-                            	out.println("<td> </td>");
-                        	}
-                        	if (c.getComp() != null) {
-                            	out.println("<td>" + c.getComp().getName() + "</td>");
-                        	} else {
-                            	out.println("<td> </td>");
-                        	}
-                        	out.println("</tr>");
-						}
-    				%>
-
+					<c:forEach items="${computers}" var="computer">
+						<tr>
+							<td class="editMode"><input type="checkbox" name="cb"
+								class="cb" value="${computer.getId()}"></td>
+							<td><a href="/ComputerDatabaseMaven/edit?id=${computer.getId()}" onclick="">${computer.getName()}</a></td>
+							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
+							<td>${computer.getDisco().toLocalDateTime().toLocalDate()}</td>
+							<td>${computer.getComp().getName()}</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>

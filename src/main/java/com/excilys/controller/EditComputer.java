@@ -84,6 +84,6 @@ public class EditComputer extends HttpServlet {
         }
 
 
-        response.sendRedirect("/ComputerDatabaseMaven/dash?return=1");
+        response.sendRedirect("/ComputerDatabaseMaven/dash?retourn=1");
     }
 }

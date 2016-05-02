@@ -31,6 +31,6 @@ public class DeleteComputer extends HttpServlet {
             }
         }
         
-        response.sendRedirect("/ComputerDatabaseMaven/dash?return=2");
+        response.sendRedirect("/ComputerDatabaseMaven/dash?retourn=2");
     }
 }
