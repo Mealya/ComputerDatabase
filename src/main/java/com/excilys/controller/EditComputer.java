@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.controller.validator.Validator;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyCompanyDAO;
@@ -34,7 +35,6 @@ public class EditComputer extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-
         if (id <= 0) {
             slf4jLogger.info("Request with id : " + id);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -70,43 +70,19 @@ public class EditComputer extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Computer computer = new Computer();
+        Computer computer = null;
 
-        computer.setId(Long.parseLong(request.getParameter("id")));
-        computer.setName(request.getParameter("computerName"));
-
-        Timestamp time = null;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(request
-                    .getParameter("introduced"));
-            time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch (Exception e) {
-
-        }
-        computer.setIntro(time);
-
-        time = null;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(request
-                    .getParameter("discontinued"));
-            time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch (Exception e) {
-
-        }
-        computer.setDisco(time);
-
-        Company compTemp = null;
-        long idCompa = Long.parseLong(request.getParameter("companyId"));
-        if (idCompa != 0) {
-            compTemp = new Company();
-            compTemp.setId(idCompa);
-            computer.setComp(compTemp);
+        computer = Validator.validateComputerEdit(request.getParameter("id"), request.getParameter("computerName"), request.getParameter("introduced"), 
+                request.getParameter("discontinued"), request.getParameter("companyId"));
+        if (computer != null) {
+            HeavyComputerDAO serv = new HeavyComputerDAO();
+            serv.createComputer(computer);
+        } else {
+            slf4jLogger.warn("Fail to edit a computer");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
 
-        HeavyComputerDAO serv = new HeavyComputerDAO();
-        serv.updateComputer(computer);
 
         response.sendRedirect("/ComputerDatabaseMaven/dash?return=1");
     }

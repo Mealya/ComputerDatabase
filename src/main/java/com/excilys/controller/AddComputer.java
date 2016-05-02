@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.controller.validator.Validator;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyCompanyDAO;
@@ -38,47 +39,21 @@ public class AddComputer extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Computer computer = new Computer();
+        Computer computer = null;
         
-        computer.setName(request.getParameter("computerName"));
-       
-        Timestamp time = null;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(request.getParameter("introduced"));
-            time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch (Exception e) {
-            slf4jLogger.info("Bad entry for introduced : " + e.getMessage());
+        computer = Validator.validateComputerAdd(request.getParameter("computerName"), request.getParameter("introduced"), 
+                request.getParameter("discontinued"), request.getParameter("companyId"));
+        
+        if (computer != null) {
+            HeavyComputerDAO serv = new HeavyComputerDAO();
+            serv.createComputer(computer);
+        } else {
+            slf4jLogger.warn("Fail to add a computer");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            return;
         }
-        computer.setIntro(time);
-        
-        time = null;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date parsedDate = dateFormat.parse(request.getParameter("discontinued"));
-            time = new java.sql.Timestamp(parsedDate.getTime());
-        } catch (Exception e) {
-            slf4jLogger.info("Bad entry for discovered : " + e.getMessage());
-        }
-        computer.setDisco(time);
-
-        Company compTemp = null;
-        long idCompa = Long.parseLong(request.getParameter("companyId"));
-        if (idCompa != 0) {
-            compTemp = new Company();
-            compTemp.setId(idCompa);
-            computer.setComp(compTemp);
-        }
-
-        
-
-        HeavyComputerDAO serv = new HeavyComputerDAO();
-        serv.createComputer(computer);
-        
-        
-
-        HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
-        
+              
+        HeavyCompanyDAO workCompt = new HeavyCompanyDAO();  
         List<Company> companies = workCompt.getCompanies();
         request.setAttribute("companies", companies);
         
