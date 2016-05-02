@@ -4,7 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="page" %>
 
 <!DOCTYPE html>
 <html>
@@ -108,106 +108,8 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<ul class="pagination">
-				<!-- Gestion du cas précédent -->
-				<c:if test="${param.page != null}">
-					<c:if test="${param.page != 1}">
-						<li><a
-							href="/ComputerDatabaseMaven/dash?page=${param.page - 1}"
-							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-						</a></li>
-					</c:if>
-				</c:if>
-
-				<!-- Gestion du cas par défaut sans num page -->
-				<c:if test="${param.page == null}">
-					<c:forEach begin="1" end="5" var="i">
-						<c:choose>
-							<c:when test="${param.page eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:when>
-							<c:otherwise>
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-
-					<c:if test="${nbComputers > 15}">
-						<li><a href="/ComputerDatabaseMaven/dash?page=2"
-							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</c:if>
-
-				</c:if>
-
-				<!-- Gestion du cas page = 1 -->
-				<c:if test="${param.page == 1}">
-					<c:forEach begin="1" end="${param.page + 4}" var="i">
-						<c:choose>
-							<c:when test="${param.page eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:when>
-							<c:otherwise>
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-					<c:if test="${nbComputers > 15}">
-						<li><a href="/ComputerDatabaseMaven/dash?page=2"
-							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</c:if>
-				</c:if>
-
-				<!-- Gestion du cas page = 2 -->
-				<c:if test="${param.page == 2}">
-					<c:forEach begin="1" end="${param.page + 3}" var="i">
-						<c:choose>
-							<c:when test="${param.page eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:when>
-							<c:otherwise>
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-					<c:if test="${nbComputers > 30}">
-						<li><a href="/ComputerDatabaseMaven/dash?page=3"
-							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</c:if>
-				</c:if>
-
-				<!-- Gestion du cas page > 2 -->
-				<c:if test="${param.page > 2}">
-					<c:forEach begin="${param.page - 2}" end="${param.page + 2}"
-						var="i">
-						<c:choose>
-							<c:when test="${param.page eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-							</c:when>
-							<c:otherwise>
-								<c:if test="${nbComputers > (15 * i)}">
-									<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
-								</c:if>
-							</c:otherwise>
-						</c:choose>
-					</c:forEach>
-					<fmt:parseNumber var="iFormat" integerOnly="true" type="number" value="${nbComputers / 15}" />
-					<c:if test="${param.page == iFormat}">						
-						<c:if test="${nbComputers % 15 != 0 }">						
-							<li><a href="/ComputerDatabaseMaven/dash?page=${iFormat + 1}">${iFormat + 1}</a></li>
-						</c:if>
-					</c:if>
-					<c:if test="${nbComputers > (15 * param.page)}">
-						<li><a
-							href="/ComputerDatabaseMaven/dash?page=${param.page + 1}"
-							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</c:if>
-				</c:if>
-			</ul>
-
+			<page:pagination pageCourante="${param.page}" nbComputers="${nbComputers}" />
+				 
 			<!-- Boutons taille des pages -->
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<button type="button"

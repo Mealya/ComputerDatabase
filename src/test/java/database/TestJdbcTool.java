@@ -49,7 +49,7 @@ public class TestJdbcTool {
         
         try {
           //When
-            tool.closeConnect();
+            tool.closeConnect(null);
             fail("Must throw an exception");
         } catch (IllegalArgumentException e) {
             //Then

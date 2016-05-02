@@ -1,5 +1,6 @@
 package com.excilys.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,9 +33,11 @@ public class CompanyDAO implements DAO<Company> {
         //toolConnexion.connect(computer_db_name);
         
         List<Company> result = null;
+        Connection connect = null;
         try {
             // Execute a query
             String sql = "SELECT * FROM `company` ";
+            connect = toolConnexion.getConnection();
             PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
@@ -55,7 +58,7 @@ public class CompanyDAO implements DAO<Company> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return result;
     }
@@ -69,11 +72,13 @@ public class CompanyDAO implements DAO<Company> {
             throw new IllegalArgumentException("ID should not be negative or 0");
         }
         Company compa = null;
+        Connection connect = null;
         try {
             //toolConnexion.connect(computer_db_name);
 
             String sql = "SELECT * FROM `company` WHERE id= ? ;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setLong(1, id);
 
             ResultSet rs = stmt.executeQuery();
@@ -90,7 +95,7 @@ public class CompanyDAO implements DAO<Company> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return compa;
     }

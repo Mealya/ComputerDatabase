@@ -1,5 +1,6 @@
 package com.excilys.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,12 +41,16 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalStateException("Pas de connexion tool");
         }
         List<Computer> result = null;
+        Connection connect = null;
         try {
             initCompanies();
 
             // Execute a query
             String sql = "SELECT * FROM `computer`;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            
             ResultSet rs = stmt.executeQuery();
 
             result = new ArrayList<Computer>();
@@ -71,7 +76,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return result;
     }
@@ -84,12 +89,16 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalArgumentException("Name should not be null");
         }
         Computer compuTemp = null;
+        Connection connect = null;
         try {
             initCompanies();
     
             // Execute a query
             String sql = "SELECT * FROM `computer` WHERE name = ? ;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
 
@@ -116,7 +125,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return compuTemp;
     }
@@ -130,12 +139,16 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalArgumentException("ID should not be negative or 0");
         }
         Computer compuTemp = null;
+        Connection connect = null;
         try {
             initCompanies();
          
             // Execute a query
             String sql = "SELECT * FROM `computer` WHERE id = ? ;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            
             stmt.setLong(1, idComp);
             ResultSet rs = stmt.executeQuery();
 
@@ -162,7 +175,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return compuTemp;
     }
@@ -175,11 +188,13 @@ public class ComputerDAO implements DAO<Computer> {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
-
+        
+        Connection connect = null;
         try {
             String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
 
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
 
             stmt.setString(1, comp.getName());
             stmt.setTimestamp(2, comp.getIntro());
@@ -196,7 +211,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
     }
 
@@ -208,10 +223,14 @@ public class ComputerDAO implements DAO<Computer> {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
+        
+        Connection connect = null;
         try {
             String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ? WHERE `computer`.`id` = ?;";
 
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            
             stmt.setString(1, comp.getName());
             stmt.setTimestamp(2, comp.getIntro());
             stmt.setTimestamp(3, comp.getDisco());
@@ -226,7 +245,7 @@ public class ComputerDAO implements DAO<Computer> {
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
     }
 
@@ -238,9 +257,13 @@ public class ComputerDAO implements DAO<Computer> {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
+        
+        Connection connect = null;
         try {
             String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setLong(1, comp);
             stmt.executeUpdate();
 
@@ -248,7 +271,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
     }
 
@@ -260,11 +283,14 @@ public class ComputerDAO implements DAO<Computer> {
             throw new IllegalArgumentException("Negative param");
         }
         List<Computer> result = null;
+        Connection connect = null;
         try {
             initCompanies();
 
             String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setInt(1, low);
             stmt.setInt(2, height);
 
@@ -294,7 +320,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return result;
     }
@@ -303,9 +329,13 @@ public class ComputerDAO implements DAO<Computer> {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
+        
+        Connection connect = null;
         try {
             String sql = "SELECT COUNT(*) FROM `computer`;";
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
             
@@ -318,7 +348,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             //throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnect();
+            toolConnexion.closeConnection(connect);
         }
         return 0;
     }

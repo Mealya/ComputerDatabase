@@ -122,8 +122,20 @@ public class BasicJdbc implements VirtualJdbc {
      * @param name
      *            The name of the data base
      */
-    public void closeConnect() {
+    public void closeConnect(Connection c) {
         synchronized (LOCK_DELETE) {
+            try {
+                c.close();
+                connections.remove(c);
+                slf4jLogger
+                .info("=========== MySQL JDBC destroyed.....  ===========");
+            } catch (SQLException e) {
+                slf4jLogger.error("Deconnection failed! "
+                        + e.getMessage());
+            }
+            
+            
+            /*
             for (Map.Entry<String, Connection> c : connections.entrySet()) {
                 if (c.getKey().equals(name)) {
                     try {
@@ -132,11 +144,10 @@ public class BasicJdbc implements VirtualJdbc {
                         slf4jLogger
                                 .info("=========== MySQL JDBC destroyed.....  ===========");
                     } catch (SQLException e) {
-                        slf4jLogger.error("Deconnection failed! "
-                                + e.getMessage());
+                       
                     }
                 }
-            }
+            }*/
         }
     }
 }

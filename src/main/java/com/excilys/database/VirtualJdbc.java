@@ -7,7 +7,7 @@ public interface VirtualJdbc {
         throw new UnsupportedOperationException("Not implemented");
     }
     
-    default void closeConnect() {
+    default void closeConnection(Connection c) {
         throw new UnsupportedOperationException("Not implemented");
     }
 }
