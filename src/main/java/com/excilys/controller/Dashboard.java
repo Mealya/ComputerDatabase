@@ -65,8 +65,16 @@ public class Dashboard extends HttpServlet {
         if (request.getParameter("search") != null) {
             for (int i = 0; i < computers.size(); i++) {
                 if (!computers.get(i).getName().equals(search)) {
-                    computers.remove(i);
-                    i--;
+                    if (computers.get(i).getComp() != null) {
+                        if (!computers.get(i).getComp().getName().equals(search)) {
+                            computers.remove(i);
+                            i--;
+                        }
+                    } 
+                    else {
+                        computers.remove(i);
+                        i--;
+                    }
                 }
             }
         }

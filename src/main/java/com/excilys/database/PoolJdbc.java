@@ -34,7 +34,7 @@ public class PoolJdbc implements VirtualJdbc {
         }
         Properties properties = new Properties();
         InputStream propertiesFile = PoolJdbc.class.getClassLoader()
-                .getResourceAsStream(PoolJdbc.bd_data);
+                .getResourceAsStream(bd_data);
         try {
             properties.load(propertiesFile);
         } catch (IOException e) {
@@ -42,16 +42,16 @@ public class PoolJdbc implements VirtualJdbc {
                     + e.getMessage());
         }
 
-        PoolJdbc.name = properties.getProperty("URL")
+        name = properties.getProperty("URL")
                 + properties.getProperty("DB_NAME")
                 + properties.getProperty("PARAMS");
-        PoolJdbc.username = properties.getProperty("USERNAME");
-        PoolJdbc.password = properties.getProperty("PASSWORD");
+        username = properties.getProperty("USERNAME");
+        password = properties.getProperty("PASSWORD");
 
-        PoolJdbc.pool = new HikariDataSource();
-        PoolJdbc.pool.setJdbcUrl(PoolJdbc.name);
-        PoolJdbc.pool.setUsername(PoolJdbc.username);
-        PoolJdbc.pool.setPassword(PoolJdbc.password);
+        pool = new HikariDataSource();
+        pool.setJdbcUrl(name);
+        pool.setUsername(username);
+        pool.setPassword(password);
 
         slf4jLogger.info("=========== Pool created.  ===========");
     }
@@ -59,7 +59,7 @@ public class PoolJdbc implements VirtualJdbc {
     public Connection getConnection() {
         try {
             slf4jLogger.info("=========== Pool get.  ===========");
-            return PoolJdbc.pool.getConnection();
+            return pool.getConnection();
         } catch (SQLException e) {
             slf4jLogger.error("Fail to get a connection " + e.getMessage());
             throw new ExceptionDB("Not connection with name : " + PoolJdbc.name

@@ -35,14 +35,15 @@ public class HeavyComputerDAO {
         return result;
     }
     
-    public Computer getComputer(String name) {
+    /*
+    public List<Computer> getComputer(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Id non valide");
         }
-        Computer result = null;
+        List<Computer> result = null;
         result = compDB.get(name);
         return result;
-    }
+    }*/
     
     public void createComputer(Computer c) {
         if (c == null) {

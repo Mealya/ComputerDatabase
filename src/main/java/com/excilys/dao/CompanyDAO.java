@@ -10,7 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.database.BasicJdbc;
+
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.VirtualJdbc;
 import com.excilys.model.Company;

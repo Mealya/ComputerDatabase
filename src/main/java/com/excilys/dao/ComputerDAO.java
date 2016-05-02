@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.database.BasicJdbc;
+
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.VirtualJdbc;
 import com.excilys.mapper.Mapper;
@@ -66,14 +65,14 @@ public class ComputerDAO implements DAO<Computer> {
         return result;
     }
     
-    public Computer get(String name) {  
+    public List<Computer> get(String name) {  
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
         if (name == null) {
             throw new IllegalArgumentException("Name should not be null");
         }
-        Computer compuTemp = null;
+        List<Computer> compuTemp = null;
         Connection connect = null;
         try {
             initCompanies();
@@ -86,7 +85,7 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
 
-            compuTemp = Mapper.resultSetToComputer(rs, cacheCompanies);
+            compuTemp = Mapper.resultSetToListComputer(rs, cacheCompanies);
 
             rs.close();
         } catch (SQLException e) {
