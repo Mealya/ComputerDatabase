@@ -24,8 +24,6 @@ public class CompanyDAO implements DAO<Company> {
    
     private VirtualJdbc toolConnexion = new PoolJdbc();
 
-
-
     public List<Company> getAll() {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion");

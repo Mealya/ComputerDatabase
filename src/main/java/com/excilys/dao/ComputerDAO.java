@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.database.BasicJdbc;
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.VirtualJdbc;
+import com.excilys.mapper.Mapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -50,27 +51,11 @@ public class ComputerDAO implements DAO<Computer> {
             
             connect = toolConnexion.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
-            
             ResultSet rs = stmt.executeQuery();
 
-            result = new ArrayList<Computer>();
+            result = Mapper.resultSetToListComputer(rs, cacheCompanies);
 
-            // Extract data from result set
-            while (rs.next()) {
-                Computer compuTemp = new Computer();
-                compuTemp.setId(rs.getLong("id"));
-                compuTemp.setName(rs.getString("name"));
-                compuTemp.setIntro(rs.getTimestamp("introduced"));
-                compuTemp.setDisco(rs.getTimestamp("discontinued"));
-
-                for (Company c : cacheCompanies) {
-                    if (c.getId() == rs.getLong("company_id")) {
-                        compuTemp.setComp(c);
-                    }
-                }
-                result.add(compuTemp);
-
-            }
+            
             rs.close();
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
@@ -98,27 +83,10 @@ public class ComputerDAO implements DAO<Computer> {
             
             connect = toolConnexion.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
-            
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
 
-            compuTemp = null;
-
-            // Extract data from result set
-            while (rs.next()) {
-                compuTemp = new Computer();
-                compuTemp.setId(rs.getLong("id"));
-                compuTemp.setName(rs.getString("name"));
-                compuTemp.setIntro(rs.getTimestamp("introduced"));
-                compuTemp.setDisco(rs.getTimestamp("discontinued"));
-
-                for (Company c : cacheCompanies) {
-                    if (c.getId() == rs.getLong("company_id")) {
-                        compuTemp.setComp(c);
-                    }
-                }
-
-            }
+            compuTemp = Mapper.resultSetToComputer(rs, cacheCompanies);
 
             rs.close();
         } catch (SQLException e) {
@@ -152,23 +120,7 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.setLong(1, idComp);
             ResultSet rs = stmt.executeQuery();
 
-            compuTemp = null;
-
-            // Extract data from result set
-            while (rs.next()) {
-                compuTemp = new Computer();
-                compuTemp.setId(rs.getLong("id"));
-                compuTemp.setName(rs.getString("name"));
-                compuTemp.setIntro(rs.getTimestamp("introduced"));
-                compuTemp.setDisco(rs.getTimestamp("discontinued"));
-
-                for (Company c : cacheCompanies) {
-                    if (c.getId() == rs.getLong("company_id")) {
-                        compuTemp.setComp(c);
-                    }
-                }
-
-            }
+            compuTemp = Mapper.resultSetToComputer(rs, cacheCompanies);
 
             rs.close();
         } catch (SQLException e) {
@@ -296,24 +248,8 @@ public class ComputerDAO implements DAO<Computer> {
 
             ResultSet rs = stmt.executeQuery();
 
-            result = new ArrayList<>();
+            result = Mapper.resultSetToListComputer(rs, cacheCompanies);
 
-            // Extract data from result set
-            while (rs.next()) {
-                Computer compuTemp = new Computer();
-                compuTemp.setId(rs.getLong("id"));
-                compuTemp.setName(rs.getString("name"));
-                compuTemp.setIntro(rs.getTimestamp("introduced"));
-                compuTemp.setDisco(rs.getTimestamp("discontinued"));
-
-                for (Company c : cacheCompanies) {
-                    if (c.getId() == rs.getLong("company_id")) {
-                        compuTemp.setComp(c);
-                    }
-                }
-                result.add(compuTemp);
-
-            }
             rs.close();
             
         } catch (SQLException e) {

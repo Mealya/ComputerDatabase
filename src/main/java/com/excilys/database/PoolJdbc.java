@@ -28,6 +28,7 @@ public class PoolJdbc implements VirtualJdbc {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
+            slf4jLogger.error("Fail to get driver sql" + e.getMessage());
             throw new ExceptionDB("Where is your MySQL JDBC Driver : "
                     + e.getMessage());
         }
@@ -60,6 +61,7 @@ public class PoolJdbc implements VirtualJdbc {
             slf4jLogger.info("=========== Pool get.  ===========");
             return PoolJdbc.pool.getConnection();
         } catch (SQLException e) {
+            slf4jLogger.error("Fail to get a connection " + e.getMessage());
             throw new ExceptionDB("Not connection with name : " + PoolJdbc.name
                     + " " + e.getMessage());
         }
@@ -71,7 +73,7 @@ public class PoolJdbc implements VirtualJdbc {
         }
         try {
             c.close();
-            slf4jLogger.info("=========== JDBC destroyed.  ===========");
+            slf4jLogger.info("=========== Pool close connection.  ===========");
         } catch (SQLException e) {
             slf4jLogger.error("Deconnection failed! " + e.getMessage());
         }
