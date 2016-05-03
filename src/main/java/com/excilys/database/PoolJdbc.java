@@ -52,6 +52,15 @@ public class PoolJdbc implements VirtualJdbc {
         pool.setJdbcUrl(name);
         pool.setUsername(username);
         pool.setPassword(password);
+        
+        pool.addDataSourceProperty("serverTimeZone", "UTC+1");
+        pool.addDataSourceProperty("zeroDateTimeBehavior", "convertToNull");
+        pool.addDataSourceProperty("useSSL", "true");
+        pool.addDataSourceProperty("useUnicode", "true");
+        pool.addDataSourceProperty("characterEncoding", "UTF-8");
+        pool.addDataSourceProperty("cachePrepStmts", "true");
+        pool.addDataSourceProperty("prepStmtCacheSize", "250");
+        pool.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         slf4jLogger.info("=========== Pool created.  ===========");
     }

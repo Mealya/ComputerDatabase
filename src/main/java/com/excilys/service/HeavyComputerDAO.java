@@ -6,6 +6,7 @@ import java.util.List;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.database.BasicJdbc;
 import com.excilys.model.Computer;
+import com.excilys.utils.OrderType;
 
 public class HeavyComputerDAO {
 
@@ -88,6 +89,19 @@ public class HeavyComputerDAO {
             throw new IllegalArgumentException("low is negative");
         }*/
         return compDB.getSet(low, height);
+    }
+    
+    public List<Computer> getSetComputer(int low, int height, OrderType ord) {
+        /*if (low >= height) {
+            throw new IllegalArgumentException("low >= height");
+        }
+        if (low < 0) {
+            throw new IllegalArgumentException("low is negative");
+        }
+        if (height < 0) {
+            throw new IllegalArgumentException("low is negative");
+        }*/
+        return compDB.getSet(low, height, ord);
     }
     
     public long getSizeTable() {

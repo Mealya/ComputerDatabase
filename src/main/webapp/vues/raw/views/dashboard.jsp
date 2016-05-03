@@ -81,12 +81,68 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+
+						<c:choose>
+							<c:when test="${param.orderby eq 'name;asc'}">
+								<th><a
+									href="${currentURL}${currentParams}orderby=name;desc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Computer name</th>
+							</c:when>
+							<c:otherwise>
+								<th><a
+									href="${currentURL}${currentParams}orderby=name;asc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Computer name</th>
+							</c:otherwise>
+						</c:choose>
+
+						<c:choose>
+							<c:when test="${param.orderby eq 'introduced;asc'}">
+								<th><a
+									href="${currentURL}${currentParams}orderby=introduced;desc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Introduced date</th>
+							</c:when>
+							<c:otherwise>
+								<th><a
+									href="${currentURL}${currentParams}orderby=introduced;asc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Introduced date</th>
+							</c:otherwise>
+
+						</c:choose>
+						<c:choose>
+							<c:when test="${param.orderby eq 'discontinued;asc'}">
+								<th><a
+									href="${currentURL}${currentParams}orderby=discontinued;desc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Discontinued date</th>
+							</c:when>
+							<c:otherwise>
+								<th><a
+									href="${currentURL}${currentParams}orderby=discontinued;asc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Discontinued date</th>
+							</c:otherwise>
+						</c:choose>
+
+
+						<c:choose>
+							<c:when test="${param.orderby eq 'company_id;asc'}">
+								<th><a
+									href="${currentURL}${currentParams}orderby=company_id;desc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Company</th>
+							</c:when>
+							<c:otherwise>
+								<th><a
+									href="${currentURL}${currentParams}orderby=company_id;asc">
+										<span class="glyphicon glyphicon glyphicon-sort"></span>
+								</a>Company</th>
+							</c:otherwise>
+						</c:choose>
+
 
 					</tr>
 				</thead>

@@ -10,11 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.VirtualJdbc;
 import com.excilys.mapper.Mapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.utils.OrderType;
 
 /**
  * Created by Angot Maxime on 19/04/16.
@@ -245,6 +247,41 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.setInt(1, low);
             stmt.setInt(2, height);
 
+            ResultSet rs = stmt.executeQuery();
+
+            result = Mapper.resultSetToListComputer(rs, cacheCompanies);
+
+            rs.close();
+            
+        } catch (SQLException e) {
+            slf4jLogger.warn(e.getMessage());
+            //throw new ExceptionDAO(e.getMessage());
+        } finally {
+            toolConnexion.closeConnection(connect);
+        }
+        return result;
+    }
+    
+    public List<Computer> getSet(int low, int height, OrderType ord) {
+        if (toolConnexion == null) {
+            throw new IllegalStateException("Pas de connexion tool");
+        }
+        if (low < 0 || height < 0) {
+            throw new IllegalArgumentException("Negative param");
+        }
+        List<Computer> result = null;
+        Connection connect = null;
+        
+        String order[] = ord.toString().split(";");
+        try {
+            initCompanies();
+
+            String sql = "SELECT * FROM `computer` ORDER BY " + order[0] + " " + order[1] + " LIMIT ?,? ;";
+            
+            connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            stmt.setInt(1, low);
+            stmt.setInt(2, height);
             ResultSet rs = stmt.executeQuery();
 
             result = Mapper.resultSetToListComputer(rs, cacheCompanies);

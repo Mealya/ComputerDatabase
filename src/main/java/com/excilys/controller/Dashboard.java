@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyComputerDAO;
+import com.excilys.utils.OrderType;
 
 public class Dashboard extends HttpServlet {
 
@@ -24,6 +25,8 @@ public class Dashboard extends HttpServlet {
 
         int page = 1;
         int size = 15;
+        
+        /* Numéro de page */
         if (request.getParameter("page") != null) {
             try {
                 page = Integer.parseInt(request.getParameter("page"));
@@ -33,6 +36,8 @@ public class Dashboard extends HttpServlet {
                 return;
             }
         }
+        
+        /* Taille de la page */
         if (request.getParameter("size") != null) {
             try {
                 size = Integer.parseInt(request.getParameter("size"));
@@ -42,26 +47,43 @@ public class Dashboard extends HttpServlet {
                 return;
             }
         }
+        /* Récupération de l'ordre de tri */
+        OrderType orderBy = null;
+        if (request.getParameter("orderby") != null) {
+                orderBy = OrderType.fromString(request.getParameter("orderby"));
+            if (orderBy == null) {
+                slf4jLogger.info("Bad parameter for orderby");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
+            }
+        }
+        
+        /* Recherche par nom (computer | company) */
         String search = null;
         if (request.getParameter("search") != null) {
             search = request.getParameter("search");
         }
 
-        String nbComputers;
-
         HeavyComputerDAO workingDB = new HeavyComputerDAO();
         
+        /* Paramétrage de la requête d'ensemble */
         long computersLong = workingDB.getSizeTable();
-        nbComputers = String.valueOf(computersLong);
         if (computersLong < (page - 1) * 15) {
             slf4jLogger.info("Error making page");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        List<Computer> computers = null;
-
         int low = (page * size) - size;
-        computers = workingDB.getSetComputer(low, size);
+        
+        /* Récupération des résultats pour la page|taille courante */
+        List<Computer> computers = null;
+        if (orderBy != null) {
+            computers = workingDB.getSetComputer(low, size, orderBy);
+        } else {
+            computers = workingDB.getSetComputer(low, size);
+        }
+        
+        /* Tri de la liste si la recherche existe */
         if (request.getParameter("search") != null) {
             for (int i = 0; i < computers.size(); i++) {
                 if (!computers.get(i).getName().equals(search)) {
@@ -79,10 +101,28 @@ public class Dashboard extends HttpServlet {
             }
         }
 
-
+        /* Attributs de retour suite aux requêtes */
         request.setAttribute("computers", computers);
-        request.setAttribute("nbComputers", nbComputers);
+        request.setAttribute("nbComputers", computersLong);
+        request.setAttribute("currentURL", request.getRequestURL());
 
+       
+        if (request.getQueryString() != null) {
+            String urlParam = request.getQueryString();
+            if (orderBy != null) {
+                String result[] = urlParam.split("orderby="+orderBy);
+                urlParam = "";
+                for (String s : result) {
+                    urlParam += s;
+                }
+                request.setAttribute("currentParams", "?" + urlParam );
+            } else {
+                request.setAttribute("currentParams", "?" + urlParam + "&");
+            }
+        } else {
+            request.setAttribute("currentParams", "?");
+
+        }
         this.getServletContext()
                 .getRequestDispatcher("/vues/raw/views/dashboard.jsp")
                 .forward(request, response);
