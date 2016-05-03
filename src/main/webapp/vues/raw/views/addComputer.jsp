@@ -46,6 +46,11 @@
 									class="glyphicon form-control-feedback" id="computerName"></span>
 								<span class="glyphicon glyphicon-remove form-control-feedback"
 									id="computerNamel"></span>
+								<div id="errorName" class="alert alert-danger" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign"
+										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+									Enter a non empty name
+								</div>
 							</div>
 							<div class="form-group has-warning has-feedback">
 								<label for="introduced">Introduced date</label> <input
@@ -53,6 +58,17 @@
 									name="introduced" placeholder="Introduced date"> <span
 									class="glyphicon glyphicon-warning-sign form-control-feedback"
 									id="introducedl"></span>
+								<div id="errorIntro" class="alert alert-danger" role="alert"
+									style="display: none;">
+									<span class="glyphicon glyphicon-exclamation-sign"
+										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+									Enter a valid or empty date
+								</div>
+								<div id="warnIntro" class="alert alert-warning" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign"
+										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+									Introduced date is empty
+								</div>
 							</div>
 							<div class="form-group has-warning has-feedback">
 								<label for="discontinued">Discontinued date</label> <input
@@ -61,10 +77,21 @@
 									placeholder="Discontinued date"> <span
 									class="glyphicon glyphicon-warning-sign form-control-feedback"
 									id="discontinuedl"></span>
+									<div id="warnDisco" class="alert alert-warning" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign"
+										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+									Discontinued date is empty
+								</div>
+								<div id="errorDisco" class="alert alert-danger" role="alert"
+									style="display: none;">
+									<span class="glyphicon glyphicon-exclamation-sign"
+										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+									Enter a valid or empty date
+								</div>
 							</div>
-							<div class="form-group has-feedback">
+							<div class="form-group has-feedback has-warning" id="validatorSelect">
 								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId">
+									class="form-control" id="companyId" name="companyId" >
 									<option value="0">-- Empty --</option>
 									<c:forEach items="${companies}" var="compa">
 										<option value="${compa.getId()}">${compa.getName()}</option>
