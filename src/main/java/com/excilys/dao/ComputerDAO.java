@@ -29,12 +29,9 @@ public class ComputerDAO implements DAO<Computer> {
     private static List<Company> cacheCompanies = null;
     
 
-    private List<Company> initCompanies() {
-        if (cacheCompanies == null) {
-            CompanyDAO comA = new CompanyDAO();
-            cacheCompanies = comA.getAll();
-        }
-        return cacheCompanies;
+    static {
+        CompanyDAO comA = new CompanyDAO();
+        cacheCompanies = comA.getAll();
     }
 
     @Override
@@ -45,7 +42,6 @@ public class ComputerDAO implements DAO<Computer> {
         List<Computer> result = null;
         Connection connect = null;
         try {
-            initCompanies();
 
             // Execute a query
             String sql = "SELECT * FROM `computer`;";
@@ -77,7 +73,6 @@ public class ComputerDAO implements DAO<Computer> {
         List<Computer> compuTemp = null;
         Connection connect = null;
         try {
-            initCompanies();
     
             // Execute a query
             String sql = "SELECT * FROM `computer` WHERE name = ? ;";
@@ -110,7 +105,6 @@ public class ComputerDAO implements DAO<Computer> {
         Computer compuTemp = null;
         Connection connect = null;
         try {
-            initCompanies();
          
             // Execute a query
             String sql = "SELECT * FROM `computer` WHERE id = ? ;";
@@ -238,7 +232,6 @@ public class ComputerDAO implements DAO<Computer> {
         List<Computer> result = null;
         Connection connect = null;
         try {
-            initCompanies();
 
             String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
             
@@ -274,7 +267,6 @@ public class ComputerDAO implements DAO<Computer> {
         
         String order[] = ord.toString().split(";");
         try {
-            initCompanies();
 
             String sql = "SELECT * FROM `computer` ORDER BY " + order[0] + " " + order[1] + " LIMIT ?,? ;";
             
