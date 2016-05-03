@@ -3,8 +3,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib tagdir="/WEB-INF/tags/" prefix="page" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib tagdir="/WEB-INF/tags/" prefix="page"%>
 
 <!DOCTYPE html>
 <html>
@@ -31,14 +31,14 @@
 
 	<section id="main">
 		<div class="container">
-			 
-					<c:if test="${param.retourn == 1}">
-						<p class="alert alert-success">Computer edited !</p>
-					</c:if>
-					<c:if test="${param.retourn == 2}">
-						<p class="alert alert-success">Computer(s) deleted !</p>
-					</c:if>
-				 
+
+			<c:if test="${param.retourn == 1}">
+				<p class="alert alert-success">Computer edited !</p>
+			</c:if>
+			<c:if test="${param.retourn == 2}">
+				<p class="alert alert-success">Computer(s) deleted !</p>
+			</c:if>
+
 			<h1 id="homeTitle">
 				<c:out value="${nbComputers}" />
 				Computers found
@@ -96,7 +96,9 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.getId()}"></td>
-							<td><a href="/ComputerDatabaseMaven/edit?id=${computer.getId()}" onclick="">${computer.getName()}</a></td>
+							<td><a
+								href="/ComputerDatabaseMaven/edit?id=${computer.getId()}"
+								onclick="">${computer.getName()}</a></td>
 							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
 							<td>${computer.getDisco().toLocalDateTime().toLocalDate()}</td>
 							<td>${computer.getComp().getName()}</td>
@@ -108,10 +110,12 @@
 	</section>
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<page:pagination pageCourante="${param.page}" nbComputers="${nbComputers}" />
-				 
+			<page:pagination pageCourante="${param.page}"
+				nbComputers="${nbComputers}" />
+
 			<!-- Boutons taille des pages -->
 			<div class="btn-group btn-group-sm pull-right" role="group">
+
 				<button type="button"
 					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=10';"
 					class="btn btn-default">10</button>

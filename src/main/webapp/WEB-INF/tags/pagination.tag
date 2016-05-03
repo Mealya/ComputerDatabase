@@ -19,8 +19,8 @@
 				<c:if test="${pageCourante == null}">
 					<c:forEach begin="1" end="5" var="i">
 						<c:choose>
-							<c:when test="${pageCourante eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
+							<c:when test="${i eq 1}">
+								<li class="active"><a href="/ComputerDatabaseMaven/dash?page=${i}" >${i}</a></li>
 							</c:when>
 							<c:otherwise>
 								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
@@ -41,7 +41,7 @@
 					<c:forEach begin="1" end="${pageCourante + 4}" var="i">
 						<c:choose>
 							<c:when test="${pageCourante eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
+								<li class="active"><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
 							</c:when>
 							<c:otherwise>
 								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
@@ -60,7 +60,7 @@
 					<c:forEach begin="1" end="${pageCourante + 3}" var="i">
 						<c:choose>
 							<c:when test="${pageCourante eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
+								<li class="active"><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
 							</c:when>
 							<c:otherwise>
 								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
@@ -80,7 +80,7 @@
 						var="i">
 						<c:choose>
 							<c:when test="${pageCourante eq i}">
-								<li><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
+								<li class="active"><a href="/ComputerDatabaseMaven/dash?page=${i}">${i}</a></li>
 							</c:when>
 							<c:otherwise>
 								<c:if test="${nbComputers > (15 * i)}">

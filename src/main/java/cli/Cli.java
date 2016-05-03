@@ -24,12 +24,13 @@ public class Cli {
         while (choix != 0) {
 
             System.out.println("\nVeuillez saisir un nombre :");
-            System.out.println("1- GetAll Java");
+            System.out.println("1- Deprecated : GetAll Java");
             System.out.println("2- GetAll SQL");
             System.out.println("3- Get : ID (int)");
             System.out.println("4- Update : ID (int)");
             System.out.println("5- Create");
             System.out.println("6- Delete");
+            System.out.println("7- Delete company with computers");
             choix = sc.nextInt();
 
             // compt.setConnexion(tool.getConnection(computerDBName));

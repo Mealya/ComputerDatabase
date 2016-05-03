@@ -28,16 +28,16 @@ public class Dashboard extends HttpServlet {
             try {
                 page = Integer.parseInt(request.getParameter("page"));
             } catch (NumberFormatException e) {
-                slf4jLogger.info("Bad parameter for page");
+                slf4jLogger.info("Bad parameter for page " + e.getMessage());
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
         }
         if (request.getParameter("size") != null) {
             try {
-                page = Integer.parseInt(request.getParameter("size"));
+                size = Integer.parseInt(request.getParameter("size"));
             } catch (NumberFormatException e) {
-                slf4jLogger.info("Bad parameter for size");
+                slf4jLogger.info("Bad parameter for size " + e.getMessage());
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
@@ -54,7 +54,7 @@ public class Dashboard extends HttpServlet {
         long computersLong = workingDB.getSizeTable();
         nbComputers = String.valueOf(computersLong);
         if (computersLong < (page - 1) * 15) {
-            slf4jLogger.info("Bad parameter for size");
+            slf4jLogger.info("Error making page");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
