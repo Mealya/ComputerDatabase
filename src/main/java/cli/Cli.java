@@ -8,15 +8,17 @@ import com.excilys.dao.ComputerDAO;
 import com.excilys.database.BasicJdbc;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.service.HeavyCompanyDAO;
 import com.excilys.service.HeavyComputerDAO;
 
 public class Cli {
 
     public static void main(String[] argv) {
-        String computerDBName = "computer-database-db";
 
         ComputerDAO compt = new ComputerDAO();
         HeavyComputerDAO workingDB = new HeavyComputerDAO();
+        
+        HeavyCompanyDAO workingCompany = new HeavyCompanyDAO();
 
         Scanner sc = new Scanner(System.in);
         Scanner sc2 = new Scanner(System.in);
@@ -174,6 +176,12 @@ public class Cli {
 
                 // compt.setConnexion(tool.getConnection(computerDBName));
                 workingDB.deleteComputer(idCompuDel);
+                break;
+           
+            case 7:
+                System.out.println("ID company to delete with computers :");
+                long idCompaDel = sc.nextLong();
+                workingCompany.deleteCompany(idCompaDel);
                 break;
             }
             sc = new Scanner(System.in);

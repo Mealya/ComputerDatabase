@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.VirtualJdbc;
 import com.excilys.model.Company;
@@ -97,5 +98,42 @@ public class CompanyDAO implements DAO<Company> {
         }
         return compa;
     }
+    
+    @Override
+    public void delete(long id) {
+        if (id < 0) {
+            throw new IllegalArgumentException("Comp negative");
+        }
+        if (toolConnexion == null) {
+            throw new IllegalStateException("Pas de connexion tool");
+        }
+        
+        Connection connect = null;
+        try {
+            String sql_1 = "DELETE FROM `computer` WHERE `company_id` = ? ;";
+            String sql_2 = "DELETE FROM `company` WHERE `id` = ? ;";
+            
+            connect = toolConnexion.getConnection();
+            connect.setAutoCommit(false);
+            
+            PreparedStatement stmt_1 = connect.prepareStatement(sql_1);
+            stmt_1.setLong(1, id);
+            PreparedStatement stmt_2 = connect.prepareStatement(sql_2);
+            stmt_2.setLong(1, id);
+  
+            stmt_1.executeUpdate();
+            stmt_2.executeUpdate();
 
+        } catch (SQLException e) {
+            slf4jLogger.warn(e.getMessage());
+            try {
+                connect.rollback();
+            } catch (SQLException e1) {
+                slf4jLogger.error(e1.getMessage());
+            }
+            //throw new ExceptionDAO(e.getMessage());
+        }  finally {
+            toolConnexion.closeConnection(connect);
+        }
+    }
 }

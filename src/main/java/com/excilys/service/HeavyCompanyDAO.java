@@ -41,9 +41,12 @@ public class HeavyCompanyDAO {
 
     }
 
-    @Deprecated
-    public void deleteCompany(long c) {
 
+    public void deleteCompany(long idCompa) {
+        if (idCompa < 0) {
+            throw new IllegalArgumentException("Id non valide");
+        }
+        compaDB.delete(idCompa);
     }
 
     @Deprecated
