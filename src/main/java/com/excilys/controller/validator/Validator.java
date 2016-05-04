@@ -11,8 +11,16 @@ import com.excilys.model.Computer;
 
 public class Validator {
 
-    private final static Logger slf4jLogger = LoggerFactory.getLogger(Validator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Validator.class);
     
+    /**
+     * Validate the parameters for a new computer.
+     * @param name Parameter of the computer
+     * @param intro Parameter of the computer
+     * @param disco Parameter of the computer
+     * @param company Parameter of the computer
+     * @return The computer who need to be added
+     */
     public static Computer validateComputerAdd(String name, String intro, String disco, String company) {
         Computer computer = new Computer();
         
@@ -29,7 +37,7 @@ public class Validator {
             time = new java.sql.Timestamp(parsedDate.getTime());
         } catch (Exception e) {
             if (!intro.equals("")) {
-                slf4jLogger.warn("Bad entry for introduced : " + e.getMessage());
+                LOGGER.warn("Bad entry for introduced : " + e.getMessage());
             }
         }
         computer.setIntro(time);
@@ -41,7 +49,7 @@ public class Validator {
             time = new java.sql.Timestamp(parsedDate.getTime());
         } catch (Exception e) {
             if (!disco.equals("")) {
-                slf4jLogger.warn("Bad entry for discovered : " + e.getMessage());
+                LOGGER.warn("Bad entry for discovered : " + e.getMessage());
             }
         }
         computer.setDisco(time);
@@ -54,8 +62,8 @@ public class Validator {
                 compTemp.setId(idCompa);
                 computer.setComp(compTemp);
             }
-        } catch (NumberFormatException e){
-            slf4jLogger.warn("Bad entry for company id : " + e.getMessage());
+        } catch (NumberFormatException e) {
+            LOGGER.warn("Bad entry for company id : " + e.getMessage());
             return null;
         }
         
@@ -63,6 +71,15 @@ public class Validator {
         return computer;
     }
 
+    /**
+     * Validate the parameters for edit a computer.
+     * @param id  Parameter of the computer
+     * @param name Parameter of the computer
+     * @param intro Parameter of the computer
+     * @param disco Parameter of the computer
+     * @param company Parameter of the computer
+     * @return The computer who need to be edited
+     */
     public static Computer validateComputerEdit(String id, String name, String intro, String disco, String company) {
         Computer compu = validateComputerAdd(name, intro, disco, company);
         
@@ -72,7 +89,7 @@ public class Validator {
             try {
                 compu.setId(Long.parseLong(id));
             } catch (NumberFormatException e) {
-                slf4jLogger.warn("Bad entry for company id : " + e.getMessage());
+                LOGGER.warn("Bad entry for company id : " + e.getMessage());
                 return null;
             }
             return compu;

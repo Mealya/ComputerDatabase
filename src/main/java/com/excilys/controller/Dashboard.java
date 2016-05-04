@@ -20,12 +20,24 @@ public class Dashboard extends HttpServlet {
     private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
     private static final long serialVersionUID = 1L;
 
+    /**
+     * The get version of the dashboard.
+     * 
+     * @param request
+     *            The HttpServletRequest
+     * @param response
+     *            The HttpServletResponse
+     * @throws ServletException
+     *             Error with servlet
+     * @throws IOException
+     *             Error with stream
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         int page = 1;
         int size = 15;
-        
+
         /* Numéro de page */
         if (request.getParameter("page") != null) {
             try {
@@ -36,7 +48,7 @@ public class Dashboard extends HttpServlet {
                 return;
             }
         }
-        
+
         /* Taille de la page */
         if (request.getParameter("size") != null) {
             try {
@@ -50,14 +62,14 @@ public class Dashboard extends HttpServlet {
         /* Récupération de l'ordre de tri */
         OrderType orderBy = null;
         if (request.getParameter("orderby") != null) {
-                orderBy = OrderType.fromString(request.getParameter("orderby"));
+            orderBy = OrderType.fromString(request.getParameter("orderby"));
             if (orderBy == null) {
                 slf4jLogger.info("Bad parameter for orderby");
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             }
         }
-        
+
         /* Recherche par nom (computer | company) */
         String search = null;
         if (request.getParameter("search") != null) {
@@ -65,7 +77,7 @@ public class Dashboard extends HttpServlet {
         }
 
         HeavyComputerDAO workingDB = new HeavyComputerDAO();
-        
+
         /* Paramétrage de la requête d'ensemble */
         long computersLong = workingDB.getSizeTable();
         if (computersLong < (page - 1) * 15) {
@@ -74,7 +86,7 @@ public class Dashboard extends HttpServlet {
             return;
         }
         int low = (page * size) - size;
-        
+
         /* Récupération des résultats pour la page|taille courante */
         List<Computer> computers = null;
         if (orderBy != null) {
@@ -82,18 +94,18 @@ public class Dashboard extends HttpServlet {
         } else {
             computers = workingDB.getSetComputer(low, size);
         }
-        
+
         /* Tri de la liste si la recherche existe */
         if (request.getParameter("search") != null) {
             for (int i = 0; i < computers.size(); i++) {
                 if (!computers.get(i).getName().equals(search)) {
                     if (computers.get(i).getComp() != null) {
-                        if (!computers.get(i).getComp().getName().equals(search)) {
+                        if (!computers.get(i).getComp().getName()
+                                .equals(search)) {
                             computers.remove(i);
                             i--;
                         }
-                    } 
-                    else {
+                    } else {
                         computers.remove(i);
                         i--;
                     }
@@ -106,16 +118,15 @@ public class Dashboard extends HttpServlet {
         request.setAttribute("nbComputers", computersLong);
         request.setAttribute("currentURL", request.getRequestURL());
 
-       
         if (request.getQueryString() != null) {
             String urlParam = request.getQueryString();
             if (orderBy != null) {
-                String result[] = urlParam.split("orderby="+orderBy);
+                String result[] = urlParam.split("orderby=" + orderBy);
                 urlParam = "";
                 for (String s : result) {
                     urlParam += s;
                 }
-                request.setAttribute("currentParams", "?" + urlParam );
+                request.setAttribute("currentParams", "?" + urlParam);
             } else {
                 request.setAttribute("currentParams", "?" + urlParam + "&");
             }

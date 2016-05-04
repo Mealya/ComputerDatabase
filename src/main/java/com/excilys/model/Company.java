@@ -4,10 +4,18 @@ public class Company {
     private long id;
     private String name;
 
+    /**
+     * Create an empty Company.
+     */
     public Company() {
 
     }
 
+    /**
+     * Create a Company.
+     * @param id The id of the company
+     * @param name The name of the company
+     */
     public Company(long id, String name) {
         super();
         this.id = id;

@@ -25,6 +25,10 @@ public class CompanyDAO implements DAO<Company> {
    
     private VirtualJdbc toolConnexion = new PoolJdbc();
 
+    /**
+     * Return the List of all the companies.
+     * @return The company list
+     */
     public List<Company> getAll() {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion");
@@ -62,6 +66,10 @@ public class CompanyDAO implements DAO<Company> {
         return result;
     }
 
+    /**
+     * To get a computer with an id.
+     * @return The computer 
+     */
     @Override
     public Company get(long id) {
         if (toolConnexion == null) {
@@ -99,6 +107,10 @@ public class CompanyDAO implements DAO<Company> {
         return compa;
     }
     
+    /**
+     * Delete the company and all the computers linkeds to the company.
+     * @param idCompa The id of the company who needs to be deleted
+     */
     @Override
     public void delete(long id) {
         if (id < 0) {
@@ -110,19 +122,19 @@ public class CompanyDAO implements DAO<Company> {
         
         Connection connect = null;
         try {
-            String sql_1 = "DELETE FROM `computer` WHERE `company_id` = ? ;";
-            String sql_2 = "DELETE FROM `company` WHERE `id` = ? ;";
+            String sql1 = "DELETE FROM `computer` WHERE `company_id` = ? ;";
+            String sql2 = "DELETE FROM `company` WHERE `id` = ? ;";
             
             connect = toolConnexion.getConnection();
             connect.setAutoCommit(false);
             
-            PreparedStatement stmt_1 = connect.prepareStatement(sql_1);
-            stmt_1.setLong(1, id);
-            PreparedStatement stmt_2 = connect.prepareStatement(sql_2);
-            stmt_2.setLong(1, id);
+            PreparedStatement stmt1 = connect.prepareStatement(sql1);
+            stmt1.setLong(1, id);
+            PreparedStatement stmt2 = connect.prepareStatement(sql2);
+            stmt2.setLong(1, id);
   
-            stmt_1.executeUpdate();
-            stmt_2.executeUpdate();
+            stmt1.executeUpdate();
+            stmt2.executeUpdate();
 
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());

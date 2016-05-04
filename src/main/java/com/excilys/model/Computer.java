@@ -9,6 +9,26 @@ public class Computer {
     private Timestamp disco;
     private Company comp;
 
+    /**
+     * Create an empty computer.
+     */
+    public Computer() {
+
+    }
+
+    /**
+     * Create a Computer with all parameters.
+     * @param id
+     *            The id of the computer
+     * @param name
+     *            The name of the computer
+     * @param intro
+     *            The introduced date of the computer
+     * @param disco
+     *            The discontinued date of the computer
+     * @param comp
+     *            The company linked to the computer
+     */
     public Computer(long id, String name, Timestamp intro, Timestamp disco,
             Company comp) {
         super();
@@ -25,9 +45,7 @@ public class Computer {
                 + ", disco=" + disco + ", comp=" + comp + "]";
     }
 
-    public Computer() {
 
-    }
 
     public long getId() {
         return id;

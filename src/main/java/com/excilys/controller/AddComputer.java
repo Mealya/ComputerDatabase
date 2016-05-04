@@ -1,8 +1,6 @@
 package com.excilys.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,6 +23,13 @@ public class AddComputer extends HttpServlet {
     private final Logger slf4jLogger = LoggerFactory.getLogger(AddComputer.class);
     private static final long serialVersionUID = 1818795394032861086L;
     
+    /**
+     * The get version of add a computer.
+     * @param request The HttpServletRequest
+     * @param response The HttpServletResponse
+     * @throws ServletException Error with servlet
+     * @throws IOException Error with stream
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
@@ -37,6 +42,13 @@ public class AddComputer extends HttpServlet {
                 .forward(request, response);
     }
     
+    /**
+     * The post version of add a computer.
+     * @param request The HttpServletRequest
+     * @param response The HttpServletResponse
+     * @throws ServletException Error with servlet
+     * @throws IOException Error with stream
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Computer computer = null;

@@ -1,8 +1,6 @@
 package com.excilys.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,6 +23,13 @@ public class EditComputer extends HttpServlet {
             .getLogger(EditComputer.class);
     private static final long serialVersionUID = -6582045182381493078L;
 
+    /**
+     * The get version of edit a computer.
+     * @param request The HttpServletRequest
+     * @param response The HttpServletResponse
+     * @throws ServletException Error with servlet
+     * @throws IOException Error with stream
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = -1;
@@ -68,6 +73,13 @@ public class EditComputer extends HttpServlet {
                 .forward(request, response);
     }
 
+    /**
+     * The post version of edit a computer.
+     * @param request The HttpServletRequest
+     * @param response The HttpServletResponse
+     * @throws ServletException Error with servlet
+     * @throws IOException Error with stream
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Computer computer = null;

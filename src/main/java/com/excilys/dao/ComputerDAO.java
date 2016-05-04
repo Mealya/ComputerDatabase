@@ -9,8 +9,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.VirtualJdbc;
 import com.excilys.mapper.Mapper;
@@ -63,6 +61,11 @@ public class ComputerDAO implements DAO<Computer> {
         return result;
     }
     
+    /**
+     * To get a computer linked to the name.
+     * @param name The name of the computer
+     * @return The computer
+     */
     public List<Computer> get(String name) {  
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
@@ -222,6 +225,12 @@ public class ComputerDAO implements DAO<Computer> {
         }
     }
 
+    /**
+     * To have a set of the computers.
+     * @param low First parameter of the LIMIT
+     * @param height Second parameter of the LIMIT
+     * @return The List who represents the set of computers
+     */
     public List<Computer> getSet(int low, int height) {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
@@ -255,6 +264,13 @@ public class ComputerDAO implements DAO<Computer> {
         return result;
     }
     
+    /**
+     * @see getSet with a order.
+     * @param low First parameter of the LIMIT 
+     * @param height Second parameter of the LIMIT
+     * @param ord The order of the list
+     * @return The List who represents the set of computers
+     */
     public List<Computer> getSet(int low, int height, OrderType ord) {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
@@ -289,6 +305,10 @@ public class ComputerDAO implements DAO<Computer> {
         return result;
     }
 
+    /**
+     * To get the number of computers.
+     * @return Nemeric who represent the number of computers
+     */
     public long getSizeTable() {
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");

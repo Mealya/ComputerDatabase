@@ -4,7 +4,6 @@ package com.excilys.service;
 import java.util.List;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.database.BasicJdbc;
 import com.excilys.model.Computer;
 import com.excilys.utils.OrderType;
 
@@ -12,21 +11,28 @@ public class HeavyComputerDAO {
 
     private ComputerDAO compDB;
 
+    /**
+     * Create a service linked to the ComputerDAO.
+     */
     public HeavyComputerDAO() {
         compDB = new ComputerDAO();
     }
 
-    /*
-     * public void setComputerDB(ComputerDB comp) { if (comp == null) { throw
-     * new IllegalArgumentException("CompDB is null"); } compDB = comp; }
+    /**
+     * Call the DAO to return the computer list.
+     * @return The List of computers
      */
-
     public List<Computer> getComputers() {
         List<Computer> result = null;
         result = compDB.getAll();
         return result;
     }
 
+    /**
+     * Call the DAO to return a computer linked to the id.
+     * @param idCompu The id of the computer
+     * @return The computer linked to the id
+     */
     public Computer getComputer(long idCompu) {
         if (idCompu < 0) {
             throw new IllegalArgumentException("Id non valide");
@@ -35,7 +41,6 @@ public class HeavyComputerDAO {
         result = compDB.get(idCompu);
         return result;
     }
-    
     /*
     public List<Computer> getComputer(String name) {
         if (name == null) {
@@ -45,7 +50,10 @@ public class HeavyComputerDAO {
         result = compDB.get(name);
         return result;
     }*/
-    
+    /**
+     * Call the DAO to create a computer.
+     * @param c The computer who needs to be added to the DB
+     */
     public void createComputer(Computer c) {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
@@ -63,7 +71,11 @@ public class HeavyComputerDAO {
         }*/
         compDB.create(c);
     }
-
+    
+    /**
+     * Call the DAO to update a computer.
+     * @param c The computer who needs to be update
+     */
     public void updateComputer(Computer c) {
         if (c == null) {
             throw new IllegalArgumentException("c is null");
@@ -71,6 +83,10 @@ public class HeavyComputerDAO {
         compDB.update(c);
     }
 
+    /**
+     * Call the DAO to delete a computer.
+     * @param c The computer who needs to be delete
+     */
     public void deleteComputer(long c) {
         if (c <= 0) {
             throw new IllegalArgumentException("c is negative or 0");
@@ -78,6 +94,12 @@ public class HeavyComputerDAO {
         compDB.delete(c);
     }
 
+    /**
+     * Call the DAO to have a set of the computers.
+     * @param low First parameter of the LIMIT
+     * @param height Second parameter of the LIMIT
+     * @return The List who represents the set of computers
+     */
     public List<Computer> getSetComputer(int low, int height) {
         /*if (low >= height) {
             throw new IllegalArgumentException("low >= height");
@@ -91,6 +113,13 @@ public class HeavyComputerDAO {
         return compDB.getSet(low, height);
     }
     
+    /**
+     * @see getSetComputer with a order.
+     * @param low First parameter of the LIMIT 
+     * @param height Second parameter of the LIMIT
+     * @param ord The order of the list
+     * @return The List who represents the set of computers
+     */
     public List<Computer> getSetComputer(int low, int height, OrderType ord) {
         /*if (low >= height) {
             throw new IllegalArgumentException("low >= height");
@@ -104,6 +133,10 @@ public class HeavyComputerDAO {
         return compDB.getSet(low, height, ord);
     }
     
+    /**
+     * The total number of computers.
+     * @return long represent the number of computers
+     */
     public long getSizeTable() {
         return compDB.getSizeTable();
     }

@@ -10,6 +10,13 @@ import com.excilys.model.Computer;
 
 public class Mapper {
 
+    /**
+     * Map a result set to a List of computers.
+     * @param res The ResultSet
+     * @param companies The company list
+     * @return The list of computers
+     * @throws SQLException Error with SQL
+     */
     public static List<Computer> resultSetToListComputer(ResultSet res, List<Company> companies) throws SQLException {
         List<Computer> result = new ArrayList<Computer>();
         // Extract data from result set
@@ -30,6 +37,14 @@ public class Mapper {
         }
         return result;
     }
+   
+    /**
+     * Map a result set to a computer.
+     * @param res The ResultSet
+     * @param companies The company list
+     * @return The computer
+     * @throws SQLException Error with SQL
+     */
     public static Computer resultSetToComputer(ResultSet res, List<Company> companies) throws SQLException {
         Computer result = new Computer();
         // Extract data from result set

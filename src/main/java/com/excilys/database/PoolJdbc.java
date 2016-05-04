@@ -13,10 +13,10 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class PoolJdbc implements VirtualJdbc {
 
-    private final static Logger slf4jLogger = LoggerFactory
+    private static final Logger LOGGER = LoggerFactory
             .getLogger(PoolJdbc.class);
 
-    private static final String bd_data = "db.properties";
+    private static final String DB_DATA = "db.properties";
 
     private static String name;
     private static String username;
@@ -28,13 +28,13 @@ public class PoolJdbc implements VirtualJdbc {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            slf4jLogger.error("Fail to get driver sql" + e.getMessage());
+            LOGGER.error("Fail to get driver sql" + e.getMessage());
             throw new ExceptionDB("Where is your MySQL JDBC Driver : "
                     + e.getMessage());
         }
         Properties properties = new Properties();
         InputStream propertiesFile = PoolJdbc.class.getClassLoader()
-                .getResourceAsStream(bd_data);
+                .getResourceAsStream(DB_DATA);
         try {
             properties.load(propertiesFile);
         } catch (IOException e) {
@@ -62,29 +62,31 @@ public class PoolJdbc implements VirtualJdbc {
         pool.addDataSourceProperty("prepStmtCacheSize", "250");
         pool.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-        slf4jLogger.info("=========== Pool created.  ===========");
+        LOGGER.info("=========== Pool created.  ===========");
     }
 
+    @Override
     public Connection getConnection() {
         try {
-            slf4jLogger.info("=========== Pool get.  ===========");
+            LOGGER.info("=========== Pool get.  ===========");
             return pool.getConnection();
         } catch (SQLException e) {
-            slf4jLogger.error("Fail to get a connection " + e.getMessage());
+            LOGGER.error("Fail to get a connection " + e.getMessage());
             throw new ExceptionDB("Not connection with name : " + PoolJdbc.name
                     + " " + e.getMessage());
         }
     }
 
+    @Override
     public void closeConnection(Connection c) {
         if (c == null) {
             throw new IllegalArgumentException("C sould not be null !");
         }
         try {
             c.close();
-            slf4jLogger.info("=========== Pool close connection.  ===========");
+            LOGGER.info("=========== Pool close connection.  ===========");
         } catch (SQLException e) {
-            slf4jLogger.error("Deconnection failed! " + e.getMessage());
+            LOGGER.error("Deconnection failed! " + e.getMessage());
         }
     }
 

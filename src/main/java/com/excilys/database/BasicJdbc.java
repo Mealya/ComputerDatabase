@@ -16,14 +16,14 @@ import org.slf4j.LoggerFactory;
  */
 public class BasicJdbc implements VirtualJdbc {
 
-    private final Logger slf4jLogger = LoggerFactory.getLogger(BasicJdbc.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(BasicJdbc.class);
 
     private static Map<String, Connection> connections = new HashMap<String, Connection>();
-    private static Class<?> DB_driver = null;
+    private static Class<?> dbDriver = null;
     
-    private final static Object LOCK_CREATE = new Object();
-    private final static Object LOCK_DELETE = new Object();
-    private final static Object LOCK_DRIVER = new Object();
+    private static final Object LOCK_CREATE = new Object();
+    private static final Object LOCK_DELETE = new Object();
+    private static final Object LOCK_DRIVER = new Object();
     
     private String name = "computer-database-db";
     
@@ -31,30 +31,30 @@ public class BasicJdbc implements VirtualJdbc {
      * Create an object Connection with a DB name.
      */
     private void linkToMySql() {
-        slf4jLogger.info("=========== MySQL JDBC Connecting.....  ===========");
+        LOGGER.info("=========== MySQL JDBC Connecting.....  ===========");
 
         try {
-            DB_driver = Class.forName("com.mysql.jdbc.Driver");
+            dbDriver = Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            slf4jLogger.error("Where is your MySQL JDBC Driver? : "
+            LOGGER.error("Where is your MySQL JDBC Driver? : "
                     + e.getMessage());
             throw new ExceptionDB("Where is your MySQL JDBC Driver? : " +  e.getMessage());
         }
-        slf4jLogger.info("MySQL JDBC Driver Registered!");
+        LOGGER.info("MySQL JDBC Driver Registered!");
     }
 
     public void connect(String nameDB) {
         if (nameDB == null) {
             throw new IllegalArgumentException("Name must not be null");
         }
-        synchronized(LOCK_CREATE) {
+        synchronized (LOCK_CREATE) {
             if (connections.get(nameDB) != null) {
                 return;
             }
         }
-        if (DB_driver == null) {
+        if (dbDriver == null) {
             synchronized (LOCK_DRIVER) {
-                if (DB_driver == null) {
+                if (dbDriver == null) {
                     linkToMySql();
                 }
             }
@@ -68,7 +68,7 @@ public class BasicJdbc implements VirtualJdbc {
                     "admincdb", "qwerty1234");
 
         } catch (SQLException e) {
-            slf4jLogger.error("Connection Failed! " + e.getMessage());
+            LOGGER.error("Connection Failed! " + e.getMessage());
 
             throw new ExceptionDB("Connection Failed! " +  e.getMessage());
         }
@@ -76,10 +76,10 @@ public class BasicJdbc implements VirtualJdbc {
         if (connection != null) {
             connections.put(nameDB, connection);
         } else {
-            slf4jLogger.error("Failed to make connection!");
+            LOGGER.error("Failed to make connection!");
             throw new ExceptionDB("Failed to make connection !");
         }
-        slf4jLogger.info("=========== MySQL JDBC created.....  ===========");
+        LOGGER.info("=========== MySQL JDBC created.....  ===========");
     }
     
     public void setConnectionName(String name) {
@@ -90,7 +90,7 @@ public class BasicJdbc implements VirtualJdbc {
     }
     
     /**
-     * Return the connection object linked to a name
+     * Return the connection object linked to a name.
      * 
      * @param name
      *            The name of the database
@@ -109,7 +109,7 @@ public class BasicJdbc implements VirtualJdbc {
                     connect(name);
                 }
             } catch (SQLException e) {
-                slf4jLogger.error("Failed to make connection! " + e.getMessage());
+                LOGGER.error("Failed to make connection! " + e.getMessage());
             }
             return connections.get(name);
         }
@@ -117,7 +117,7 @@ public class BasicJdbc implements VirtualJdbc {
     }
 
     /**
-     * Close the Connection linked to a name
+     * Close the Connection linked to a name.
      * 
      * @param name
      *            The name of the data base
@@ -127,10 +127,10 @@ public class BasicJdbc implements VirtualJdbc {
             try {
                 c.close();
                 connections.remove(c);
-                slf4jLogger
+                LOGGER
                 .info("=========== MySQL JDBC destroyed.....  ===========");
             } catch (SQLException e) {
-                slf4jLogger.error("Deconnection failed! "
+                LOGGER.error("Deconnection failed! "
                         + e.getMessage());
             }
             

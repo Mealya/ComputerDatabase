@@ -15,6 +15,13 @@ public class DeleteComputer extends HttpServlet {
 
     private static final long serialVersionUID = -3950022894376611585L;
 
+    /**
+     * The post version of delete a computer.
+     * @param request The HttpServletRequest
+     * @param response The HttpServletResponse
+     * @throws ServletException Error with servlet
+     * @throws IOException Error with stream
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String params = request.getParameterValues("selection")[0]; 

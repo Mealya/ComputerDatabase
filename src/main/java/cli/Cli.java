@@ -5,7 +5,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.excilys.dao.ComputerDAO;
-import com.excilys.database.BasicJdbc;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyCompanyDAO;
