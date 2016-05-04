@@ -1,19 +1,24 @@
 package com.excilys.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.ComputerDAO;
+import com.excilys.dao.ExceptionDAO;
 import com.excilys.model.Company;
 
 public class HeavyCompanyDAO {
 
     private CompanyDAO compaDB;
-
+    private ComputerDAO compuDB;
     /**
      * Create a service linked to the CompanyDAO.
      */
     public HeavyCompanyDAO() {
         compaDB = new CompanyDAO();
+        compuDB = new ComputerDAO();
     }
 
     /**
@@ -66,7 +71,24 @@ public class HeavyCompanyDAO {
         if (idCompa < 0) {
             throw new IllegalArgumentException("Id non valide");
         }
-        compaDB.delete(idCompa);
+        Connection connect = compuDB.getTool().getConnection();
+        try {
+            connect.setAutoCommit(false);
+            compuDB.deleteWithCompany(idCompa, connect);
+            compaDB.delete(idCompa, connect);
+        } catch (SQLException | ExceptionDAO e) {
+            try {
+                connect.rollback();
+            } catch (SQLException e1) {
+                throw new ExceptionService(e.getMessage());
+            }
+        } finally {
+            try {
+                connect.close();
+            } catch (SQLException e) {
+                throw new ExceptionService(e.getMessage());
+            }
+        }        
     }
 
     /**

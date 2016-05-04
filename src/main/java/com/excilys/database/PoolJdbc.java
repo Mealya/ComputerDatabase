@@ -20,7 +20,7 @@ public class PoolJdbc implements VirtualJdbc {
 
     private static String name;
     private static String username;
-    private static String password;
+    private static String password; 
 
     private static HikariDataSource pool;
 

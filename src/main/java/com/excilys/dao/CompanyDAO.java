@@ -59,7 +59,7 @@ public class CompanyDAO implements DAO<Company> {
             }
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
@@ -100,7 +100,7 @@ public class CompanyDAO implements DAO<Company> {
             rs.close();
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
@@ -111,8 +111,8 @@ public class CompanyDAO implements DAO<Company> {
      * Delete the company and all the computers linkeds to the company.
      * @param idCompa The id of the company who needs to be deleted
      */
-    @Override
-    public void delete(long id) {
+    
+    public void delete(long id, Connection connect) {
         if (id < 0) {
             throw new IllegalArgumentException("Comp negative");
         }
@@ -120,32 +120,32 @@ public class CompanyDAO implements DAO<Company> {
             throw new IllegalStateException("Pas de connexion tool");
         }
         
-        Connection connect = null;
+        //Connection connect = null;
         try {
-            String sql1 = "DELETE FROM `computer` WHERE `company_id` = ? ;";
+            //String sql1 = "DELETE FROM `computer` WHERE `company_id` = ? ;";
             String sql2 = "DELETE FROM `company` WHERE `id` = ? ;";
             
             connect = toolConnexion.getConnection();
             connect.setAutoCommit(false);
             
-            PreparedStatement stmt1 = connect.prepareStatement(sql1);
-            stmt1.setLong(1, id);
+            //PreparedStatement stmt1 = connect.prepareStatement(sql1);
+            //stmt1.setLong(1, id);
             PreparedStatement stmt2 = connect.prepareStatement(sql2);
             stmt2.setLong(1, id);
   
-            stmt1.executeUpdate();
+            //stmt1.executeUpdate();
             stmt2.executeUpdate();
 
         } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
+            /*slf4jLogger.warn(e.getMessage());
             try {
                 connect.rollback();
             } catch (SQLException e1) {
                 slf4jLogger.error(e1.getMessage());
-            }
-            //throw new ExceptionDAO(e.getMessage());
+            }*/
+            throw new ExceptionDAO(e.getMessage());/*
         }  finally {
             toolConnexion.closeConnection(connect);
-        }
+        */}
     }
 }

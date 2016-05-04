@@ -31,7 +31,11 @@ public class ComputerDAO implements DAO<Computer> {
         CompanyDAO comA = new CompanyDAO();
         cacheCompanies = comA.getAll();
     }
-
+    
+    public VirtualJdbc getTool() {
+        return toolConnexion;
+    }
+    
     @Override
     public List<Computer> getAll() {
         if (toolConnexion == null) {
@@ -54,7 +58,7 @@ public class ComputerDAO implements DAO<Computer> {
             rs.close();
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
@@ -90,7 +94,7 @@ public class ComputerDAO implements DAO<Computer> {
             rs.close();
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
@@ -123,7 +127,7 @@ public class ComputerDAO implements DAO<Computer> {
             rs.close();
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
@@ -159,7 +163,7 @@ public class ComputerDAO implements DAO<Computer> {
             stmt.executeUpdate();
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
@@ -219,12 +223,37 @@ public class ComputerDAO implements DAO<Computer> {
 
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         }  finally {
             toolConnexion.closeConnection(connect);
         }
     }
+    
 
+    public void deleteWithCompany(long compaID, Connection connect) {
+        if (compaID < 0) {
+            throw new IllegalArgumentException("Compa negative");
+        }
+        /*if (toolConnexion == null) {
+            throw new IllegalStateException("Pas de connexion tool");
+        }*/
+        
+        //Connection connect = null;
+        try {
+            String sql = "DELETE FROM `computer` WHERE `company_id` = ? ;";
+            
+            //connect = toolConnexion.getConnection();
+            PreparedStatement stmt = connect.prepareStatement(sql);
+            stmt.setLong(1, compaID);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            slf4jLogger.warn(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
+        }  /*finally {
+            toolConnexion.closeConnection(connect);
+        }*/
+    }
     /**
      * To have a set of the computers.
      * @param low First parameter of the LIMIT
@@ -257,7 +286,7 @@ public class ComputerDAO implements DAO<Computer> {
             
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         } finally {
             toolConnexion.closeConnection(connect);
         }
@@ -298,7 +327,7 @@ public class ComputerDAO implements DAO<Computer> {
             
         } catch (SQLException e) {
             slf4jLogger.warn(e.getMessage());
-            //throw new ExceptionDAO(e.getMessage());
+            throw new ExceptionDAO(e.getMessage());
         } finally {
             toolConnexion.closeConnection(connect);
         }
