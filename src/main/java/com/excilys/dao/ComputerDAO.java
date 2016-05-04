@@ -99,7 +99,7 @@ public class ComputerDAO implements DAO<Computer> {
     
     @Override
     public Computer get(long idComp) {
-        if (toolConnexion == null) {
+        if (toolConnexion == null) { 
             throw new IllegalStateException("Pas de connexion tool");
         }
         if (idComp <= 0) {

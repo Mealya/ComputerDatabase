@@ -123,6 +123,9 @@ public class BasicJdbc implements VirtualJdbc {
      *            The name of the data base
      */
     public void closeConnect(Connection c) {
+        if (c == null) {
+            throw new IllegalArgumentException("Connection must not be null");
+        }
         synchronized (LOCK_DELETE) {
             try {
                 c.close();

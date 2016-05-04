@@ -1,21 +1,19 @@
 package selenium;
 
+import static org.junit.Assert.*;
+
 import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+//driver.findElement(By.xpath(".//*[@id='account']/a")).click();
 public class TestDashboard {
-
-    @Test
-    public void test_list_computers_display() {
-
-    }
 
     private static FirefoxDriver driver;
     WebElement element;
@@ -23,44 +21,59 @@ public class TestDashboard {
     @BeforeClass
     public static void openBrowser() {
         driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
     @Test
-    public void test_add_computers_founds() {
-
+    public void test_add_computer() {
+        //Given
         driver.get("http://localhost:8080/ComputerDatabaseMaven/dash");
-        /*driver.findElement(By.xpath(".//*[@id='account']/a")).click();
-        driver.findElement(By.id("log")).sendKeys("testuser_3");
-        driver.findElement(By.id("pwd")).sendKeys("Test@123");*/
-        driver.findElement(By.id("addComputer")).click();
-        
+        driver.findElement(By.id("addComputer")).click();   
         driver.findElement(By.id("computerName")).sendKeys("testuser");
         driver.findElement(By.id("introduced")).sendKeys("1991-02-12");
         driver.findElement(By.id("discontinued")).sendKeys("2000-02-12");
+        
+        //When
         driver.findElement(By.id("valid")).click();
-        Assert.assertNotNull(driver.findElementByClassName("alert alert-success"));
+       
+        //Then
+        assertNotNull(driver.findElement(By.id("compuAdded")));
     }
     
-    /*
     @Test
-    public void inValid_UserCredential() {
-        System.out.println("Starting test " + new Object() {
-        }.getClass().getEnclosingMethod().getName());
-        driver.get("http://www.store.demoqa.com");
-        driver.findElement(By.xpath(".//*[@id='account']/a")).click();
-        driver.findElement(By.id("log")).sendKeys("testuser");
-        driver.findElement(By.id("pwd")).sendKeys("Test@123");
-        driver.findElement(By.id("login")).click();
+    public void test_add_invalid_computer() {
+        //Given
+        driver.get("http://localhost:8080/ComputerDatabaseMaven/dash");
+        //driver.findElement(By.xpath(".//*[@id='account']/a")).click();
+        driver.findElement(By.id("addComputer")).click();
+        
+        driver.findElement(By.id("computerName")).sendKeys("");
+        driver.findElement(By.id("introduced")).sendKeys("1991-02-12");
+        driver.findElement(By.id("discontinued")).sendKeys("2000-02-12");
+        driver.findElement(By.id("valid")).click();
+       
+
         try {
-            element = driver.findElement(By
-                    .xpath(".//*[@id='account_logout']/a"));
-        } catch (Exception e) {
+            //When
+            driver.findElement(By.id("compuAdded"));
+            fail("The computer should not be added !");
+        } catch (NoSuchElementException e) {
+            //Then
+            String errorMessage = "Unable to locate element: {\"method\":\"id\",\"selector\":\"compuAdded\"}";
+            assertTrue(e.getMessage().contains(errorMessage));
         }
-        Assert.assertNotNull(element);
-        System.out.println("Ending test " + new Object() {
-        }.getClass().getEnclosingMethod().getName());
-    }*/
+    }
+    
+    @Test
+    public void test_list_computers_display() {
+        //When
+        driver.get("http://localhost:8080/ComputerDatabaseMaven/dash");
+        
+        //Then
+        assertNotNull(driver.findElement(By.id("homeTitle")));
+        assertNotNull(driver.findElement(By.id("results")));
+    } 
+
 
     @AfterClass
     public static void closeBrowser() {

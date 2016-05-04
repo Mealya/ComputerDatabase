@@ -47,7 +47,7 @@ public class Mapper {
      */
     public static Computer resultSetToComputer(ResultSet res, List<Company> companies) throws SQLException {
         Computer result = new Computer();
-        // Extract data from result set
+        // Extract data from result set 
         while (res.next()) {
             Computer compuTemp = new Computer();
             compuTemp.setId(res.getLong("id"));

@@ -32,7 +32,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<c:if test="${added == 1}">
-						<p class="alert alert-success">Computer added !</p>
+						<p id="compuAdded" class="alert alert-success">Computer added !</p>
 					</c:if>
 
 					<h1>Add Computer</h1>
