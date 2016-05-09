@@ -41,15 +41,15 @@ public class HeavyComputerDAO {
         result = compDB.get(idCompu);
         return result;
     }
-    /*
-    public List<Computer> getComputer(String name) {
+    
+    public List<Computer> searchFor(String name) {
         if (name == null) {
-            throw new IllegalArgumentException("Id non valide");
+            throw new IllegalArgumentException("Name non valide");
         }
         List<Computer> result = null;
-        result = compDB.get(name);
+        result = compDB.searchFor(name);
         return result;
-    }*/
+    }
     /**
      * Call the DAO to create a computer.
      * @param c The computer who needs to be added to the DB

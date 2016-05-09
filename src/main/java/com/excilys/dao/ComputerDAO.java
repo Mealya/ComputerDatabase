@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.database.PoolJdbc;
+import com.excilys.database.ThreadJdbc;
 import com.excilys.database.VirtualJdbc;
 import com.excilys.mapper.Mapper;
 import com.excilys.model.Company;
@@ -70,7 +71,7 @@ public class ComputerDAO implements DAO<Computer> {
      * @param name The name of the computer
      * @return The computer
      */
-    public List<Computer> get(String name) {  
+    public List<Computer> searchFor(String name) {  
         if (toolConnexion == null) {
             throw new IllegalStateException("Pas de connexion tool");
         }
@@ -82,13 +83,14 @@ public class ComputerDAO implements DAO<Computer> {
         try {
     
             // Execute a query
-            String sql = "SELECT * FROM `computer` WHERE name = ? ;";
+            String sql = "SELECT * FROM `computer` Inner JOIN company ON computer.company_id = company.id WHERE computer.name = ? OR company.name = ? ;";
             
             connect = toolConnexion.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setString(1, name);
+            stmt.setString(2, name);
             ResultSet rs = stmt.executeQuery();
-
+            
             compuTemp = Mapper.resultSetToListComputer(rs, cacheCompanies);
 
             rs.close();
@@ -309,8 +311,10 @@ public class ComputerDAO implements DAO<Computer> {
         }
         List<Computer> result = null;
         Connection connect = null;
-        
+
+        long debut = System.currentTimeMillis();
         String order[] = ord.toString().split(";");
+        slf4jLogger.debug("Split timer : " + (System.currentTimeMillis()-debut));
         try {
 
             String sql = "SELECT * FROM `computer` ORDER BY " + order[0] + " " + order[1] + " LIMIT ?,? ;";

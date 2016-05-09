@@ -50,7 +50,7 @@ public class HeavyCompanyDAO {
      * @param c A company
      */
     @Deprecated
-    public void createCompany(Company c) {
+    public void createCompany(Company c) {throw new UnsupportedOperationException("Not implemented");
 
     }
 
@@ -76,18 +76,11 @@ public class HeavyCompanyDAO {
             connect.setAutoCommit(false);
             compuDB.deleteWithCompany(idCompa, connect);
             compaDB.delete(idCompa, connect);
+            connect.commit();
         } catch (SQLException | ExceptionDAO e) {
-            try {
-                connect.rollback();
-            } catch (SQLException e1) {
-                throw new ExceptionService(e.getMessage());
-            }
+            compuDB.getTool().rollBack(connect);
         } finally {
-            try {
-                connect.close();
-            } catch (SQLException e) {
-                throw new ExceptionService(e.getMessage());
-            }
+            compuDB.getTool().closeConnection(connect);
         }        
     }
 

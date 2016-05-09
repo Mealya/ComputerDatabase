@@ -25,6 +25,7 @@ public class Validator {
         Computer computer = new Computer();
         
         if (name == null) {
+            LOGGER.warn("Bad entry for name : null ");
             return null;
         } else {
             computer.setName(name);

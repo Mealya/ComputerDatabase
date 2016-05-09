@@ -35,7 +35,7 @@
 
 					<form action="/ComputerDatabaseMaven/edit" method="POST">
 
-						<input type="hidden" value="${id}" name="id" />
+						<input type="hidden" value="${id}" name="id" id="id"/>
 
 						<fieldset>
 							<div class="form-group">

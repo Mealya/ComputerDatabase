@@ -32,6 +32,7 @@ public class AddComputer extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
         
         List<Company> companies = workCompt.getCompanies();
@@ -60,7 +61,7 @@ public class AddComputer extends HttpServlet {
             HeavyComputerDAO serv = new HeavyComputerDAO();
             serv.createComputer(computer);
         } else {
-            slf4jLogger.warn("Fail to add a computer");
+            slf4jLogger.error("Fail to add a computer");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

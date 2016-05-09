@@ -18,4 +18,9 @@ public interface VirtualJdbc {
     default void closeConnection(Connection c) {
         throw new UnsupportedOperationException("Not implemented");
     }
-}
+    
+    default void rollBack(Connection c) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+    
+} 

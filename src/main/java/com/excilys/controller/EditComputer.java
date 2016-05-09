@@ -32,11 +32,12 @@ public class EditComputer extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         int id = -1;
         try {
             id = Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException e) {
-            slf4jLogger.info("Bad parameter for id");
+            slf4jLogger.info("Bad parameter for id : " + request.getParameter("id"));
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }

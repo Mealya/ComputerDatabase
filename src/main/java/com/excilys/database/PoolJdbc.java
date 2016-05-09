@@ -62,13 +62,13 @@ public class PoolJdbc implements VirtualJdbc {
         pool.addDataSourceProperty("prepStmtCacheSize", "250");
         pool.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-        LOGGER.info("=========== Pool created.  ===========");
+        LOGGER.debug("=========== Pool created.  ===========");
     }
 
     @Override
     public Connection getConnection() {
         try {
-            LOGGER.info("=========== Pool get.  ===========");
+            LOGGER.debug("=========== Pool get.  ===========");
             return pool.getConnection();
         } catch (SQLException e) {
             LOGGER.error("Fail to get a connection " + e.getMessage());
@@ -84,10 +84,19 @@ public class PoolJdbc implements VirtualJdbc {
         }
         try {
             c.close();
-            LOGGER.info("=========== Pool close connection.  ===========");
+            LOGGER.debug("=========== Pool close connection.  ===========");
         } catch (SQLException e) {
             LOGGER.error("Deconnection failed! " + e.getMessage());
+            throw new ExceptionDB(e.getMessage());
         }
     }
 
+    public void rollBack(Connection c) {
+        try {
+            c.rollback();
+        } catch (SQLException e) {
+            LOGGER.error("RollBack fail! " + e.getMessage());
+            throw new ExceptionDB(e.getMessage());
+        }
+    }
 }

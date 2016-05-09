@@ -151,8 +151,8 @@
 					<c:forEach items="${computers}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.getId()}"></td>
-							<td><a
+								class="cb" value="${computer.getId()}" id="${computer.getName().concat('_').concat('id')}" ></td>
+							<td><a id="${computer.getName().concat('_').concat('name')}"
 								href="/ComputerDatabaseMaven/edit?id=${computer.getId()}"
 								onclick="">${computer.getName()}</a></td>
 							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
