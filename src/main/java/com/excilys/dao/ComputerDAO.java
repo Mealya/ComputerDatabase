@@ -29,8 +29,13 @@ public class ComputerDAO implements DAO<Computer> {
     
 
     static {
-        CompanyDAO comA = new CompanyDAO();
-        cacheCompanies = comA.getAll();
+        try {
+            CompanyDAO comA = new CompanyDAO();
+            cacheCompanies = comA.getAll();
+        } catch (Exception e ) {
+            throw new ExceptionDAO(e.getMessage());
+        }
+        
     }
     
     public VirtualJdbc getTool() {
