@@ -72,13 +72,19 @@ public class PoolJdbc implements VirtualJdbc {
 
     @Override
     public Connection getConnection() {
+        Connection c = null;
         try {
             LOGGER.debug("=========== Pool get.  ===========");
-            return pool.getConnection();
+            c = pool.getConnection();
         } catch (SQLException e) {
             LOGGER.error("Fail to get a connection " + e.getMessage());
             throw new ExceptionDB("Not connection with name : " + PoolJdbc.name
                     + " " + e.getMessage());
+        }
+        if (c == null) {
+            throw new ExceptionDB("Connection is null !");
+        } else {
+            return c;
         }
     }
 
