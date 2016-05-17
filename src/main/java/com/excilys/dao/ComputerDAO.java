@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.database.BasicJdbc;
 import com.excilys.database.PoolJdbc;
 import com.excilys.database.ThreadJdbc;
 import com.excilys.database.VirtualJdbc;
@@ -24,7 +25,7 @@ public class ComputerDAO implements DAO<Computer> {
 
     private final Logger slf4jLogger = LoggerFactory.getLogger(ComputerDAO.class);
         
-    private VirtualJdbc toolConnexion = new PoolJdbc();
+    private VirtualJdbc toolConnexion = new BasicJdbc();
     private static List<Company> cacheCompanies = null;
     
 
