@@ -91,7 +91,8 @@ public class PoolJdbc implements VirtualJdbc {
     @Override
     public void closeConnection(Connection c) {
         if (c == null) {
-            throw new IllegalArgumentException("C should not be null !");
+            //throw new IllegalArgumentException("C should not be null !");
+            return;
         }
         try {
             c.close();
