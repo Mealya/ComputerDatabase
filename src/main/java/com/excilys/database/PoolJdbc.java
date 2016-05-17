@@ -25,6 +25,7 @@ public class PoolJdbc implements VirtualJdbc {
     private static HikariDataSource pool;
 
     static {
+        
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {

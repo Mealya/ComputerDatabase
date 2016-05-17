@@ -63,7 +63,7 @@ public class BasicJdbc implements VirtualJdbc {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/" + nameDB
+                    "jdbc:mysql://172.17.0.3:3306/" + nameDB
                     + "?zeroDateTimeBehavior=convertToNull",
                     "admincdb", "qwerty1234");
 
