@@ -20,7 +20,7 @@ public interface VirtualJdbc {
     }
     
     default void rollBack(Connection c) {
-        throw new UnsupportedOperationException("Not implemented");
+        //throw new UnsupportedOperationException("Not implemented");
     }
     
 } 

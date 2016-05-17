@@ -122,7 +122,7 @@ public class BasicJdbc implements VirtualJdbc {
      * @param name
      *            The name of the data base
      */
-    public void closeConnect(Connection c) {
+    public void closeConnection(Connection c) {
         if (c == null) {
             throw new IllegalArgumentException("Connection must not be null");
         }
@@ -151,6 +151,18 @@ public class BasicJdbc implements VirtualJdbc {
                     }
                 }
             }*/
+        }
+    }
+    
+    public void rollBack(Connection c) {
+        if (c == null) {
+            throw new IllegalArgumentException("C should not be null !");
+        }
+        try {
+            c.rollback();
+        } catch (SQLException e) {
+            LOGGER.error("RollBack fail! " + e.getMessage());
+            throw new ExceptionDB(e.getMessage());
         }
     }
 }
