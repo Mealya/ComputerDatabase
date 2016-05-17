@@ -48,7 +48,11 @@ public class PoolJdbc implements VirtualJdbc {
                 + properties.getProperty("PARAMS");
         username = properties.getProperty("USERNAME");
         password = properties.getProperty("PASSWORD");
-
+        
+        if (name == null || username == null || password == null) {
+            throw new ExceptionDB("Cannot get DB properties");
+        }
+        
         pool = new HikariDataSource();
         pool.setJdbcUrl(name);
         pool.setUsername(username);
@@ -81,7 +85,7 @@ public class PoolJdbc implements VirtualJdbc {
     @Override
     public void closeConnection(Connection c) {
         if (c == null) {
-            throw new IllegalArgumentException("C sould not be null !");
+            throw new IllegalArgumentException("C should not be null !");
         }
         try {
             c.close();
@@ -93,6 +97,9 @@ public class PoolJdbc implements VirtualJdbc {
     }
 
     public void rollBack(Connection c) {
+        if (c == null) {
+            throw new IllegalArgumentException("C should not be null !");
+        }
         try {
             c.rollback();
         } catch (SQLException e) {
