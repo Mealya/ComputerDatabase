@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.zaxxer.hikari.HikariDataSource;
 
-public class PoolJdbc implements VirtualJdbc {
+public class PoolJdbc implements VirtualConnectTool {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(PoolJdbc.class);
@@ -91,8 +91,7 @@ public class PoolJdbc implements VirtualJdbc {
     @Override
     public void closeConnection(Connection c) {
         if (c == null) {
-            //throw new IllegalArgumentException("C should not be null !");
-            return;
+            throw new IllegalArgumentException("C should not be null !");
         }
         try {
             c.close();

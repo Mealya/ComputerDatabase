@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Angot Maxime
  */
-public class BasicJdbc implements VirtualJdbc {
+public class BasicJdbc implements VirtualConnectTool {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BasicJdbc.class);
 
@@ -63,9 +63,9 @@ public class BasicJdbc implements VirtualJdbc {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:mysql://172.17.0.3:3306/" + nameDB
+                    "jdbc:mysql://localhost:3306/" + nameDB
                     + "?zeroDateTimeBehavior=convertToNull",
-                    "admincdb", "qwerty1234");
+                    "root", "root");
 
         } catch (SQLException e) {
             LOGGER.error("Connection Failed! " + e.getMessage());

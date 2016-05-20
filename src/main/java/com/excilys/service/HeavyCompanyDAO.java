@@ -7,18 +7,23 @@ import java.util.List;
 import com.excilys.dao.CompanyDAO;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.ExceptionDAO;
+import com.excilys.dao.spring.SpringCompanyDAO;
+import com.excilys.dao.spring.SpringComputerDAO;
+import com.excilys.database.SpringDataSource;
 import com.excilys.model.Company;
+import com.excilys.utils.EasyConnection;
 
 public class HeavyCompanyDAO {
 
-    private CompanyDAO compaDB;
-    private ComputerDAO compuDB;
+    private SpringCompanyDAO compaDB;
+    private SpringComputerDAO compuDB;
+    
     /**
      * Create a service linked to the CompanyDAO.
      */
     public HeavyCompanyDAO() {
-        compaDB = new CompanyDAO();
-        compuDB = new ComputerDAO();
+        compaDB = (SpringCompanyDAO) SpringDataSource.getContext().getBean("SpringCompanyDAO");
+        compuDB = (SpringComputerDAO) SpringDataSource.getContext().getBean("SpringComputerDAO");
     }
 
     /**
@@ -67,23 +72,25 @@ public class HeavyCompanyDAO {
      * Call the DAO to delete the company and all the computers linkeds to the company.
      * @param idCompa The id of the company who needs to be deleted
      */
+    
     public void deleteCompany(long idCompa) {
         if (idCompa < 0) {
             throw new IllegalArgumentException("Id non valide");
         }
-        Connection connect = compuDB.getTool().getConnection();
+        Connection connect = compuDB.getConnection();
         try {
             connect.setAutoCommit(false);
             compuDB.deleteWithCompany(idCompa, connect);
             compaDB.delete(idCompa, connect);
             connect.commit();
         } catch (SQLException | ExceptionDAO e) {
-            compuDB.getTool().rollBack(connect);
+            EasyConnection.rollBackConnection(connect);
         } finally {
-            compuDB.getTool().closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }        
     }
-
+    
+    
     /**
      * Nothing now.
      * @param low First parameter of the LIMIT

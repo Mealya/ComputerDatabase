@@ -1,4 +1,4 @@
-package com.excilys.dao;
+package com.excilys.dao.spring;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,43 +11,49 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.database.BasicJdbc;
+import com.excilys.dao.CompanyDAO;
+import com.excilys.dao.ComputerDAO;
+import com.excilys.dao.DAO;
+import com.excilys.dao.ExceptionDAO;
 import com.excilys.database.PoolJdbc;
-import com.excilys.database.ThreadJdbc;
+import com.excilys.database.SpringDataSource;
 import com.excilys.database.VirtualConnectTool;
 import com.excilys.mapper.Mapper;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+import com.excilys.utils.EasyConnection;
 import com.excilys.utils.OrderType;
 
-/**
- * Created by Angot Maxime on 19/04/16.
- */
-public class ComputerDAO implements DAO<Computer> {
+public class SpringComputerDAO implements DAO<Computer>{
+
 
     private final Logger slf4jLogger = LoggerFactory
-            .getLogger(ComputerDAO.class);
+            .getLogger(SpringComputerDAO.class);
 
-    private VirtualConnectTool toolConnexion = new PoolJdbc();
     private static List<Company> cacheCompanies = null;
     
+    private DataSource dataSource;
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     
     static {
-
-        CompanyDAO comA = new CompanyDAO();
+        SpringCompanyDAO comA = (SpringCompanyDAO) SpringDataSource.getContext().getBean("SpringCompanyDAO");
         cacheCompanies = comA.getAll();
-
     }
 
-    public VirtualConnectTool getTool() {
-        return toolConnexion;
+    public Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new ExceptionDAO(e.getMessage());
+        }
     }
-
     @Override
     public List<Computer> getAll() {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
+
         List<Computer> result = null;
         Connection connect = null;
         try {
@@ -55,7 +61,7 @@ public class ComputerDAO implements DAO<Computer> {
             // Execute a query
             String sql = "SELECT * FROM `computer`;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
 
@@ -66,7 +72,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return result;
     }
@@ -79,9 +85,6 @@ public class ComputerDAO implements DAO<Computer> {
      * @return The computer
      */
     public List<Computer> searchFor(String name) {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
         if (name == null) {
             throw new IllegalArgumentException("Name should not be null");
         }
@@ -92,7 +95,7 @@ public class ComputerDAO implements DAO<Computer> {
             // Execute a query
             String sql = "SELECT * FROM `computer` Inner JOIN company ON computer.company_id = company.id WHERE computer.name = ? OR company.name = ? ;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setString(1, name);
             stmt.setString(2, name);
@@ -105,16 +108,13 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return compuTemp;
     }
 
     @Override
     public Computer get(long idComp) {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
         if (idComp <= 0) {
             throw new IllegalArgumentException("ID should not be negative or 0");
         }
@@ -125,7 +125,7 @@ public class ComputerDAO implements DAO<Computer> {
             // Execute a query
             String sql = "SELECT * FROM `computer` WHERE id = ? ;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
 
             stmt.setLong(1, idComp);
@@ -138,7 +138,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return compuTemp;
     }
@@ -148,15 +148,12 @@ public class ComputerDAO implements DAO<Computer> {
         if (comp == null) {
             throw new IllegalArgumentException("c is null");
         }
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
 
         Connection connect = null;
         try {
             String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
 
             stmt.setString(1, comp.getName());
@@ -173,7 +170,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
     }
 
@@ -182,15 +179,13 @@ public class ComputerDAO implements DAO<Computer> {
         if (comp == null) {
             throw new IllegalArgumentException("c is null");
         }
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
+
 
         Connection connect = null;
         try {
             String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ? WHERE `computer`.`id` = ?;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
 
             stmt.setString(1, comp.getName());
@@ -207,7 +202,7 @@ public class ComputerDAO implements DAO<Computer> {
         } catch (SQLException e) {
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
     }
 
@@ -216,15 +211,13 @@ public class ComputerDAO implements DAO<Computer> {
         if (comp < 0) {
             throw new IllegalArgumentException("Comp negative");
         }
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
+
 
         Connection connect = null;
         try {
             String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setLong(1, comp);
             stmt.executeUpdate();
@@ -233,7 +226,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
     }
 
@@ -273,9 +266,6 @@ public class ComputerDAO implements DAO<Computer> {
      * @return The List who represents the set of computers
      */
     public List<Computer> getSet(int low, int height) {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
         if (low < 0 || height < 0) {
             throw new IllegalArgumentException("Negative param");
         }
@@ -285,7 +275,7 @@ public class ComputerDAO implements DAO<Computer> {
 
             String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setInt(1, low);
             stmt.setInt(2, height);
@@ -300,7 +290,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return result;
     }
@@ -316,9 +306,6 @@ public class ComputerDAO implements DAO<Computer> {
      * @return The List who represents the set of computers
      */
     public List<Computer> getSet(int low, int height, OrderType ord) {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
         if (low < 0 || height < 0) {
             throw new IllegalArgumentException("Negative param");
         }
@@ -334,7 +321,7 @@ public class ComputerDAO implements DAO<Computer> {
             String sql = "SELECT * FROM `computer` ORDER BY " + order[0] + " "
                     + order[1] + " LIMIT ?,? ;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setInt(1, low);
             stmt.setInt(2, height);
@@ -348,7 +335,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return result;
     }
@@ -359,15 +346,12 @@ public class ComputerDAO implements DAO<Computer> {
      * @return Nemeric who represent the number of computers
      */
     public long getSizeTable() {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
 
         Connection connect = null;
         try {
             String sql = "SELECT COUNT(*) FROM `computer`;";
 
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
@@ -380,7 +364,7 @@ public class ComputerDAO implements DAO<Computer> {
             slf4jLogger.warn(e.getMessage());
             // throw new ExceptionDAO(e.getMessage());
         } finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return 0;
     }

@@ -4,18 +4,20 @@ package com.excilys.service;
 import java.util.List;
 
 import com.excilys.dao.ComputerDAO;
+import com.excilys.dao.spring.SpringComputerDAO;
+import com.excilys.database.SpringDataSource;
 import com.excilys.model.Computer;
 import com.excilys.utils.OrderType;
 
 public class HeavyComputerDAO {
 
-    private ComputerDAO compDB;
+    private SpringComputerDAO compDB;
 
     /**
      * Create a service linked to the ComputerDAO.
      */
     public HeavyComputerDAO() {
-        compDB = new ComputerDAO();
+        compDB = (SpringComputerDAO) SpringDataSource.getContext().getBean("SpringComputerDAO");
     }
 
     /**

@@ -2,7 +2,7 @@ package com.excilys.database;
 
 import java.sql.Connection;
 
-public interface VirtualJdbc {
+public interface VirtualConnectTool {
     /**
      * To get a connection for a DAO.
      * @return The connection

@@ -3,9 +3,9 @@ package com.excilys.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.excilys.database.VirtualJdbc;
+import com.excilys.database.VirtualConnectTool;
 
-public class ThreadJdbc implements VirtualJdbc {
+public class ThreadJdbc implements VirtualConnectTool {
       
     private PoolJdbc pool = new PoolJdbc();
     // Thread local variable containing each thread's ID

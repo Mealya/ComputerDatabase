@@ -1,4 +1,4 @@
-package com.excilys.dao;
+package com.excilys.dao.spring;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,34 +11,31 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.excilys.database.BasicJdbc;
+import com.excilys.dao.DAO;
+import com.excilys.dao.ExceptionDAO;
 import com.excilys.database.ExceptionDB;
-import com.excilys.database.PoolJdbc;
-import com.excilys.database.SpringDataSource;
-import com.excilys.database.ThreadJdbc;
-import com.excilys.database.VirtualConnectTool;
 import com.excilys.model.Company;
+import com.excilys.utils.EasyConnection;
 
-/**
- * Created by Angot Maxime on 19/04/16.
- */
-public class CompanyDAO implements DAO<Company> {
-    
-    private final Logger slf4jLogger = LoggerFactory.getLogger(CompanyDAO.class);
-   
-    private VirtualConnectTool toolConnexion = new PoolJdbc();
-   
+
+public class SpringCompanyDAO implements DAO<Company>{
+
+    private final Logger slf4jLogger = LoggerFactory
+            .getLogger(SpringCompanyDAO.class);
+
+    private DataSource dataSource;
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     /**
      * Return the List of all the companies.
      * @return The company list
      */
     public List<Company> getAll() {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion");
-        }
+
         //toolConnexion.connect(computer_db_name);
         
         List<Company> result = null;
@@ -46,11 +43,11 @@ public class CompanyDAO implements DAO<Company> {
         try {
             // Execute a query
             String sql = "SELECT * FROM `company` ";
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             if (connect == null) {
                 throw new ExceptionDB("No connection ! ");
             }
-            PreparedStatement stmt = toolConnexion.getConnection().prepareStatement(sql);
+            PreparedStatement stmt = connect.prepareStatement(sql);
 
             ResultSet rs = stmt.executeQuery();
 
@@ -70,7 +67,7 @@ public class CompanyDAO implements DAO<Company> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return result;
     }
@@ -81,9 +78,7 @@ public class CompanyDAO implements DAO<Company> {
      */
     @Override
     public Company get(long id) {
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion");
-        }
+
         if (id <= 0) {
             throw new IllegalArgumentException("ID should not be negative or 0");
         }
@@ -93,7 +88,7 @@ public class CompanyDAO implements DAO<Company> {
             //toolConnexion.connect(computer_db_name);
 
             String sql = "SELECT * FROM `company` WHERE id= ? ;";
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             PreparedStatement stmt = connect.prepareStatement(sql);
             stmt.setLong(1, id);
 
@@ -111,7 +106,7 @@ public class CompanyDAO implements DAO<Company> {
             slf4jLogger.warn(e.getMessage());
             throw new ExceptionDAO(e.getMessage());
         }  finally {
-            toolConnexion.closeConnection(connect);
+            EasyConnection.closeConnection(connect);
         }
         return compa;
     }
@@ -124,16 +119,13 @@ public class CompanyDAO implements DAO<Company> {
         if (id < 0) {
             throw new IllegalArgumentException("Comp negative");
         }
-        if (toolConnexion == null) {
-            throw new IllegalStateException("Pas de connexion tool");
-        }
-        
+ 
         //Connection connect = null;
         try {
             //String sql1 = "DELETE FROM `computer` WHERE `company_id` = ? ;";
             String sql2 = "DELETE FROM `company` WHERE `id` = ? ;";
             
-            connect = toolConnexion.getConnection();
+            connect = dataSource.getConnection();
             connect.setAutoCommit(false);
             
             //PreparedStatement stmt1 = connect.prepareStatement(sql1);
