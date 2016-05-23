@@ -4,6 +4,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
 import com.excilys.dao.CompanyDAO;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.dao.ExceptionDAO;
@@ -17,7 +23,13 @@ public class HeavyCompanyDAO {
 
     private SpringCompanyDAO compaDB;
     private SpringComputerDAO compuDB;
+    private PlatformTransactionManager transactionManager;
+
     
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
     /**
      * Create a service linked to the CompanyDAO.
      */
@@ -77,16 +89,17 @@ public class HeavyCompanyDAO {
         if (idCompa < 0) {
             throw new IllegalArgumentException("Id non valide");
         }
-        Connection connect = compuDB.getConnection();
+
+        TransactionDefinition def = new DefaultTransactionDefinition();
+        TransactionStatus status = transactionManager.getTransaction(def);
+        
         try {
-            connect.setAutoCommit(false);
-            compuDB.deleteWithCompany(idCompa, connect);
-            compaDB.delete(idCompa, connect);
-            connect.commit();
-        } catch (SQLException | ExceptionDAO e) {
-            EasyConnection.rollBackConnection(connect);
-        } finally {
-            EasyConnection.closeConnection(connect);
+            compuDB.deleteWithCompany(idCompa);
+            compaDB.delete(idCompa);
+            transactionManager.commit(status);
+        } catch (DataAccessException | ExceptionDAO e) {
+            transactionManager.rollback(status);
+            throw new ExceptionService(e.getMessage());
         }        
     }
     

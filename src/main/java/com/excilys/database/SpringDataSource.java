@@ -7,9 +7,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 public class SpringDataSource implements VirtualConnectTool {
-
+    private static ApplicationContext app;
     public static ApplicationContext getContext() {
-        return new ClassPathXmlApplicationContext("Beans.xml");
+        if (app == null) {
+            app = new ClassPathXmlApplicationContext("Beans.xml");
+        }
+        return app;
     }
 
 }

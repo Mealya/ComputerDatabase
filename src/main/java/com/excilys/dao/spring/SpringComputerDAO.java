@@ -5,11 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.excilys.dao.CompanyDAO;
 import com.excilys.dao.ComputerDAO;
@@ -33,48 +38,22 @@ public class SpringComputerDAO implements DAO<Computer>{
     private static List<Company> cacheCompanies = null;
     
     private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+        this.jdbcTemplate = new JdbcTemplate(dataSource);   
     }
 
-    
     static {
         SpringCompanyDAO comA = (SpringCompanyDAO) SpringDataSource.getContext().getBean("SpringCompanyDAO");
         cacheCompanies = comA.getAll();
     }
-
-    public Connection getConnection() {
-        try {
-            return dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
-        }
-    }
+    
     @Override
     public List<Computer> getAll() {
-
-        List<Computer> result = null;
-        Connection connect = null;
-        try {
-
-            // Execute a query
-            String sql = "SELECT * FROM `computer`;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-
-            result = Mapper.resultSetToListComputer(rs, cacheCompanies);
-
-            rs.close();
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
-        return result;
+        String sql = "SELECT * FROM `computer`;";
+        return Mapper.resultToListComputerSpring(this.jdbcTemplate.queryForList(sql), cacheCompanies);
     }
 
     /**
@@ -88,29 +67,8 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (name == null) {
             throw new IllegalArgumentException("Name should not be null");
         }
-        List<Computer> compuTemp = null;
-        Connection connect = null;
-        try {
-
-            // Execute a query
-            String sql = "SELECT * FROM `computer` Inner JOIN company ON computer.company_id = company.id WHERE computer.name = ? OR company.name = ? ;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, name);
-            ResultSet rs = stmt.executeQuery();
-
-            compuTemp = Mapper.resultSetToListComputer(rs, cacheCompanies);
-
-            rs.close();
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
-        return compuTemp;
+        String sql = "SELECT * FROM `computer` Inner JOIN company ON computer.company_id = company.id WHERE computer.name = ? OR company.name = ? ;";
+        return Mapper.resultToListComputerSpring(this.jdbcTemplate.queryForList(sql, new Object[] {name, name}), cacheCompanies);
     }
 
     @Override
@@ -118,29 +76,43 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (idComp <= 0) {
             throw new IllegalArgumentException("ID should not be negative or 0");
         }
-        Computer compuTemp = null;
-        Connection connect = null;
-        try {
-
-            // Execute a query
-            String sql = "SELECT * FROM `computer` WHERE id = ? ;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-
-            stmt.setLong(1, idComp);
-            ResultSet rs = stmt.executeQuery();
-
-            compuTemp = Mapper.resultSetToComputer(rs, cacheCompanies);
-
-            rs.close();
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
-        return compuTemp;
+        return (Computer) this.jdbcTemplate.query(new PreparedStatementCreator() {     
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con)
+                    {
+                String sql = "SELECT * FROM `computer` WHERE id = ? ;";
+                try {
+                    PreparedStatement stmt = con.prepareStatement(sql);
+                    stmt.setLong(1, idComp);
+                    return stmt;
+                } catch (SQLException e) {
+                    throw new ExceptionDAO(e.getMessage());
+                }
+                
+                
+            }
+        }, new ResultSetExtractor() {
+            @Override
+            public Computer extractData(ResultSet rs) {
+                try {
+                    if (rs.next()) {
+                        Computer temp = new Computer();
+                        temp.setId(rs.getLong("id"));
+                        temp.setName(rs.getString("name"));
+                        temp.setIntro(rs.getTimestamp("introduced"));
+                        temp.setDisco(rs.getTimestamp("discontinued"));
+                        
+                        if ((Long) rs.getLong("company_id") != null) {
+                            temp.setComp(cacheCompanies.get((int) rs.getLong("company_id")));
+                        }
+                        return temp;
+                    }
+                } catch (SQLException e) {
+                    throw new ExceptionDAO(e.getMessage());
+                }
+                return null;
+            }
+        });
     }
 
     @Override
@@ -148,30 +120,24 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (comp == null) {
             throw new IllegalArgumentException("c is null");
         }
+        this.jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection conn)
+                    throws SQLException {
+                String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
+                PreparedStatement stmt = conn.prepareStatement(sql);
 
-        Connection connect = null;
-        try {
-            String sql = "INSERT INTO `computer`(`name`, `introduced`, `discontinued`, `company_id`) VALUES (?,?,?,?);";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-
-            stmt.setString(1, comp.getName());
-            stmt.setTimestamp(2, comp.getIntro());
-            stmt.setTimestamp(3, comp.getDisco());
-            if (comp.getComp() == null) {
-                stmt.setObject(4, null);
-            } else {
-                stmt.setObject(4, comp.getComp().getId());
+                stmt.setString(1, comp.getName());
+                stmt.setTimestamp(2, comp.getIntro());
+                stmt.setTimestamp(3, comp.getDisco());
+                if (comp.getComp() == null) {
+                    stmt.setObject(4, null);
+                } else {
+                    stmt.setObject(4, comp.getComp().getId());
+                }
+                return stmt;
             }
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
+        });
     }
 
     @Override
@@ -179,31 +145,31 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (comp == null) {
             throw new IllegalArgumentException("c is null");
         }
-
-
-        Connection connect = null;
-        try {
-            String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ? WHERE `computer`.`id` = ?;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-
-            stmt.setString(1, comp.getName());
-            stmt.setTimestamp(2, comp.getIntro());
-            stmt.setTimestamp(3, comp.getDisco());
-            if (comp.getComp() == null) {
-                stmt.setObject(4, null);
-            } else {
-                stmt.setObject(4, comp.getComp().getId());
+       
+        this.jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection conn)
+                     {
+                String sql = "UPDATE `computer` SET `name` = ?, `introduced` = ?, `discontinued` = ?, `company_id` = ? WHERE `computer`.`id` = ?;";
+                
+                PreparedStatement stmt = null;
+                try {
+                    stmt = conn.prepareStatement(sql);
+                    stmt.setString(1, comp.getName());
+                    stmt.setTimestamp(2, comp.getIntro());
+                    stmt.setTimestamp(3, comp.getDisco());
+                    if (comp.getComp() == null) {
+                        stmt.setObject(4, null);
+                    } else {
+                        stmt.setObject(4, comp.getComp().getId());
+                    }
+                    stmt.setLong(5, comp.getId());
+                } catch (SQLException e) {
+                    throw new ExceptionDAO(e.getMessage());
+                }
+                return stmt;
             }
-            stmt.setLong(5, comp.getId());
-
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
+        });
     }
 
     @Override
@@ -211,49 +177,19 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (comp < 0) {
             throw new IllegalArgumentException("Comp negative");
         }
-
-
-        Connection connect = null;
-        try {
-            String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-            stmt.setLong(1, comp);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
+        String sql = "DELETE FROM `computer` WHERE `id` = ? ;";
+        this.jdbcTemplate.update(sql, new Object[] {comp});
     }
 
-    public void deleteWithCompany(long compaID, Connection connect) {
+    public void deleteWithCompany(long compaID) {
         if (compaID < 0) {
             throw new IllegalArgumentException("Compa negative");
         }
-        /*
-         * if (toolConnexion == null) { throw new
-         * IllegalStateException("Pas de connexion tool"); }
-         */
+        String sql = "DELETE FROM `computer` WHERE `company_id` = ? ;";
+        
+        // TODO : Safe?
+        jdbcTemplate.update(sql, new Object[] {compaID});
 
-        // Connection connect = null;
-        try {
-            String sql = "DELETE FROM `computer` WHERE `company_id` = ? ;";
-
-            // connect = toolConnexion.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-            stmt.setLong(1, compaID);
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } /*
-           * finally { toolConnexion.closeConnection(connect); }
-           */
     }
 
     /**
@@ -269,30 +205,9 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (low < 0 || height < 0) {
             throw new IllegalArgumentException("Negative param");
         }
-        List<Computer> result = null;
-        Connection connect = null;
-        try {
-
-            String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-            stmt.setInt(1, low);
-            stmt.setInt(2, height);
-
-            ResultSet rs = stmt.executeQuery();
-
-            result = Mapper.resultSetToListComputer(rs, cacheCompanies);
-
-            rs.close();
-
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
-        return result;
+        
+        String sql = "SELECT * FROM `computer` LIMIT ?,? ;";
+        return Mapper.resultToListComputerSpring(this.jdbcTemplate.queryForList(sql, new Object[] {low, height}), cacheCompanies);
     }
 
     /**
@@ -309,35 +224,11 @@ public class SpringComputerDAO implements DAO<Computer>{
         if (low < 0 || height < 0) {
             throw new IllegalArgumentException("Negative param");
         }
-        List<Computer> result = null;
-        Connection connect = null;
-
-        long debut = System.currentTimeMillis();
         String order[] = ord.toString().split(";");
-        slf4jLogger.debug("Split timer : "
-                + (System.currentTimeMillis() - debut));
-        try {
 
-            String sql = "SELECT * FROM `computer` ORDER BY " + order[0] + " "
-                    + order[1] + " LIMIT ?,? ;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-            stmt.setInt(1, low);
-            stmt.setInt(2, height);
-            ResultSet rs = stmt.executeQuery();
-
-            result = Mapper.resultSetToListComputer(rs, cacheCompanies);
-
-            rs.close();
-
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
-        return result;
+        String sql = "SELECT * FROM `computer` ORDER BY " + order[0] + " "
+                + order[1] + " LIMIT ?,? ;";
+        return Mapper.resultToListComputerSpring(this.jdbcTemplate.queryForList(sql, new Object[] {low, height}), cacheCompanies);
     }
 
     /**
@@ -346,26 +237,7 @@ public class SpringComputerDAO implements DAO<Computer>{
      * @return Nemeric who represent the number of computers
      */
     public long getSizeTable() {
-
-        Connection connect = null;
-        try {
-            String sql = "SELECT COUNT(*) FROM `computer`;";
-
-            connect = dataSource.getConnection();
-            PreparedStatement stmt = connect.prepareStatement(sql);
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                return rs.getLong("COUNT(*)");
-            }
-
-        } catch (SQLException e) {
-            slf4jLogger.warn(e.getMessage());
-            // throw new ExceptionDAO(e.getMessage());
-        } finally {
-            EasyConnection.closeConnection(connect);
-        }
-        return 0;
+        String sql = "SELECT COUNT(*) FROM `computer`;";
+        return this.jdbcTemplate.queryForLong(sql);
     }
 }

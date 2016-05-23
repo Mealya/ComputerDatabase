@@ -16,6 +16,7 @@
 	<bean id="SpringCompanyDAO" class="com.excilys.dao.spring.SpringCompanyDAO">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+ 
 	<bean id="SpringComputerDAO" class="com.excilys.dao.spring.SpringComputerDAO">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
