@@ -35,8 +35,8 @@ public class AddComputer {
      */
     
     @RequestMapping(method = RequestMethod.GET)
-    public String addComputerView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public String addComputerView(ModelMap model, HttpServletRequest request)
+            throws IOException {
 
         HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
         
@@ -58,8 +58,7 @@ public class AddComputer {
      * @throws IOException Error with stream
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String addComputer(ModelMap model, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public String addComputer(ModelMap model, HttpServletRequest request) throws IOException {
         Computer computer = null;
         
         computer = Validator.validateComputerAdd(request.getParameter("computerName"), request.getParameter("introduced"), 
@@ -70,7 +69,6 @@ public class AddComputer {
             serv.createComputer(computer);
         } else {
             slf4jLogger.error("Fail to add a computer");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
             return "addComputer";
         }
               

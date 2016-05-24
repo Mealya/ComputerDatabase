@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -37,7 +36,7 @@ public class EditComputer {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String editComputerView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         
         int id = -1;
         try {
@@ -90,7 +89,7 @@ public class EditComputer {
      */
     @RequestMapping(method = RequestMethod.POST)
     public String editComputer(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         Computer computer = null;
 
         computer = Validator.validateComputerEdit(request.getParameter("id"), request.getParameter("computerName"), request.getParameter("introduced"), 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,20 +37,20 @@ public class Dashboard {
      *             Error with stream
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String dashboardView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public String dashboardView(ModelMap model, HttpServletRequest request) throws IOException {
         long debut = System.currentTimeMillis();
 
         int page = 1;
         int size = 15;
-
+    
+        
         /* Numéro de page */
         if (request.getParameter("page") != null) {
             try {
                 page = Integer.parseInt(request.getParameter("page"));
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for page " + e.getMessage());
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return "dashboard";
             }
         }
@@ -62,7 +61,7 @@ public class Dashboard {
                 size = Integer.parseInt(request.getParameter("size"));
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for size " + e.getMessage());
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return "dashboard";
             }
         }
@@ -72,7 +71,7 @@ public class Dashboard {
             orderBy = OrderType.fromString(request.getParameter("orderby"));
             if (orderBy == null) {
                 slf4jLogger.info("Bad parameter for orderby");
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return "dashboard";
             }
         }
