@@ -238,6 +238,6 @@ public class SpringComputerDAO implements DAO<Computer>{
      */
     public long getSizeTable() {
         String sql = "SELECT COUNT(*) FROM `computer`;";
-        return this.jdbcTemplate.queryForLong(sql);
+        return this.jdbcTemplate.queryForObject(sql, Long.class);
     }
 }

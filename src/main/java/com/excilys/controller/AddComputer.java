@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.controller.validator.Validator;
 import com.excilys.model.Company;
@@ -17,11 +20,11 @@ import com.excilys.model.Computer;
 import com.excilys.service.HeavyCompanyDAO;
 import com.excilys.service.HeavyComputerDAO;
 
-
-public class AddComputer extends HttpServlet {
+@Controller
+@RequestMapping("/add")
+public class AddComputer {
 
     private final Logger slf4jLogger = LoggerFactory.getLogger(AddComputer.class);
-    private static final long serialVersionUID = 1818795394032861086L;
     
     /**
      * The get version of add a computer.
@@ -30,17 +33,21 @@ public class AddComputer extends HttpServlet {
      * @throws ServletException Error with servlet
      * @throws IOException Error with stream
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
+    
+    @RequestMapping(method = RequestMethod.GET)
+    public String addComputerView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
         
         List<Company> companies = workCompt.getCompanies();
-        request.setAttribute("companies", companies);
+        model.addAttribute("companies", companies);
         
-        request.setAttribute("added", 2);
+        model.addAttribute("added", 2);
+        /*request.setAttribute("added", 2);
         this.getServletContext().getRequestDispatcher("/vues/raw/views/addComputer.jsp")
-                .forward(request, response);
+                .forward(request, response);*/
+        return "addComputer";
     }
     
     /**
@@ -50,7 +57,8 @@ public class AddComputer extends HttpServlet {
      * @throws ServletException Error with servlet
      * @throws IOException Error with stream
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(method = RequestMethod.POST)
+    public String addComputer(ModelMap model, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Computer computer = null;
         
@@ -63,16 +71,18 @@ public class AddComputer extends HttpServlet {
         } else {
             slf4jLogger.error("Fail to add a computer");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return;
+            return "addComputer";
         }
               
         HeavyCompanyDAO workCompt = new HeavyCompanyDAO();  
         List<Company> companies = workCompt.getCompanies();
-        request.setAttribute("companies", companies);
+        model.addAttribute("companies", companies);
         
-        request.setAttribute("added", 1);
+        model.addAttribute("added", 1);
+        /*request.setAttribute("added", 1);
         this.getServletContext().getRequestDispatcher("/vues/raw/views/addComputer.jsp")
-        .forward(request, response);
+        .forward(request, response);*/
+        return "addComputer";
         
     }
 }

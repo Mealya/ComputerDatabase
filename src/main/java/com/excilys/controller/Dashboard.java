@@ -10,15 +10,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.model.Computer;
 import com.excilys.service.HeavyComputerDAO;
 import com.excilys.utils.OrderType;
 
-public class Dashboard extends HttpServlet {
+@Controller
+@RequestMapping("/dash")
+public class Dashboard {
  
     private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
-    private static final long serialVersionUID = 1L;
 
     /**
      * The get version of the dashboard.
@@ -32,7 +37,8 @@ public class Dashboard extends HttpServlet {
      * @throws IOException
      *             Error with stream
      */
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(method = RequestMethod.GET)
+    public String dashboardView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         long debut = System.currentTimeMillis();
 
@@ -46,7 +52,7 @@ public class Dashboard extends HttpServlet {
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for page " + e.getMessage());
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
+                return "dashboard";
             }
         }
 
@@ -57,7 +63,7 @@ public class Dashboard extends HttpServlet {
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for size " + e.getMessage());
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
+                return "dashboard";
             }
         }
         /* Récupération de l'ordre de tri */
@@ -67,7 +73,7 @@ public class Dashboard extends HttpServlet {
             if (orderBy == null) {
                 slf4jLogger.info("Bad parameter for orderby");
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return;
+                return "dashboard";
             }
         }
 
@@ -82,10 +88,7 @@ public class Dashboard extends HttpServlet {
         /* Paramétrage de la requête d'ensemble */
         long computersLong = workingDB.getSizeTable();
         if (computersLong < (page - 1) * 15) {
-            slf4jLogger.info("Error making page, redirect...");
             page = 1;
-            //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            //return;
         }
         int low = (page * size) - size;
 
@@ -94,21 +97,6 @@ public class Dashboard extends HttpServlet {
 
         /* Tri de la liste si la recherche existe */
         if (search != null) {
-            /*
-            for (int i = 0; i < computers.size(); i++) {
-                if (!computers.get(i).getName().equals(search)) {
-                    if (computers.get(i).getComp() != null) {
-                        if (!computers.get(i).getComp().getName()
-                                .equals(search)) {
-                            computers.remove(i);
-                            i--;
-                        }
-                    } else {
-                        computers.remove(i);
-                        i--;
-                    }
-                }
-            }*/
             List<Computer> temp = workingDB.searchFor(search);
             if (temp.size() < size) {
                 computers = temp;
@@ -124,9 +112,9 @@ public class Dashboard extends HttpServlet {
         
         
         /* Attributs de retour suite aux requêtes */
-        request.setAttribute("computers", computers);
-        request.setAttribute("nbComputers", computersLong);
-        request.setAttribute("currentURL", request.getRequestURL());
+        model.addAttribute("computers", computers);
+        model.addAttribute("nbComputers", computersLong);
+        model.addAttribute("currentURL", request.getRequestURL());
 
         if (request.getQueryString() != null) {
             String urlParam = request.getQueryString();
@@ -136,18 +124,19 @@ public class Dashboard extends HttpServlet {
                 for (String s : result) {
                     urlParam += s;
                 }
-                request.setAttribute("currentParams", "?" + urlParam);
+                model.addAttribute("currentParams", "?" + urlParam);
             } else {
-                request.setAttribute("currentParams", "?" + urlParam + "&");
+                model.addAttribute("currentParams", "?" + urlParam + "&");
             }
         } else {
-            request.setAttribute("currentParams", "?");
+            model.addAttribute("currentParams", "?");
 
         }
         slf4jLogger.debug("Exécution Dashboard : " + (System.currentTimeMillis()-debut));
         
-        this.getServletContext()
+        /*this.getServletContext()
                 .getRequestDispatcher("/vues/raw/views/dashboard.jsp")
-                .forward(request, response);
+                .forward(request, response);*/
+        return "dashboard";
     }
 }

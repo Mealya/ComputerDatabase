@@ -7,13 +7,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.excilys.service.HeavyComputerDAO;
 
 
-
-public class DeleteComputer extends HttpServlet {
-
-    private static final long serialVersionUID = -3950022894376611585L;
+@Controller
+@RequestMapping("/delete")
+public class DeleteComputer {
 
     /**
      * The post version of delete a computer.
@@ -22,7 +25,8 @@ public class DeleteComputer extends HttpServlet {
      * @throws ServletException Error with servlet
      * @throws IOException Error with stream
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(method = RequestMethod.POST)
+    public String deleteComputer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String params = request.getParameterValues("selection")[0]; 
      
@@ -34,10 +38,11 @@ public class DeleteComputer extends HttpServlet {
                 work.deleteComputer(Long.parseLong(c));
             } catch (NumberFormatException e) {
                 response.sendRedirect("/ComputerDatabaseMaven/dash");
-                return;
+                return "redirect:dashboard";
             }
         }
         
-        response.sendRedirect("/ComputerDatabaseMaven/dash?retourn=2");
+        //response.sendRedirect("/ComputerDatabaseMaven/dash?retourn=2");
+        return "dashboard";
     }
 }
