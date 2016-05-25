@@ -96,4 +96,21 @@ public class Validator {
             return compu;
         }
     }
+    
+    public static Computer validateCompany(Computer c, String company) {
+        Company compTemp = null;
+        try {
+            long idCompa = Long.parseLong(company);
+            if (idCompa != 0) {
+                compTemp = new Company();
+                compTemp.setId(idCompa);
+                c.setComp(compTemp);
+            }
+        } catch (NumberFormatException e) {
+            LOGGER.warn("Bad entry for company id : " + e.getMessage());
+            return null;
+        }
+        return c;
+    }
+    
 }

@@ -2,11 +2,18 @@ package com.excilys.model;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.Size;
+
 public class Computer {
+    
     private long id;
+    
+    @Size(min=1, max=45)
     private String name;
+    
     private Timestamp intro;
     private Timestamp disco;
+    
     private Company comp;
 
     /**

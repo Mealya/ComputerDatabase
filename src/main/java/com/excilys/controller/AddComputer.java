@@ -6,38 +6,40 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.controller.validator.Validator;
+import com.excilys.dto.AddComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
+
+import org.springframework.web.bind.annotation.ModelAttribute;  
+
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 
 @Controller
-@RequestMapping("/add")
 public class AddComputer {
 
     private final Logger slf4jLogger = LoggerFactory.getLogger(AddComputer.class);
     
     /**
      * The get version of add a computer.
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws ServletException Error with servlet
-     * @throws IOException Error with stream
      */
     
     @RequestMapping(method = RequestMethod.GET)
     public String addComputerView(ModelMap model, HttpServletRequest request)
             throws IOException {
-
+        model.addAttribute("addcomputerdto", new AddComputerDTO());
+        
         CompanyService workCompt = new CompanyService();
         
         List<Company> companies = workCompt.getCompanies();
@@ -52,21 +54,18 @@ public class AddComputer {
     
     /**
      * The post version of add a computer.
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws ServletException Error with servlet
-     * @throws IOException Error with stream
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String addComputer(ModelMap model, HttpServletRequest request) throws IOException {
-        Computer computer = null;
+    public String addComputer(@ModelAttribute("addcomputerdto") @Valid AddComputerDTO addcomputerdto, BindingResult bindingResult, ModelMap model, HttpServletRequest request) throws IOException {
+        /*if (bindingResult.hasErrors()) {
+            return "redirect:addComputer";
+        }*/
         
-        computer = Validator.validateComputerAdd(request.getParameter("computerName"), request.getParameter("introduced"), 
-                request.getParameter("discontinued"), request.getParameter("companyId"));
+        Computer computerToAdd = Validator.validateComputerAdd(addcomputerdto.getName(), addcomputerdto.getIntro(), addcomputerdto.getDisco(), addcomputerdto.getComp());
         
-        if (computer != null) {
+        if (computerToAdd != null) {
             ComputerService serv = new ComputerService();
-            serv.createComputer(computer);
+            serv.createComputer(computerToAdd);
         } else {
             slf4jLogger.error("Fail to add a computer");
             return "addComputer";

@@ -17,7 +17,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/ComputerDatabaseMaven/dash">
+			<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
 				Application - Computer Database </a>
 		</div>
 	</header>
@@ -33,7 +33,7 @@
 
 					<h1>Edit Computer</h1>
 
-					<form action="/ComputerDatabaseMaven/edit" method="POST">
+					<form action="/ComputerDatabaseMaven/editcomputer" method="POST">
 
 						<input type="hidden" value="${id}" name="id" id="id"/>
 
@@ -100,7 +100,7 @@
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="/ComputerDatabaseMaven/dash" class="btn btn-default">Cancel</a>
+							or <a href="/ComputerDatabaseMaven/dashboard" class="btn btn-default">Cancel</a>
 						</div>
 					</form>
 				</div>

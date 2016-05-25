@@ -1,6 +1,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="com.excilys.model.Company"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +23,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/ComputerDatabaseMaven/dash">
+			<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
 				Application - Computer Database </a>
 		</div>
 	</header>
@@ -36,32 +37,26 @@
 					</c:if>
 
 					<h1>Add Computer</h1>
-					<form action="/ComputerDatabaseMaven/add" method="POST">
+					<sf:form action="/ComputerDatabaseMaven/addcomputer" method="POST" commandName="addcomputerdto">
 						<fieldset>
 							<div class="form-group has-error has-feedback">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control control-label"
-									id="computerName" name="computerName"
-									placeholder="Computer name"> <span
-									class="glyphicon form-control-feedback" id="computerName"></span>
-								<span class="glyphicon glyphicon-remove form-control-feedback"
-									id="computerNamel"></span>
+								<label for="computerName">Computer name</label> 
+								<sf:input path="name" type="text" class="form-control control-label" id="computerName" name="computerName"	placeholder="Computer name" />
+								<span class="glyphicon form-control-feedback" id="computerName"></span>
+								<span class="glyphicon glyphicon-remove form-control-feedback" id="computerNamel"></span>
 								<div id="errorName" class="alert alert-danger" role="alert">
-									<span class="glyphicon glyphicon-exclamation-sign"
-										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
+									<span class="sr-only">Error:</span>
 									Enter a non empty name
 								</div>
 							</div>
 							<div class="form-group has-warning has-feedback">
-								<label for="introduced">Introduced date</label> <input
-									type="date" class="form-control control-label" id="introduced"
-									name="introduced" placeholder="Introduced date"> <span
-									class="glyphicon glyphicon-warning-sign form-control-feedback"
-									id="introducedl"></span>
-								<div id="errorIntro" class="alert alert-danger" role="alert"
-									style="display: none;">
-									<span class="glyphicon glyphicon-exclamation-sign"
-										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+								<label for="introduced">Introduced date</label> 
+								<sf:input path="intro" type="date" class="form-control control-label" id="introduced" name="introduced" placeholder="Introduced date" /> 
+								<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="introducedl"></span>
+								<div id="errorIntro" class="alert alert-danger" role="alert" style="display: none;">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
+									<span class="sr-only">Error:</span>
 									Enter a valid or empty date
 								</div>
 								<div id="warnIntro" class="alert alert-warning" role="alert">
@@ -71,40 +66,34 @@
 								</div>
 							</div>
 							<div class="form-group has-warning has-feedback">
-								<label for="discontinued">Discontinued date</label> <input
-									type="date" class="form-control control-label"
-									id="discontinued" name="discontinued"
-									placeholder="Discontinued date"> <span
-									class="glyphicon glyphicon-warning-sign form-control-feedback"
-									id="discontinuedl"></span>
-									<div id="warnDisco" class="alert alert-warning" role="alert">
-									<span class="glyphicon glyphicon-exclamation-sign"
-										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+								<label for="discontinued">Discontinued date</label> 
+								<sf:input path="disco" type="date" class="form-control control-label" id="discontinued" name="discontinued" placeholder="Discontinued date" /> 
+								<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="discontinuedl"></span>
+								<div id="warnDisco" class="alert alert-warning" role="alert">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
+									<span class="sr-only">Error:</span>
 									Discontinued date is empty
 								</div>
-								<div id="errorDisco" class="alert alert-danger" role="alert"
-									style="display: none;">
-									<span class="glyphicon glyphicon-exclamation-sign"
-										aria-hidden="true"></span> <span class="sr-only">Error:</span>
+								<div id="errorDisco" class="alert alert-danger" role="alert" style="display: none;">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span class="sr-only">Error:</span>
 									Enter a valid or empty date
 								</div>
 							</div>
 							<div class="form-group has-feedback has-warning" id="validatorSelect">
-								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId" >
+								<label for="companyId">Company</label> 
+								<sf:select	path="comp" class="form-control" id="companyId" name="companyId" >
 									<option value="0">-- Empty --</option>
 									<c:forEach items="${companies}" var="compa">
 										<option value="${compa.getId()}">${compa.getName()}</option>
 									</c:forEach>
-								</select>
+								</sf:select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary"
-								id="valid"> or <a href="/ComputerDatabaseMaven/dash"
-								class="btn btn-default">Cancel</a>
+							<input type="submit" value="Add" class="btn btn-primary" id="valid"> or <a href="/ComputerDatabaseMaven/dashboard" class="btn btn-default">Cancel</a>
 						</div>
-					</form>
+					</sf:form>
 				</div>
 			</div>
 		</div>

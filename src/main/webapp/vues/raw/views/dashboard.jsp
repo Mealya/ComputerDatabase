@@ -26,7 +26,7 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="/ComputerDatabaseMaven/dash">
+				<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
 					<spring:message code="dashboard.name" text="App computer DB" /> </a>
 			</div>
 
@@ -65,14 +65,14 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="/ComputerDatabaseMaven/add"><spring:message code="dashboard.Badd" text="Add Computerd" /></a> 
+						href="/ComputerDatabaseMaven/addcomputer"><spring:message code="dashboard.Badd" text="Add Computerd" /></a> 
 						<!--<a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.Bedit" text="Edit" /></a>-->
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="/ComputerDatabaseMaven/delete"
+		<form id="deleteForm" action="/ComputerDatabaseMaven/deletecomputer"
 			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
@@ -163,7 +163,7 @@
 								class="cb" value="${computer.getId()}"
 								id="${computer.getName().concat('_').concat('id')}"></td>
 							<td><a id="${computer.getName().concat('_').concat('name')}"
-								href="/ComputerDatabaseMaven/edit?id=${computer.getId()}"
+								href="/ComputerDatabaseMaven/editcomputer?id=${computer.getId()}"
 								onclick="">${computer.getName()}</a></td>
 							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
 							<td>${computer.getDisco().toLocalDateTime().toLocalDate()}</td>
@@ -183,15 +183,15 @@
 			<div class="btn-group btn-group-sm pull-right" role="group">
 
 				<button type="button"
-					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=10';"
+					onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10';"
 					class="btn btn-default">10</button>
 
 				<button type="button"
-					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=50';"
+					onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50';"
 					class="btn btn-default">50</button>
 
 				<button type="button"
-					onclick="window.location.href ='/ComputerDatabaseMaven/dash?size=100';"
+					onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100';"
 					class="btn btn-default">100</button>
 
 			</div>

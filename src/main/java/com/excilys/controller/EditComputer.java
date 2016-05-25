@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.controller.validator.Validator;
 import com.excilys.model.Company;
@@ -21,7 +22,6 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 
 @Controller
-@RequestMapping("/edit")
 public class EditComputer {
 
     private final Logger slf4jLogger = LoggerFactory
@@ -88,7 +88,7 @@ public class EditComputer {
      * @throws IOException Error with stream
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String editComputer(HttpServletRequest request, HttpServletResponse response)
+    public ModelAndView editComputer(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         Computer computer = null;
 
@@ -96,15 +96,14 @@ public class EditComputer {
                 request.getParameter("discontinued"), request.getParameter("companyId"));
         if (computer != null) {
             ComputerService serv = new ComputerService();
-            serv.createComputer(computer);
+            serv.updateComputer(computer);
         } else {
             slf4jLogger.warn("Fail to edit a computer");
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return "dashboard";
+            return new ModelAndView("redirect:/editcomputer");
         }
 
 
-        //response.sendRedirect("/ComputerDatabaseMaven/dash?retourn=1");
-        return "dashboard";
+    
+        return new ModelAndView("redirect:/dashboard?retourn=1");
     }
 }

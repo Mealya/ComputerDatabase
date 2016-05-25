@@ -3,17 +3,7 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
 
-	<!-- Inutile? -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
-	</context-param>
-
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-
-	<!-- Declaration de la servlet de Spring et de son mapping -->
+	<!-- Lien servlet dispatch -->
 	<servlet>
 		<servlet-name>servlet-dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -28,6 +18,7 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<!-- Mapping ressources -->
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>*.css</url-pattern>
@@ -57,6 +48,7 @@
 		<url-pattern>*.png</url-pattern>
 	</servlet-mapping>
 	
+	<!-- Mapping erreurs -->
 	<error-page>
 		<location>/vues/raw/views/404.jsp</location>
 	</error-page>
@@ -77,10 +69,3 @@
 		<location>/vues/raw/views/403.jsp</location>
 	</error-page>
 </web-app>
-
-<!-- <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE web-app PUBLIC "-//Sun 
-	Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
-	<web-app> <display-name>TestTomcat</display-name> <servlet> <servlet-name>Test</servlet-name> 
-	<servlet-class>com.excilys.controller.HelloServlet</servlet-class> </servlet> 
-	<servlet-mapping> <servlet-name>Test</servlet-name> <url-pattern>/Test</url-pattern> 
-	</servlet-mapping> </web-app> -->

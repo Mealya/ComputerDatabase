@@ -15,7 +15,6 @@ import com.excilys.service.ComputerService;
 
 
 @Controller
-@RequestMapping("/delete")
 public class DeleteComputer {
 
     /**
