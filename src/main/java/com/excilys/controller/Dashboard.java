@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.excilys.model.Computer;
-import com.excilys.service.HeavyComputerDAO;
+import com.excilys.service.ComputerService;
 import com.excilys.utils.OrderType;
 
 @Controller
@@ -82,7 +82,7 @@ public class Dashboard {
             search = request.getParameter("search");
         }
 
-        HeavyComputerDAO workingDB = new HeavyComputerDAO();
+        ComputerService workingDB = new ComputerService();
 
         /* Paramétrage de la requête d'ensemble */
         long computersLong = workingDB.getSizeTable();

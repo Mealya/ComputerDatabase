@@ -7,17 +7,17 @@ import java.util.Scanner;
 import com.excilys.dao.ComputerDAO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.service.HeavyCompanyDAO;
-import com.excilys.service.HeavyComputerDAO;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 
 public class Cli {
 
     public static void main(String[] argv) {
 
         ComputerDAO compt = new ComputerDAO();
-        HeavyComputerDAO workingDB = new HeavyComputerDAO();
+        ComputerService workingDB = new ComputerService();
         
-        HeavyCompanyDAO workingCompany = new HeavyCompanyDAO();
+        CompanyService workingCompany = new CompanyService();
 
         Scanner sc = new Scanner(System.in);
         Scanner sc2 = new Scanner(System.in);

@@ -19,7 +19,7 @@ import com.excilys.database.SpringDataSource;
 import com.excilys.model.Company;
 import com.excilys.utils.EasyConnection;
 
-public class HeavyCompanyDAO {
+public class CompanyService {
 
     private SpringCompanyDAO compaDB;
     private SpringComputerDAO compuDB;
@@ -33,7 +33,7 @@ public class HeavyCompanyDAO {
     /**
      * Create a service linked to the CompanyDAO.
      */
-    public HeavyCompanyDAO() {
+    public CompanyService() {
         compaDB = (SpringCompanyDAO) SpringDataSource.getContext().getBean("SpringCompanyDAO");
         compuDB = (SpringComputerDAO) SpringDataSource.getContext().getBean("SpringComputerDAO");
     }

@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib tagdir="/WEB-INF/tags/" prefix="page"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -22,42 +23,51 @@
 
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="/ComputerDatabaseMaven/dash">
-				Application - Computer Database </a>
-		</div>
-	</header>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/ComputerDatabaseMaven/dash">
+					<spring:message code="dashboard.name" text="App computer DB" /> </a>
+			</div>
 
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="?language=fr"><img src="vues/raw/fonts/France.png" alt="French"
+						style="width: 25px; height: 25px;"></a></li>
+				<li><a href="?language=en"><img src="vues/raw/fonts/UnitedKingdom.png" alt="UK"
+						style="width: 25px; height: 25px;"></a></li>
+			</ul>
+		</div>
+	</nav>
+	<!-- Current Locale : ${pageContext.response.locale} -->
 	<section id="main">
 		<div class="container">
 
 			<c:if test="${param.retourn == 1}">
-				<p class="alert alert-success">Computer edited !</p>
+				<p class="alert alert-success"><spring:message code="dashboard.edited" text="Computer edited !" /></p>
 			</c:if>
 			<c:if test="${param.retourn == 2}">
-				<p class="alert alert-success">Computer(s) deleted !</p>
+				<p class="alert alert-success"><spring:message code="dashboard.deleted" text="Computer(s) deleted !" /></p>
 			</c:if>
 
 			<h1 id="homeTitle">
 				<c:out value="${nbComputers}" />
-				Computers found
+				<spring:message code="dashboard.found" text="Computer(s) found" />
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" required /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="dashboard.Bshearch" text="Search name" />" required /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="dashboard.Bfilter" text="Filter by name" />"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="/ComputerDatabaseMaven/add">Add Computer</a> <a
-						class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+						href="/ComputerDatabaseMaven/add"><spring:message code="dashboard.Badd" text="Add Computerd" /></a> 
+						<!--<a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.Bedit" text="Edit" /></a>-->
 				</div>
 			</div>
 		</div>
@@ -85,15 +95,14 @@
 						<c:choose>
 							<c:when test="${param.orderby eq 'name;asc'}">
 								<th><a
-									href="${currentURL}${currentParams}orderby=name;desc">
-										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Computer name</th>
+									href="${currentURL}${currentParams}orderby=name;desc"> <span
+										class="glyphicon glyphicon glyphicon-sort"></span>
+								</a><spring:message code="dashboard.cname" text="Computer name" /></th>
 							</c:when>
 							<c:otherwise>
-								<th><a
-									href="${currentURL}${currentParams}orderby=name;asc">
+								<th><a href="${currentURL}${currentParams}orderby=name;asc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Computer name</th>
+								</a><spring:message code="dashboard.cname" text="Computer name" /></th>
 							</c:otherwise>
 						</c:choose>
 
@@ -102,13 +111,13 @@
 								<th><a
 									href="${currentURL}${currentParams}orderby=introduced;desc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Introduced date</th>
+								</a><spring:message code="dashboard.cintro" text="Introduced date" /></th>
 							</c:when>
 							<c:otherwise>
 								<th><a
 									href="${currentURL}${currentParams}orderby=introduced;asc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Introduced date</th>
+								</a><spring:message code="dashboard.cintro" text="Introduced date" /></th>
 							</c:otherwise>
 
 						</c:choose>
@@ -117,13 +126,13 @@
 								<th><a
 									href="${currentURL}${currentParams}orderby=discontinued;desc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Discontinued date</th>
+								</a><spring:message code="dashboard.cdisco" text="Discontinued date" /></th>
 							</c:when>
 							<c:otherwise>
 								<th><a
 									href="${currentURL}${currentParams}orderby=discontinued;asc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Discontinued date</th>
+								</a><spring:message code="dashboard.cdisco" text="Discontinued date" /></th>
 							</c:otherwise>
 						</c:choose>
 
@@ -133,13 +142,13 @@
 								<th><a
 									href="${currentURL}${currentParams}orderby=company_id;desc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Company</th>
+								</a><spring:message code="dashboard.ccompany" text="Company" /></th>
 							</c:when>
 							<c:otherwise>
 								<th><a
 									href="${currentURL}${currentParams}orderby=company_id;asc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
-								</a>Company</th>
+								</a><spring:message code="dashboard.ccompany" text="Company" /></th>
 							</c:otherwise>
 						</c:choose>
 
@@ -151,7 +160,8 @@
 					<c:forEach items="${computers}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.getId()}" id="${computer.getName().concat('_').concat('id')}" ></td>
+								class="cb" value="${computer.getId()}"
+								id="${computer.getName().concat('_').concat('id')}"></td>
 							<td><a id="${computer.getName().concat('_').concat('name')}"
 								href="/ComputerDatabaseMaven/edit?id=${computer.getId()}"
 								onclick="">${computer.getName()}</a></td>

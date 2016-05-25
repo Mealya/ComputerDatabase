@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.excilys.controller.validator.Validator;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.service.HeavyCompanyDAO;
-import com.excilys.service.HeavyComputerDAO;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 
 @Controller
 @RequestMapping("/edit")
@@ -54,9 +54,9 @@ public class EditComputer {
 
         model.addAttribute("id", id);
 
-        HeavyComputerDAO work = new HeavyComputerDAO();
+        ComputerService work = new ComputerService();
 
-        HeavyCompanyDAO workCompa = new HeavyCompanyDAO();
+        CompanyService workCompa = new CompanyService();
 
         List<Company> companies = workCompa.getCompanies();
         model.addAttribute("companies", companies);
@@ -95,7 +95,7 @@ public class EditComputer {
         computer = Validator.validateComputerEdit(request.getParameter("id"), request.getParameter("computerName"), request.getParameter("introduced"), 
                 request.getParameter("discontinued"), request.getParameter("companyId"));
         if (computer != null) {
-            HeavyComputerDAO serv = new HeavyComputerDAO();
+            ComputerService serv = new ComputerService();
             serv.createComputer(computer);
         } else {
             slf4jLogger.warn("Fail to edit a computer");

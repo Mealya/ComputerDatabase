@@ -9,14 +9,14 @@ import com.excilys.database.SpringDataSource;
 import com.excilys.model.Computer;
 import com.excilys.utils.OrderType;
 
-public class HeavyComputerDAO {
+public class ComputerService {
 
     private SpringComputerDAO compDB;
 
     /**
      * Create a service linked to the ComputerDAO.
      */
-    public HeavyComputerDAO() {
+    public ComputerService() {
         compDB = (SpringComputerDAO) SpringDataSource.getContext().getBean("SpringComputerDAO");
     }
 

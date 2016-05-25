@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.service.HeavyComputerDAO;
+import com.excilys.service.ComputerService;
 
 
 @Controller
@@ -31,7 +31,7 @@ public class DeleteComputer {
      
         String result[] = (params.split(",")); 
 
-        HeavyComputerDAO work = new HeavyComputerDAO();
+        ComputerService work = new ComputerService();
         for (String c : result) {
             try {
                 work.deleteComputer(Long.parseLong(c));

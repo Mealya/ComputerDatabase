@@ -8,6 +8,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SpringDataSource implements VirtualConnectTool {
     private static ApplicationContext app;
+    
+    // FIXME : Non thread safe
     public static ApplicationContext getContext() {
         if (app == null) {
             app = new ClassPathXmlApplicationContext("Beans.xml");

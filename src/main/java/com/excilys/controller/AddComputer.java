@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.excilys.controller.validator.Validator;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-import com.excilys.service.HeavyCompanyDAO;
-import com.excilys.service.HeavyComputerDAO;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 
 @Controller
 @RequestMapping("/add")
@@ -38,7 +38,7 @@ public class AddComputer {
     public String addComputerView(ModelMap model, HttpServletRequest request)
             throws IOException {
 
-        HeavyCompanyDAO workCompt = new HeavyCompanyDAO();
+        CompanyService workCompt = new CompanyService();
         
         List<Company> companies = workCompt.getCompanies();
         model.addAttribute("companies", companies);
@@ -65,14 +65,14 @@ public class AddComputer {
                 request.getParameter("discontinued"), request.getParameter("companyId"));
         
         if (computer != null) {
-            HeavyComputerDAO serv = new HeavyComputerDAO();
+            ComputerService serv = new ComputerService();
             serv.createComputer(computer);
         } else {
             slf4jLogger.error("Fail to add a computer");
             return "addComputer";
         }
               
-        HeavyCompanyDAO workCompt = new HeavyCompanyDAO();  
+        CompanyService workCompt = new CompanyService();  
         List<Company> companies = workCompt.getCompanies();
         model.addAttribute("companies", companies);
         
