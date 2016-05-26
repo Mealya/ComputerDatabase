@@ -100,10 +100,9 @@ public class Mapper {
             compuTemp.setDisco((Timestamp) m.get("discontinued"));
 
             if (m.get("company_id") != null) {
-                System.out.println(m.get("company_id"));
                 compuTemp.setComp(
-                                    companies.get(
-                                                    ((Long) m.get("company_id")).intValue()-1));
+                        companies.get(
+                                ((Long) m.get("company_id")).intValue()-1));
             }
             res.add(compuTemp);
         }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.model.Computer;
 import com.excilys.service.ComputerService;
@@ -25,24 +27,16 @@ public class Dashboard {
 
     /**
      * The get version of the dashboard.
-     * 
-     * @param request
-     *            The HttpServletRequest
-     * @param response
-     *            The HttpServletResponse
-     * @throws ServletException
-     *             Error with servlet
-     * @throws IOException
-     *             Error with stream
      */
     @RequestMapping(value="dashboard", method = RequestMethod.GET)
-    public String dashboardView(ModelMap model, HttpServletRequest request) throws IOException {
-        long debut = System.currentTimeMillis();
-
+    public ModelAndView dashboardView(ModelMap model, HttpServletRequest request) throws IOException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("dashboard");
+        
         int page = 1;
         int size = 15;
     
-        
+
         /* Numéro de page */
         if (request.getParameter("page") != null) {
             try {
@@ -50,7 +44,7 @@ public class Dashboard {
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for page " + e.getMessage());
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return "dashboard";
+                return modelAndView;
             }
         }
 
@@ -61,7 +55,7 @@ public class Dashboard {
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for size " + e.getMessage());
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return "dashboard";
+                return modelAndView;
             }
         }
         /* Récupération de l'ordre de tri */
@@ -71,7 +65,7 @@ public class Dashboard {
             if (orderBy == null) {
                 slf4jLogger.info("Bad parameter for orderby");
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-                return "dashboard";
+                return modelAndView;
             }
         }
 
@@ -130,11 +124,6 @@ public class Dashboard {
             model.addAttribute("currentParams", "?");
 
         }
-        slf4jLogger.debug("Exécution Dashboard : " + (System.currentTimeMillis()-debut));
-        
-        /*this.getServletContext()
-                .getRequestDispatcher("/vues/raw/views/dashboard.jsp")
-                .forward(request, response);*/
-        return "dashboard";
+        return modelAndView;
     }
 }

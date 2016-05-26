@@ -26,8 +26,17 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
-					<spring:message code="dashboard.name" text="App computer DB" /> </a>
+			<c:choose>
+					<c:when test="${param.language != null}">
+						<a class="navbar-brand"
+							href="/ComputerDatabaseMaven/dashboard?language=${param.language}">
+					<spring:message code="dashboard.name" text="App computer DB" /></a>
+					</c:when>
+					<c:otherwise>
+						<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
+					<spring:message code="dashboard.name" text="App computer DB" /></a>
+					</c:otherwise>
+				</c:choose>
 			</div>
 
 			<ul class="nav navbar-nav navbar-right">
@@ -64,9 +73,22 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer"
-						href="/ComputerDatabaseMaven/addComputerForm"><spring:message code="dashboard.Badd" text="Add Computerd" /></a> 
-						<!--<a class="btn btn-default" id="editComputer" href="#"
+					<c:choose>
+						<c:when test="${param.language != null}">
+							<a class="btn btn-success" id="addComputer"
+								href="/ComputerDatabaseMaven/addComputerForm?language=${param.language}"><spring:message
+									code="dashboard.Badd" text="Add Computer" /></a>
+
+						</c:when>
+						<c:otherwise>
+							<a class="btn btn-success" id="addComputer"
+								href="/ComputerDatabaseMaven/addComputerForm"><spring:message
+									code="dashboard.Badd" text="Add Computer" /></a>
+
+						</c:otherwise>
+					</c:choose>
+
+					<!--<a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.Bedit" text="Edit" /></a>-->
 				</div>
 			</div>
@@ -161,9 +183,16 @@
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.getId()}"
 								id="${computer.getName().concat('_').concat('id')}"></td>
-							<td><a id="${computer.getName().concat('_').concat('name')}"
-								href="/ComputerDatabaseMaven/editComputerForm?id=${computer.getId()}"
-								onclick="">${computer.getName()}</a></td>
+							<td>
+							<c:choose>
+								<c:when test="${param.language != null}">
+									<a id="${computer.getName().concat('_').concat('name')}" href="/ComputerDatabaseMaven/editComputerForm?id=${computer.getId()}&language=${param.language}">${computer.getName()}</a>
+								</c:when>
+								<c:otherwise>
+									<a id="${computer.getName().concat('_').concat('name')}" href="/ComputerDatabaseMaven/editComputerForm?id=${computer.getId()}">${computer.getName()}</a>
+								</c:otherwise>
+							</c:choose>
+								</td>
 							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
 							<td>${computer.getDisco().toLocalDateTime().toLocalDate()}</td>
 							<td>${computer.getComp().getName()}</td>
@@ -176,22 +205,50 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<page:pagination pageCourante="${param.page}"
-				nbComputers="${nbComputers}" />
+				nbComputers="${nbComputers}" 
+				lang="${param.language}"/>
 
 			<!-- Boutons taille des pages -->
 			<div class="btn-group btn-group-sm pull-right" role="group">
+				<c:choose>
+					<c:when test="${param.language != null}">
+						<button type="button"
+							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10&language=${param.language}';"
+							class="btn btn-default">10</button>
+					</c:when>
+					<c:otherwise>
+						<button type="button"
+							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10';"
+							class="btn btn-default">10</button>
+					</c:otherwise>
+				</c:choose>
 
-				<button type="button"
-					onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10';"
-					class="btn btn-default">10</button>
+				<c:choose>
+					<c:when test="${param.language != null}">
+						<button type="button"
+							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50&language=${param.language}';"
+							class="btn btn-default">50</button>
+					</c:when>
+					<c:otherwise>
+						<button type="button"
+							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50';"
+							class="btn btn-default">50</button>
+					</c:otherwise>
+				</c:choose>
 
-				<button type="button"
-					onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50';"
-					class="btn btn-default">50</button>
+				<c:choose>
+					<c:when test="${param.language != null}">
+						<button type="button"
+							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100&language=${param.language}';"
+							class="btn btn-default">100</button>
+					</c:when>
+					<c:otherwise>
+						<button type="button"
+							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100';"
+							class="btn btn-default">100</button>
+					</c:otherwise>
+				</c:choose>
 
-				<button type="button"
-					onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100';"
-					class="btn btn-default">100</button>
 
 			</div>
 		</div>

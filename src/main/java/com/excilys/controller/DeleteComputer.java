@@ -19,10 +19,6 @@ public class DeleteComputer {
 
     /**
      * The post version of delete a computer.
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws ServletException Error with servlet
-     * @throws IOException Error with stream
      */
     @RequestMapping(value="deleteComputer", method = RequestMethod.POST)
     public ModelAndView deleteComputer(HttpServletRequest request) throws IOException {

@@ -33,10 +33,6 @@ public class EditComputer {
 
     /**
      * The get version of edit a computer.
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws ServletException Error with servlet
-     * @throws IOException Error with stream
      */
     @RequestMapping(value="editComputerForm", method = RequestMethod.GET)
     public String editComputerView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
@@ -77,18 +73,11 @@ public class EditComputer {
             model.addAttribute("idCompa", temp.getComp().getId());
         }
 
-        /*this.getServletContext()
-                .getRequestDispatcher("/vues/raw/views/editComputer.jsp")
-                .forward(request, response);*/
         return "editComputer";
     }
 
     /**
      * The post version of edit a computer.
-     * @param request The HttpServletRequest
-     * @param response The HttpServletResponse
-     * @throws ServletException Error with servlet
-     * @throws IOException Error with stream
      */
     @RequestMapping(value="editComputer", method = RequestMethod.POST)
     public ModelAndView editComputer(HttpServletRequest request, @Valid EditComputerDTO editcomputerdto, BindingResult bindingResult)
@@ -111,8 +100,6 @@ public class EditComputer {
             slf4jLogger.warn("Fail to edit a computer");
             return new ModelAndView("redirect:/editComputerForm");
         }
-
-
     
         return new ModelAndView("redirect:/dashboard?retourn=1");
     }
