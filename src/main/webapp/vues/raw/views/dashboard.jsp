@@ -193,8 +193,31 @@
 								</c:otherwise>
 							</c:choose>
 								</td>
-							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
-							<td>${computer.getDisco().toLocalDateTime().toLocalDate()}</td>
+							<td>
+								<c:choose>
+									<c:when test="${param.language == 'fr'}">
+										<fmt:formatDate value="${computer.getIntro()}" var="stdDatum" type="date" pattern="dd-MM-yyyy" />
+										${stdDatum}
+									</c:when>
+									<c:otherwise>
+										<fmt:formatDate value="${computer.getIntro()}" var="stdDatum" type="date" pattern="yyyy-MM-dd" />
+										${stdDatum}
+									</c:otherwise>
+								</c:choose>
+								
+							</td>
+							<td>
+								<c:choose>
+									<c:when test="${param.language == 'fr'}">
+										<fmt:formatDate value="${computer.getDisco()}" var="stdDatum" type="date" pattern="dd-MM-yyyy" />
+										${stdDatum}
+									</c:when>
+									<c:otherwise>
+										<fmt:formatDate value="${computer.getDisco()}" var="stdDatum" type="date" pattern="yyyy-MM-dd" />
+										${stdDatum}
+									</c:otherwise>
+								</c:choose>
+							</td>
 							<td>${computer.getComp().getName()}</td>
 						</tr>
 					</c:forEach>
