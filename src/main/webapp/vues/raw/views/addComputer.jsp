@@ -37,11 +37,11 @@
 					</c:if>
 
 					<h1>Add Computer</h1>
-					<sf:form action="/ComputerDatabaseMaven/addcomputer" method="POST" commandName="addcomputerdto">
+					<form action="/ComputerDatabaseMaven/addComputer" method="POST">
 						<fieldset>
 							<div class="form-group has-error has-feedback">
 								<label for="computerName">Computer name</label> 
-								<sf:input path="name" type="text" class="form-control control-label" id="computerName" name="computerName"	placeholder="Computer name" />
+								<input type="text" class="form-control control-label" id="computerName" name="computerName"	placeholder="Computer name" />
 								<span class="glyphicon form-control-feedback" id="computerName"></span>
 								<span class="glyphicon glyphicon-remove form-control-feedback" id="computerNamel"></span>
 								<div id="errorName" class="alert alert-danger" role="alert">
@@ -52,7 +52,7 @@
 							</div>
 							<div class="form-group has-warning has-feedback">
 								<label for="introduced">Introduced date</label> 
-								<sf:input path="intro" type="date" class="form-control control-label" id="introduced" name="introduced" placeholder="Introduced date" /> 
+								<input type="date" class="form-control control-label" id="introduced" name="introduced" placeholder="Introduced date" /> 
 								<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="introducedl"></span>
 								<div id="errorIntro" class="alert alert-danger" role="alert" style="display: none;">
 									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
@@ -67,7 +67,7 @@
 							</div>
 							<div class="form-group has-warning has-feedback">
 								<label for="discontinued">Discontinued date</label> 
-								<sf:input path="disco" type="date" class="form-control control-label" id="discontinued" name="discontinued" placeholder="Discontinued date" /> 
+								<input type="date" class="form-control control-label" id="discontinued" name="discontinued" placeholder="Discontinued date" /> 
 								<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="discontinuedl"></span>
 								<div id="warnDisco" class="alert alert-warning" role="alert">
 									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
@@ -82,18 +82,18 @@
 							</div>
 							<div class="form-group has-feedback has-warning" id="validatorSelect">
 								<label for="companyId">Company</label> 
-								<sf:select	path="comp" class="form-control" id="companyId" name="companyId" >
+								<select class="form-control" id="companyId" name="companyId" >
 									<option value="0">-- Empty --</option>
 									<c:forEach items="${companies}" var="compa">
 										<option value="${compa.getId()}">${compa.getName()}</option>
 									</c:forEach>
-								</sf:select>
+								</select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Add" class="btn btn-primary" id="valid"> or <a href="/ComputerDatabaseMaven/dashboard" class="btn btn-default">Cancel</a>
 						</div>
-					</sf:form>
+					</form>
 				</div>
 			</div>
 		</div>

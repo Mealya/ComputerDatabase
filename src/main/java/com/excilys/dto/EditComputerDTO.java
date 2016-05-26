@@ -5,8 +5,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
-public class AddComputerDTO {
+public class EditComputerDTO {
 
+    @NotNull
+    private String id;
     
     @Size(min=1, max=45)
     private String computerName;
@@ -19,6 +21,20 @@ public class AddComputerDTO {
     
     @NotNull
     private String companyId;
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * @return the computerName
@@ -75,7 +91,4 @@ public class AddComputerDTO {
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
-
-
-
 }

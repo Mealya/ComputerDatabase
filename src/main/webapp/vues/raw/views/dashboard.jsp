@@ -65,15 +65,14 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer"
-						href="/ComputerDatabaseMaven/addcomputer"><spring:message code="dashboard.Badd" text="Add Computerd" /></a> 
+						href="/ComputerDatabaseMaven/addComputerForm"><spring:message code="dashboard.Badd" text="Add Computerd" /></a> 
 						<!--<a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.Bedit" text="Edit" /></a>-->
 				</div>
 			</div>
 		</div>
 
-		<form id="deleteForm" action="/ComputerDatabaseMaven/deletecomputer"
-			method="POST">
+		<form id="deleteForm" action="/ComputerDatabaseMaven/deleteComputer" method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -163,7 +162,7 @@
 								class="cb" value="${computer.getId()}"
 								id="${computer.getName().concat('_').concat('id')}"></td>
 							<td><a id="${computer.getName().concat('_').concat('name')}"
-								href="/ComputerDatabaseMaven/editcomputer?id=${computer.getId()}"
+								href="/ComputerDatabaseMaven/editComputerForm?id=${computer.getId()}"
 								onclick="">${computer.getName()}</a></td>
 							<td>${computer.getIntro().toLocalDateTime().toLocalDate()}</td>
 							<td>${computer.getDisco().toLocalDateTime().toLocalDate()}</td>

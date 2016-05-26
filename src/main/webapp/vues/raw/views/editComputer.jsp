@@ -2,6 +2,8 @@
 <%@ page import="java.util.List"%>
 <%@ page import="com.excilys.model.Company"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +35,7 @@
 
 					<h1>Edit Computer</h1>
 
-					<form action="/ComputerDatabaseMaven/editcomputer" method="POST">
+					<form action="/ComputerDatabaseMaven/editComputer" method="POST">
 
 						<input type="hidden" value="${id}" name="id" id="id"/>
 
@@ -42,13 +44,10 @@
 								<label for="computerName">Computer name</label>
 								<c:choose>
 									<c:when test="${name != null}">
-										<input type="text" class="form-control" id="computerName"
-											name="computerName" placeholder="Computer name"
-											value="${name}">
+										<input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" value="${name}" />
 									</c:when>
 									<c:otherwise>
-										<input type="text" class="form-control" id="computerName"
-											name="computerName" placeholder="Computer name">
+										<input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" />
 									</c:otherwise>
 								</c:choose>
 							</div>
@@ -56,13 +55,10 @@
 								<label for="introduced">Introduced date</label>
 								<c:choose>
 									<c:when test="${name != intro}">
-										<input type="date" class="form-control" id="introduced"
-											name="introduced" placeholder="Introduced date"
-											value="${intro.toLocalDateTime().toLocalDate()}">
+										<input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" value="${intro.toLocalDateTime().toLocalDate()}" />
 									</c:when>
 									<c:otherwise>
-										<input type="date" class="form-control" id="introduced"
-											name="introduced" placeholder="Introduced date">
+										<input type="date" class="form-control" id="introduced"	name="introduced" placeholder="Introduced date" />
 									</c:otherwise>
 								</c:choose>
 							</div>
@@ -70,23 +66,20 @@
 								<label for="discontinued">Discontinued date</label>
 								<c:choose>
 									<c:when test="${name != disco}">
-										<input type="date" class="form-control" id="discontinued"
-											name="discontinued" placeholder="Discontinued date"
-											value="${disco.toLocalDateTime().toLocalDate()}">
+										<input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="${disco.toLocalDateTime().toLocalDate()}" />
 									</c:when>
 									<c:otherwise>
-										<input type="date" class="form-control" id="discontinued"
-											name="discontinued" placeholder="Discontinued date">
+										<input path="disco" type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" />
 									</c:otherwise>
 								</c:choose>
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
-									class="form-control" id="companyId" name="companyId">
+								<label for="companyId">Company</label>
+								 <select class="form-control" id="companyId" name="companyId">
 									<option value="0">-- Empty --</option>
 									<c:forEach items="${companies}" var="compa">
 										<c:choose>
-											<c:when test="${idCompa == compa.getId()}">
+											<c:when test="${idCompa-1 == compa.getId()}">
 												<option value="${compa.getId()}" selected>${compa.getName()}</option>
 											</c:when>
 											<c:otherwise>

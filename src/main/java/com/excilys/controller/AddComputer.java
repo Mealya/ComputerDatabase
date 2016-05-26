@@ -35,10 +35,9 @@ public class AddComputer {
      * The get version of add a computer.
      */
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value="addComputerForm", method = RequestMethod.GET)
     public String addComputerView(ModelMap model, HttpServletRequest request)
             throws IOException {
-        model.addAttribute("addcomputerdto", new AddComputerDTO());
         
         CompanyService workCompt = new CompanyService();
         
@@ -55,13 +54,13 @@ public class AddComputer {
     /**
      * The post version of add a computer.
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public String addComputer(@ModelAttribute("addcomputerdto") @Valid AddComputerDTO addcomputerdto, BindingResult bindingResult, ModelMap model, HttpServletRequest request) throws IOException {
+    @RequestMapping(value="addComputer", method = RequestMethod.POST)
+    public String addComputer(@Valid AddComputerDTO addcomputerdto, BindingResult bindingResult, ModelMap model, HttpServletRequest request) throws IOException {
         /*if (bindingResult.hasErrors()) {
             return "redirect:addComputer";
         }*/
         
-        Computer computerToAdd = Validator.validateComputerAdd(addcomputerdto.getName(), addcomputerdto.getIntro(), addcomputerdto.getDisco(), addcomputerdto.getComp());
+        Computer computerToAdd = Validator.validateComputerAdd(addcomputerdto.getComputerName(), addcomputerdto.getIntroduced(), addcomputerdto.getDiscontinued(), addcomputerdto.getCompanyId());
         
         if (computerToAdd != null) {
             ComputerService serv = new ComputerService();

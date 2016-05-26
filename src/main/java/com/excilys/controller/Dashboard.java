@@ -19,7 +19,6 @@ import com.excilys.service.ComputerService;
 import com.excilys.utils.OrderType;
 
 @Controller
-@RequestMapping("/dash")
 public class Dashboard {
  
     private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
@@ -36,7 +35,7 @@ public class Dashboard {
      * @throws IOException
      *             Error with stream
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value="dashboard", method = RequestMethod.GET)
     public String dashboardView(ModelMap model, HttpServletRequest request) throws IOException {
         long debut = System.currentTimeMillis();
 

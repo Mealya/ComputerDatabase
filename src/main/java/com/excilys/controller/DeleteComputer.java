@@ -24,7 +24,7 @@ public class DeleteComputer {
      * @throws ServletException Error with servlet
      * @throws IOException Error with stream
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="deleteComputer", method = RequestMethod.POST)
     public ModelAndView deleteComputer(HttpServletRequest request) throws IOException {
         String params = request.getParameterValues("selection")[0]; 
      
@@ -36,12 +36,12 @@ public class DeleteComputer {
                 work.deleteComputer(Long.parseLong(c));
             } catch (NumberFormatException e) {
                 //response.sendRedirect("/ComputerDatabaseMaven/dash");
-                return new ModelAndView("redirect:/dash");
+                return new ModelAndView("redirect:/dashboard");
             }
         }
         
         //response.sendRedirect("/ComputerDatabaseMaven/dash?retourn=2");
         //request.setAttribute("retourn", 2);
-        return new ModelAndView("redirect:/dash?retourn=2");
+        return new ModelAndView("redirect:/dashboard?retourn=2");
     }
 }

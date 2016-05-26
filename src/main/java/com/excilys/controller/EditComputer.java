@@ -6,16 +6,20 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.controller.validator.Validator;
+import com.excilys.dto.EditComputerDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyService;
@@ -34,10 +38,9 @@ public class EditComputer {
      * @throws ServletException Error with servlet
      * @throws IOException Error with stream
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value="editComputerForm", method = RequestMethod.GET)
     public String editComputerView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        
         int id = -1;
         try {
             id = Integer.parseInt(request.getParameter("id"));
@@ -87,19 +90,26 @@ public class EditComputer {
      * @throws ServletException Error with servlet
      * @throws IOException Error with stream
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView editComputer(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(value="editComputer", method = RequestMethod.POST)
+    public ModelAndView editComputer(HttpServletRequest request, @Valid EditComputerDTO editcomputerdto, BindingResult bindingResult)
             throws IOException {
-        Computer computer = null;
-
-        computer = Validator.validateComputerEdit(request.getParameter("id"), request.getParameter("computerName"), request.getParameter("introduced"), 
-                request.getParameter("discontinued"), request.getParameter("companyId"));
+        
+        //TODO : when no ID in form
+        if (bindingResult.hasErrors()) {
+            for(ObjectError e : bindingResult.getAllErrors()){
+                System.out.println(e);
+            }
+            return new ModelAndView("redirect:/editComputerForm?id="+editcomputerdto.getId());
+        }
+        
+        Computer computer = Validator.validateComputerEdit(editcomputerdto.getId(), editcomputerdto.getComputerName(), editcomputerdto.getIntroduced(), editcomputerdto.getDiscontinued(), editcomputerdto.getCompanyId());
+         
         if (computer != null) {
             ComputerService serv = new ComputerService();
             serv.updateComputer(computer);
         } else {
             slf4jLogger.warn("Fail to edit a computer");
-            return new ModelAndView("redirect:/editcomputer");
+            return new ModelAndView("redirect:/editComputerForm");
         }
 
 
