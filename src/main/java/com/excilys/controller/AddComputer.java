@@ -36,7 +36,7 @@ public class AddComputer {
      */
     
     @RequestMapping(value="addComputerForm", method = RequestMethod.GET)
-    public String addComputerView(ModelMap model, HttpServletRequest request)
+    public String addComputerView(ModelMap model)
             throws IOException {
         
         CompanyService workCompt = new CompanyService();
@@ -45,9 +45,7 @@ public class AddComputer {
         model.addAttribute("companies", companies);
         
         model.addAttribute("added", 2);
-        /*request.setAttribute("added", 2);
-        this.getServletContext().getRequestDispatcher("/vues/raw/views/addComputer.jsp")
-                .forward(request, response);*/
+
         return "addComputer";
     }
     
@@ -55,10 +53,15 @@ public class AddComputer {
      * The post version of add a computer.
      */
     @RequestMapping(value="addComputer", method = RequestMethod.POST)
-    public String addComputer(@Valid AddComputerDTO addcomputerdto, BindingResult bindingResult, ModelMap model, HttpServletRequest request) throws IOException {
-        /*if (bindingResult.hasErrors()) {
-            return "redirect:addComputer";
-        }*/
+    public String addComputer(@Valid AddComputerDTO addcomputerdto, BindingResult bindingResult, ModelMap model) throws IOException {
+        CompanyService workCompt = new CompanyService();  
+        List<Company> companies = workCompt.getCompanies();
+        model.addAttribute("companies", companies);
+        
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("fail", 1);
+            return "addComputer";
+        }
         
         Computer computerToAdd = Validator.validateComputerAdd(addcomputerdto.getComputerName(), addcomputerdto.getIntroduced(), addcomputerdto.getDiscontinued(), addcomputerdto.getCompanyId());
         
@@ -67,17 +70,14 @@ public class AddComputer {
             serv.createComputer(computerToAdd);
         } else {
             slf4jLogger.error("Fail to add a computer");
+            model.addAttribute("fail", 1);
             return "addComputer";
         }
               
-        CompanyService workCompt = new CompanyService();  
-        List<Company> companies = workCompt.getCompanies();
-        model.addAttribute("companies", companies);
+       
         
         model.addAttribute("added", 1);
-        /*request.setAttribute("added", 1);
-        this.getServletContext().getRequestDispatcher("/vues/raw/views/addComputer.jsp")
-        .forward(request, response);*/
+
         return "addComputer";
         
     }

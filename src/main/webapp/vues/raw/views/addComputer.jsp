@@ -23,7 +23,6 @@
 </style>
 </head>
 <body>
-
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -42,10 +41,10 @@
 			</div>
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="?language=fr"><img
+				<li><a href="/ComputerDatabaseMaven/addComputerForm?language=fr"><img
 						src="vues/raw/fonts/France.png" alt="French"
 						style="width: 25px; height: 25px;"></a></li>
-				<li><a href="?language=en"><img
+				<li><a href="/ComputerDatabaseMaven/addComputerForm?language=en"><img
 						src="vues/raw/fonts/UnitedKingdom.png" alt="UK"
 						style="width: 25px; height: 25px;"></a></li>
 			</ul>
@@ -58,6 +57,9 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<c:if test="${added == 1}">
 						<p id="compuAdded" class="alert alert-success"><spring:message code="add.added" text="Computer added !" /></p>
+					</c:if>
+					<c:if test="${fail == 1}">
+						<p id="compuAdded" class="alert alert-danger"><spring:message code="add.fail" text="Use correct parameters to add a computer" /></p>
 					</c:if>
 
 					<h1><spring:message code="add.title" text="Add computer" /></h1>
@@ -84,7 +86,7 @@
 									<spring:message code="add.Fintro1" text="Enter a valid or empty date" />
 								</div>
 								<div id="warnIntro" class="alert alert-warning" role="alert">
-									<span class="glyphicon glyphicon-exclamation-sign"
+									<span class="glyphicon glyphicon-warning-sign"
 										aria-hidden="true"></span> <span class="sr-only">Error:</span>
 									<spring:message code="add.Fintro2" text="Introduced date is empty" />
 								</div>
@@ -94,7 +96,7 @@
 								<input type="date" class="form-control control-label" id="discontinued" name="discontinued" placeholder="<spring:message code="add.cdisco" text="Discontinued date" />" /> 
 								<span class="glyphicon glyphicon-warning-sign form-control-feedback" id="discontinuedl"></span>
 								<div id="warnDisco" class="alert alert-warning" role="alert">
-									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 
+									<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> 
 									<span class="sr-only"><spring:message code="add.error" text="Error" />:</span>
 									<spring:message code="add.Fdisco2" text="Discontinued date is empty" />
 								</div>
@@ -115,7 +117,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="<spring:message code="add.Badd" text="Add" />" class="btn btn-primary" id="valid"> <spring:message code="add.or" text="Or" /> <a href="/ComputerDatabaseMaven/dashboard" class="btn btn-default"><spring:message code="add.Bcancel" text="Cancel" /></a>
+							<input type="submit" value="<spring:message code="add.Badd" text="Add" />" class="btn btn-primary" id="valid" disabled> <spring:message code="add.or" text="Or" /> <a href="/ComputerDatabaseMaven/dashboard" class="btn btn-default"><spring:message code="add.Bcancel" text="Cancel" /></a>
 						</div>
 					</form>
 				</div>

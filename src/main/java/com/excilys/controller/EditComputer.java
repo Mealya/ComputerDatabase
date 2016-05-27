@@ -85,9 +85,9 @@ public class EditComputer {
         
         //TODO : when no ID in form
         if (bindingResult.hasErrors()) {
-            for(ObjectError e : bindingResult.getAllErrors()){
+            /*for(ObjectError e : bindingResult.getAllErrors()){
                 System.out.println(e);
-            }
+            }*/
             return new ModelAndView("redirect:/editComputerForm?id="+editcomputerdto.getId());
         }
         

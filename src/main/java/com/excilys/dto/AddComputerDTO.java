@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class AddComputerDTO {
 
     
-    @Size(min=1, max=45)
+    @Size(min=2, max=45)
     private String computerName;
     
     @Pattern(regexp = "(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-((19|20)\\d\\d)|((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])|^$")
