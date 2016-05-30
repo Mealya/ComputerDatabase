@@ -23,6 +23,7 @@ import com.excilys.utils.OrderType;
 /**
  * Created by Angot Maxime on 19/04/16.
  */
+@Deprecated
 public class ComputerDAO implements DAO<Computer> {
 
     private final Logger slf4jLogger = LoggerFactory

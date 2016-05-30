@@ -11,11 +11,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 
 
+
 import com.excilys.dao.DAO;
 import com.excilys.mapper.Mapper;
 import com.excilys.model.Company;
 
-
+@Deprecated
 public class SpringCompanyDAO implements DAO<Company>{
 
     private final Logger slf4jLogger = LoggerFactory

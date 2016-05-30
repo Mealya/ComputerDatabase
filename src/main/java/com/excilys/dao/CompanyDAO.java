@@ -24,6 +24,7 @@ import com.excilys.model.Company;
 /**
  * Created by Angot Maxime on 19/04/16.
  */
+@Deprecated
 public class CompanyDAO implements DAO<Company> {
     
     private final Logger slf4jLogger = LoggerFactory.getLogger(CompanyDAO.class);

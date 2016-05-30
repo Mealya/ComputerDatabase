@@ -3,6 +3,7 @@ package com.excilys.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+@Deprecated
 public interface DAO<T> {
 
     /**

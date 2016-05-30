@@ -29,6 +29,7 @@ import com.excilys.model.Computer;
 import com.excilys.utils.EasyConnection;
 import com.excilys.utils.OrderType;
 
+@Deprecated
 public class SpringComputerDAO implements DAO<Computer>{
 
 
