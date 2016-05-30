@@ -3,17 +3,16 @@ package com.excilys.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +30,12 @@ public class EditComputer {
     private final Logger slf4jLogger = LoggerFactory
             .getLogger(EditComputer.class);
 
+    @Autowired
+    private CompanyService workCompt;
+    
+    @Autowired
+    private ComputerService workCompu;
+    
     /**
      * The get version of edit a computer.
      */
@@ -53,13 +58,10 @@ public class EditComputer {
 
         model.addAttribute("id", id);
 
-        ComputerService work = new ComputerService();
 
-        CompanyService workCompa = new CompanyService();
-
-        List<Company> companies = workCompa.getCompanies();
+        List<Company> companies = workCompt.getCompanies();
         model.addAttribute("companies", companies);
-        Computer temp = work.getComputer(id);
+        Computer temp = workCompu.getComputer((long) id);
         if (temp.getName() != null) {
             model.addAttribute("name", temp.getName());
         }
@@ -94,8 +96,7 @@ public class EditComputer {
         Computer computer = Validator.validateComputerEdit(editcomputerdto.getId(), editcomputerdto.getComputerName(), editcomputerdto.getIntroduced(), editcomputerdto.getDiscontinued(), editcomputerdto.getCompanyId());
          
         if (computer != null) {
-            ComputerService serv = new ComputerService();
-            serv.updateComputer(computer);
+            workCompu.updateComputer(computer);
         } else {
             slf4jLogger.warn("Fail to edit a computer");
             return new ModelAndView("redirect:/editComputerForm");

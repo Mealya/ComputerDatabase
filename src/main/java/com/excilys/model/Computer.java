@@ -2,26 +2,44 @@ package com.excilys.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "computer")
 public class Computer {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    @Column(name = "name")
     @Size(min=1, max=45)
     private String name;
     
+    @Column(name = "introduced")
     private Timestamp intro;
+    
+    @Column(name = "discontinued")
     private Timestamp disco;
     
-    private Company comp;
+    @ManyToOne
+    private Company company;
 
     /**
      * Create an empty computer.
-     */
+    
     public Computer() {
 
-    }
+    } */
 
     /**
      * Create a Computer with all parameters.
@@ -33,10 +51,10 @@ public class Computer {
      *            The introduced date of the computer
      * @param disco
      *            The discontinued date of the computer
-     * @param comp
+     * @param company
      *            The company linked to the computer
      */
-    public Computer(long id, String name, Timestamp intro, Timestamp disco,
+    /*public Computer(long id, String name, Timestamp intro, Timestamp disco,
             Company comp) {
         super();
         this.id = id;
@@ -44,12 +62,12 @@ public class Computer {
         this.intro = intro;
         this.disco = disco;
         this.comp = comp;
-    }
+    }*/
 
     @Override
     public String toString() {
         return "Computer [id=" + id + ", name=" + name + ", intro=" + intro
-                + ", disco=" + disco + ", comp=" + comp + "]";
+                + ", disco=" + disco + ", comp=" + company + "]";
     }
 
 
@@ -87,11 +105,11 @@ public class Computer {
     }
 
     public Company getComp() {
-        return comp;
+        return company;
     }
 
     public void setComp(Company comp) {
-        this.comp = comp;
+        this.company = comp;
     }
 
     /*
@@ -102,7 +120,7 @@ public class Computer {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((comp == null) ? 0 : comp.hashCode());
+        result = prime * result + ((company == null) ? 0 : company.hashCode());
         result = prime * result + ((disco == null) ? 0 : disco.hashCode());
         result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + ((intro == null) ? 0 : intro.hashCode());
@@ -129,11 +147,11 @@ public class Computer {
         }
 
         Computer other = (Computer) obj;
-        if (comp == null) {
-            if (other.comp != null) {
+        if (company == null) {
+            if (other.company != null) {
                 return false;
             }
-        } else if (!comp.equals(other.comp)) {
+        } else if (!company.equals(other.company)) {
             return false;
         }
 

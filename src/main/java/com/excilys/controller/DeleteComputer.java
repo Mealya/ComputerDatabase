@@ -2,10 +2,9 @@ package com.excilys.controller;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +16,9 @@ import com.excilys.service.ComputerService;
 @Controller
 public class DeleteComputer {
 
+    @Autowired
+    private ComputerService workCompu;
+    
     /**
      * The post version of delete a computer.
      */
@@ -26,10 +28,9 @@ public class DeleteComputer {
      
         String result[] = (params.split(",")); 
 
-        ComputerService work = new ComputerService();
         for (String c : result) {
             try {
-                work.deleteComputer(Long.parseLong(c));
+                workCompu.deleteComputer(Long.parseLong(c));
             } catch (NumberFormatException e) {
                 //response.sendRedirect("/ComputerDatabaseMaven/dash");
                 return new ModelAndView("redirect:/dashboard");

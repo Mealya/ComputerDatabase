@@ -1,19 +1,19 @@
 package com.excilys.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.model.Computer;
@@ -21,10 +21,19 @@ import com.excilys.service.ComputerService;
 import com.excilys.utils.OrderType;
 
 @Controller
+@Configuration
 public class Dashboard {
  
     private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
+    
+    private ComputerService workCompu;
+    
 
+    @Autowired(required = true)
+    public void setComputerService(ComputerService ComputerService) {
+        this.workCompu = ComputerService;
+    }
+    
     /**
      * The get version of the dashboard.
      */
@@ -75,10 +84,10 @@ public class Dashboard {
             search = request.getParameter("search");
         }
 
-        ComputerService workingDB = new ComputerService();
 
         /* Paramétrage de la requête d'ensemble */
-        long computersLong = workingDB.getSizeTable();
+        
+        long computersLong = workCompu.getSizeTable();
         if (computersLong < (page - 1) * 15) {
             page = 1;
         }
@@ -88,8 +97,9 @@ public class Dashboard {
         List<Computer> computers = null;
 
         /* Tri de la liste si la recherche existe */
+        
         if (search != null) {
-            List<Computer> temp = workingDB.searchFor(search);
+            List<Computer> temp = workCompu.searchFor(search);
             if (temp.size() < size) {
                 computers = temp;
             } else {
@@ -97,11 +107,16 @@ public class Dashboard {
             }
            
         } else if (orderBy != null) {
-            computers = workingDB.getSetComputer(low, size, orderBy);
+            computers = workCompu.getSetComputer(low, size, orderBy);
         } else {
-            computers = workingDB.getSetComputer(low, size);
+            computers = workCompu.getComputers();
         }
-        
+        /*
+        computers = new ArrayList<Computer>();
+        Computer c = new Computer();
+        c.setId(0);
+        c.setName("Test");
+        computers.add(c);*/
         
         /* Attributs de retour suite aux requêtes */
         model.addAttribute("computers", computers);

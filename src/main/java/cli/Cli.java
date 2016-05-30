@@ -8,16 +8,18 @@ import com.excilys.dao.ComputerDAO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyService;
+import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerService;
+import com.excilys.service.ComputerServiceImpl;
 
 public class Cli {
 
     public static void main(String[] argv) {
 
         ComputerDAO compt = new ComputerDAO();
-        ComputerService workingDB = new ComputerService();
+        ComputerService workingDB = new ComputerServiceImpl();
         
-        CompanyService workingCompany = new CompanyService();
+        CompanyService workingCompany = new CompanyServiceImpl();
 
         Scanner sc = new Scanner(System.in);
         Scanner sc2 = new Scanner(System.in);
