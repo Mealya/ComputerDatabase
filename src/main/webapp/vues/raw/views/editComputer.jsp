@@ -69,7 +69,7 @@
 										<input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" value="${disco.toLocalDateTime().toLocalDate()}" />
 									</c:when>
 									<c:otherwise>
-										<input path="disco" type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" />
+										<input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" />
 									</c:otherwise>
 								</c:choose>
 							</div>
@@ -79,7 +79,7 @@
 									<option value="0">-- Empty --</option>
 									<c:forEach items="${companies}" var="compa">
 										<c:choose>
-											<c:when test="${idCompa-1 == compa.getId()}">
+											<c:when test="${idCompa == compa.getId()}">
 												<option value="${compa.getId()}" selected>${compa.getName()}</option>
 											</c:when>
 											<c:otherwise>

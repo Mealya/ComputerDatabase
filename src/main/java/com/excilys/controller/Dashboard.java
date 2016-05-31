@@ -42,7 +42,7 @@ public class Dashboard {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
         
-        int page = 1;
+        int page = 0;
         int size = 15;
     
 
@@ -50,6 +50,7 @@ public class Dashboard {
         if (request.getParameter("page") != null) {
             try {
                 page = Integer.parseInt(request.getParameter("page"));
+                page--;
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for page " + e.getMessage());
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -86,7 +87,6 @@ public class Dashboard {
 
 
         /* Paramétrage de la requête d'ensemble */
-        
         long computersLong = workCompu.getSizeTable();
         if (computersLong < (page - 1) * 15) {
             page = 1;
@@ -100,16 +100,17 @@ public class Dashboard {
         
         if (search != null) {
             List<Computer> temp = workCompu.searchFor(search);
-            if (temp.size() < size) {
+            computers = temp;
+            /*if (temp.size() < size) {
                 computers = temp;
             } else {
                 computers = temp.subList(0, size);
-            }
-           
+            }*/
+            computersLong = temp.size();
         } else if (orderBy != null) {
-            computers = workCompu.getSetComputer(low, size, orderBy);
+            computers = workCompu.getSetComputer(page, size, orderBy);
         } else {
-            computers = workCompu.getComputers();
+            computers = workCompu.getSetComputer(page, size);
         }
         /*
         computers = new ArrayList<Computer>();

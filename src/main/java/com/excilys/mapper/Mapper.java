@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
@@ -125,5 +127,11 @@ public class Mapper {
         return compuTemp;
     }
 
-
+    public static List<Computer> pageToList(Page<Computer> page) {
+        List<Computer> computers = new ArrayList<Computer>(page.getSize());
+        for (Computer c : page) {
+            computers.add(c);
+        }
+        return computers;
+    }
 }

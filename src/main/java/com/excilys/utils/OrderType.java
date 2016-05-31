@@ -1,14 +1,16 @@
 package com.excilys.utils;
 
+import org.springframework.data.domain.Sort.Direction;
+
 public enum OrderType {
     NAME_ASC("name;asc"),
     NAME_DESC("name;desc"),
     
-    INTRODUCED_ASC("introduced;asc"),
-    INTRODUCED_DESC("introduced;desc"),
+    INTRODUCED_ASC("intro;asc"),
+    INTRODUCED_DESC("intro;desc"),
     
-    DISCONTINUED_ASC("discontinued;asc"),
-    DISCONTINUED_DESC("discontinued;desc"),
+    DISCONTINUED_ASC("disco;asc"),
+    DISCONTINUED_DESC("disco;desc"),
     
     COMPAID_ASC("company_id;asc"),
     COMPAID_DESC("company_id;desc");
@@ -32,5 +34,16 @@ public enum OrderType {
           }
         }
         return null;
-      }
+    }
+    public Direction getOrder() {
+        String order[] = orderType.split(";");
+        switch (order[1]) {
+        case "asc" :
+            return Direction.ASC;
+        case "desc" :
+            return Direction.DESC;
+        default :
+            return Direction.ASC;
+        }
+    }
 }

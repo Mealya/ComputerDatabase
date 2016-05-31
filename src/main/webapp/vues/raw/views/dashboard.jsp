@@ -128,30 +128,30 @@
 						</c:choose>
 
 						<c:choose>
-							<c:when test="${param.orderby eq 'introduced;asc'}">
+							<c:when test="${param.orderby eq 'intro;asc'}">
 								<th><a
-									href="${currentURL}${currentParams}orderby=introduced;desc">
+									href="${currentURL}${currentParams}orderby=intro;desc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
 								</a><spring:message code="dashboard.cintro" text="Introduced date" /></th>
 							</c:when>
 							<c:otherwise>
 								<th><a
-									href="${currentURL}${currentParams}orderby=introduced;asc">
+									href="${currentURL}${currentParams}orderby=intro;asc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
 								</a><spring:message code="dashboard.cintro" text="Introduced date" /></th>
 							</c:otherwise>
 
 						</c:choose>
 						<c:choose>
-							<c:when test="${param.orderby eq 'discontinued;asc'}">
+							<c:when test="${param.orderby eq 'disco;asc'}">
 								<th><a
-									href="${currentURL}${currentParams}orderby=discontinued;desc">
+									href="${currentURL}${currentParams}orderby=disco;desc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
 								</a><spring:message code="dashboard.cdisco" text="Discontinued date" /></th>
 							</c:when>
 							<c:otherwise>
 								<th><a
-									href="${currentURL}${currentParams}orderby=discontinued;asc">
+									href="${currentURL}${currentParams}orderby=disco;asc">
 										<span class="glyphicon glyphicon glyphicon-sort"></span>
 								</a><spring:message code="dashboard.cdisco" text="Discontinued date" /></th>
 							</c:otherwise>
@@ -225,57 +225,62 @@
 			</table>
 		</div>
 	</section>
-	<footer class="navbar-fixed-bottom">
-		<div class="container text-center">
-			<page:pagination pageCourante="${param.page}"
-				nbComputers="${nbComputers}" 
-				lang="${param.language}"/>
+	<c:choose>
+		<c:when test="${param.search == null}">
+			<footer class="navbar-fixed-bottom">
+				<div class="container text-center">
+					<page:pagination pageCourante="${param.page}"
+						nbComputers="${nbComputers}" lang="${param.language}" />
 
-			<!-- Boutons taille des pages -->
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<c:choose>
-					<c:when test="${param.language != null}">
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10&language=${param.language}';"
-							class="btn btn-default">10</button>
-					</c:when>
-					<c:otherwise>
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10';"
-							class="btn btn-default">10</button>
-					</c:otherwise>
-				</c:choose>
+					<!-- Boutons taille des pages -->
+					<div class="btn-group btn-group-sm pull-right" role="group">
+						<c:choose>
+							<c:when test="${param.language != null}">
+								<button type="button"
+									onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10&language=${param.language}';"
+									class="btn btn-default">10</button>
+							</c:when>
+							<c:otherwise>
+								<button type="button"
+									onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=10';"
+									class="btn btn-default">10</button>
+							</c:otherwise>
+						</c:choose>
 
-				<c:choose>
-					<c:when test="${param.language != null}">
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50&language=${param.language}';"
-							class="btn btn-default">50</button>
-					</c:when>
-					<c:otherwise>
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50';"
-							class="btn btn-default">50</button>
-					</c:otherwise>
-				</c:choose>
+						<c:choose>
+							<c:when test="${param.language != null}">
+								<button type="button"
+									onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50&language=${param.language}';"
+									class="btn btn-default">50</button>
+							</c:when>
+							<c:otherwise>
+								<button type="button"
+									onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=50';"
+									class="btn btn-default">50</button>
+							</c:otherwise>
+						</c:choose>
 
-				<c:choose>
-					<c:when test="${param.language != null}">
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100&language=${param.language}';"
-							class="btn btn-default">100</button>
-					</c:when>
-					<c:otherwise>
-						<button type="button"
-							onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100';"
-							class="btn btn-default">100</button>
-					</c:otherwise>
-				</c:choose>
+						<c:choose>
+							<c:when test="${param.language != null}">
+								<button type="button"
+									onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100&language=${param.language}';"
+									class="btn btn-default">100</button>
+							</c:when>
+							<c:otherwise>
+								<button type="button"
+									onclick="window.location.href ='/ComputerDatabaseMaven/dashboard?size=100';"
+									class="btn btn-default">100</button>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</div>
+			</footer>
+		</c:when>
+		<c:otherwise>
 
+		</c:otherwise>
+	</c:choose>
 
-			</div>
-		</div>
-	</footer>
 	<script src="vues/raw/js/jquery.min.js"></script>
 	<script src="vues/raw/js/bootstrap.min.js"></script>
 	<script src="vues/raw/js/dashboard.js"></script>

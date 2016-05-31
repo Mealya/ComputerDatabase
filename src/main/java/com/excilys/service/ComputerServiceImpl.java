@@ -2,18 +2,19 @@ package com.excilys.service;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-
+import com.excilys.mapper.Mapper;
 import com.excilys.model.Computer;
-import com.excilys.repository.CompanyRepository;
 import com.excilys.repository.ComputerRepository;
 import com.excilys.utils.OrderType;
 
@@ -43,11 +44,14 @@ public class ComputerServiceImpl implements ComputerService {
     @Override
     @Transactional
     public List<Computer> searchFor(String name) {
-        return new ArrayList<Computer>();
-        /*if (name == null) {
+        if (name == null) {
             throw new IllegalArgumentException("Name non valide");
         }
-        return computerRep.find(name);*/
+        Set<Computer> founds = new HashSet<Computer>();
+        founds.addAll(computerRep.findComputerName(name));
+        founds.addAll(computerRep.findCompanyName(name));
+        return new ArrayList<Computer>(founds);
+        //return computerRep.find(name);
     }
     
     @Override
@@ -93,24 +97,23 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     @Transactional
-    public List<Computer> getSetComputer(int low, int height) {
-        return new ArrayList<Computer>();
-        //return computerRep.set(low, height);
+    public List<Computer> getSetComputer(int page, int size) {
+       return Mapper.pageToList(computerRep.findAll(new PageRequest(page, size)));
     }
     
     @Override
     @Transactional
-    public List<Computer> getSetComputer(int low, int height, OrderType ord) {
+    public List<Computer> getSetComputer(int page, int size, OrderType ord) {
         /*if (low >= height) {
             throw new IllegalArgumentException("low >= height");
-        }
-        if (low < 0) {
-            throw new IllegalArgumentException("low is negative");
-        }
-        if (height < 0) {
-            throw new IllegalArgumentException("low is negative");
         }*/
-        return new ArrayList<Computer>();
+        if (page < 0) {
+            throw new IllegalArgumentException("page is negative");
+        }
+        if (size < 0) {
+            throw new IllegalArgumentException("size is negative");
+        }
+        return Mapper.pageToList(computerRep.findAll(new PageRequest(page, size, new Sort(ord.getOrder(), ord.toString().split(";")[0]))));
         /*
         String order[] = ord.toString().split(";");
         return computerRep.set(low, height, order[0], order[1]);*/
