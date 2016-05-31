@@ -1,7 +1,6 @@
 package com.excilys.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +36,7 @@ public class Dashboard {
     /**
      * The get version of the dashboard.
      */
-    @RequestMapping(value="dashboard", method = RequestMethod.GET)
+    @RequestMapping(value={"/", "dashboard"}, method = RequestMethod.GET)
     public ModelAndView dashboardView(ModelMap model, HttpServletRequest request) throws IOException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
@@ -91,7 +90,6 @@ public class Dashboard {
         if (computersLong < (page - 1) * 15) {
             page = 1;
         }
-        int low = (page * size) - size;
 
         /* Récupération des résultats pour la page|taille courante */
         List<Computer> computers = null;

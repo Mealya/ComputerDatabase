@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.excilys.dao.ComputerDAO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyService;
@@ -16,7 +15,6 @@ public class Cli {
 
     public static void main(String[] argv) {
 
-        ComputerDAO compt = new ComputerDAO();
         ComputerService workingDB = new ComputerServiceImpl();
         
         CompanyService workingCompany = new CompanyServiceImpl();
@@ -62,7 +60,7 @@ public class Cli {
                 break;
             case 2:
                 long nbPages = 0;
-                nbPages = compt.getSizeTable() / 15;
+                nbPages = workingDB.getSizeTable() / 15;
 
                 for (int i = 0; i < nbPages; i++) {
 

@@ -25,7 +25,7 @@
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
-			<div class="navbar-header">
+			<div class="nav navbar-nav navbar-left">
 			<c:choose>
 					<c:when test="${param.language != null}">
 						<a class="navbar-brand"
@@ -45,6 +45,13 @@
 				<li><a href="?language=en"><img src="vues/raw/fonts/UnitedKingdom.png" alt="UK"
 						style="width: 25px; height: 25px;"></a></li>
 			</ul>
+			<div class="nav navbar-nav navbar-right">
+				<div class="form-group">
+					<button style="margin-top: 11%;" onclick="window.location.href ='/ComputerDatabaseMaven/logout'" type="submit" class="btn btn-primary btn-sm">
+						<span class="glyphicon glyphicon-log-out"></span> Déconnexion
+					</button>
+				</div>
+			</div>
 		</div>
 	</nav>
 	<!-- Current Locale : ${pageContext.response.locale} -->

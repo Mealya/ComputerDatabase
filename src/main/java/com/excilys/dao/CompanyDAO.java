@@ -7,17 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.excilys.database.BasicJdbc;
 import com.excilys.database.ExceptionDB;
 import com.excilys.database.PoolJdbc;
-import com.excilys.database.SpringDataSource;
-import com.excilys.database.ThreadJdbc;
 import com.excilys.database.VirtualConnectTool;
 import com.excilys.model.Company;
 

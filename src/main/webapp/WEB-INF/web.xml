@@ -51,7 +51,7 @@
 		<url-pattern>*.png</url-pattern>
 	</servlet-mapping>
 	
-	<!-- Mapping erreurs
+	<!-- Mapping erreurs -->
 	<error-page>
 		<location>/vues/raw/views/404.jsp</location>
 	</error-page>
@@ -70,5 +70,5 @@
 	<error-page>
 		<error-code>403</error-code>
 		<location>/vues/raw/views/403.jsp</location>
-	</error-page> -->
+	</error-page> 
 </web-app>

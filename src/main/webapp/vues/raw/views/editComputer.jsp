@@ -3,6 +3,7 @@
 <%@ page import="com.excilys.model.Company"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -17,12 +18,37 @@
 <link href="vues/raw/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
-				Application - Computer Database </a>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="nav navbar-nav navbar-left">
+			<c:choose>
+					<c:when test="${param.language != null}">
+						<a class="navbar-brand"
+							href="/ComputerDatabaseMaven/dashboard?language=${param.language}">
+					<spring:message code="dashboard.name" text="App computer DB" /></a>
+					</c:when>
+					<c:otherwise>
+						<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
+					<spring:message code="dashboard.name" text="App computer DB" /></a>
+					</c:otherwise>
+				</c:choose>
+			</div>
+
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="?language=fr"><img src="vues/raw/fonts/France.png" alt="French"
+						style="width: 25px; height: 25px;"></a></li>
+				<li><a href="?language=en"><img src="vues/raw/fonts/UnitedKingdom.png" alt="UK"
+						style="width: 25px; height: 25px;"></a></li>
+			</ul>
+			<div class="nav navbar-nav navbar-right">
+				<div class="form-group">
+					<button style="margin-top: 11%;" onclick="window.location.href ='/ComputerDatabaseMaven/logout'" type="submit" class="btn btn-primary btn-sm">
+						<span class="glyphicon glyphicon-log-out"></span> Déconnexion
+					</button>
+				</div>
+			</div>
 		</div>
-	</header>
+	</nav>
 	<section id="main">
 		<div class="container">
 			<div class="row">

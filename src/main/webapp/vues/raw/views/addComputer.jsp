@@ -25,29 +25,33 @@
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
-			<div class="navbar-header">
-				<c:choose>
+			<div class="nav navbar-nav navbar-left">
+			<c:choose>
 					<c:when test="${param.language != null}">
 						<a class="navbar-brand"
-							href="/ComputerDatabaseMaven/dashboard?language=${param.language}"><spring:message
-								code="add.name" text="App computer DB" /> </a>
+							href="/ComputerDatabaseMaven/dashboard?language=${param.language}">
+					<spring:message code="dashboard.name" text="App computer DB" /></a>
 					</c:when>
 					<c:otherwise>
-						<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard"><spring:message
-								code="add.name" text="App computer DB" /> </a>
+						<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
+					<spring:message code="dashboard.name" text="App computer DB" /></a>
 					</c:otherwise>
 				</c:choose>
-
 			</div>
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="/ComputerDatabaseMaven/addComputerForm?language=fr"><img
-						src="vues/raw/fonts/France.png" alt="French"
+				<li><a href="?language=fr"><img src="vues/raw/fonts/France.png" alt="French"
 						style="width: 25px; height: 25px;"></a></li>
-				<li><a href="/ComputerDatabaseMaven/addComputerForm?language=en"><img
-						src="vues/raw/fonts/UnitedKingdom.png" alt="UK"
+				<li><a href="?language=en"><img src="vues/raw/fonts/UnitedKingdom.png" alt="UK"
 						style="width: 25px; height: 25px;"></a></li>
 			</ul>
+			<div class="nav navbar-nav navbar-right">
+				<div class="form-group">
+					<button style="margin-top: 11%;" onclick="window.location.href ='/ComputerDatabaseMaven/logout'" type="submit" class="btn btn-primary btn-sm">
+						<span class="glyphicon glyphicon-log-out"></span> Déconnexion
+					</button>
+				</div>
+			</div>
 		</div>
 	</nav>
 
