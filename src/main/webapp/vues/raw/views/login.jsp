@@ -11,7 +11,8 @@
 	<link href="vues/raw/css/font-awesome.css" rel="stylesheet"
 		media="screen">
 	<link href="vues/raw/css/main.css" rel="stylesheet" media="screen">
-  </head>
+
+</head>
   <body>
   <header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -44,10 +45,11 @@
 	                </div> 
 	                <div class="form-group">
 		                <label for="password">Password</label>
-		                <input type="password" id="password" name="password"/>    
+		                <input type="password" id="password_default" name="password_default"/>    
+		                <input type="hidden" id="password" name="password"/>    
 	                </div> 
 	                <div class="form-actions">
-	                    <button type="submit" class="btn">Log in</button>
+	                    <button id="cmd_valider" type="submit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Log in</button>
 	                </div>
 	            </fieldset>
 	        </form>
@@ -55,8 +57,19 @@
 	    </div>
 	    </div>
     </section>
+    
 	<script src="vues/raw/js/jquery.min.js"></script>
 	<script src="vues/raw/js/bootstrap.min.js"></script>
 	<script src="vues/raw/js/validation.js"></script>
+	<script src="vues/raw/js/jquery.sha256.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#cmd_valider").on("click", function(){
+				var mdp = $("#password_default").val();
+				var mdpcrypt = $.sha256(mdp);
+				$("#password").val(mdpcrypt);
+			});
+		});
+	</script>
   </body>
 </html>

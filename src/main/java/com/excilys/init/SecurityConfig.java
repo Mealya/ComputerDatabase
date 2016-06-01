@@ -2,23 +2,36 @@ package com.excilys.init;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import com.excilys.model.User;
+import com.excilys.service.UserService;
 
 @Configuration 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private UserService userServ;
+    
+    
+    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)
             throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("123456")
-                .roles("USER");
-        auth.inMemoryAuthentication().withUser("root").password("123456")
+        for (User u : userServ.getAllUsers()) {
+            if (u.getName().equals("root")) {
+                auth.inMemoryAuthentication().withUser(u.getName()).password(u.getPassword())
                 .roles("ADMIN");
+            } else {
+                auth.inMemoryAuthentication().withUser(u.getName()).password(u.getPassword())
+                .roles("USER");
+            }
+        }
+        
+        
     }
 
     @Override
@@ -40,4 +53,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .csrf().disable();
     }
+
 }
