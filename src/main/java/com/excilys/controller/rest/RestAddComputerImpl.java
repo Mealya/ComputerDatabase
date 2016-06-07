@@ -1,6 +1,5 @@
-package com.excilys.controller;
+package com.excilys.controller.rest;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,24 +7,26 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.excilys.controller.AddComputer;
 import com.excilys.controller.dtomapper.Mappator;
+import com.excilys.controller.rest.RestAddComputer;
 import com.excilys.dto.AddComputerDTO;
+import com.excilys.dto.rest.AddComputerRestDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
-
-
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 
-@Controller
-public class AddComputer {
-
+@RestController
+@RequestMapping("/rest/")
+public class RestAddComputerImpl implements RestAddComputer {
     private final Logger slf4jLogger = LoggerFactory.getLogger(AddComputer.class);
     
     @Autowired
@@ -34,32 +35,22 @@ public class AddComputer {
     @Autowired
     private ComputerService workCompu;
     
-    /**
-     * The get version of add a computer.
-     */
+
     @RequestMapping(value="addComputerForm", method = RequestMethod.GET)
-    public String addComputerView(ModelMap model)
-            throws IOException {
-
+    public ResponseEntity<?> addComputerView() {
         List<Company> companies = workCompt.getCompanies();
-        model.addAttribute("companies", companies);
-        
-        model.addAttribute("added", 2);
-
-        return "addComputer";
+        return ResponseEntity.status(HttpStatus.OK).body(companies);
     }
     
-    /**
-     * The post version of add a computer.
-     */
+
     @RequestMapping(value="addComputer", method = RequestMethod.POST)
-    public String addComputer(@Valid AddComputerDTO addcomputerdto, BindingResult bindingResult, ModelMap model) throws IOException {
+    public ResponseEntity<?> addComputer(@Valid AddComputerDTO addcomputerdto, BindingResult bindingResult) {
         List<Company> companies = workCompt.getCompanies();
-        model.addAttribute("companies", companies);
+        AddComputerRestDTO datas = new AddComputerRestDTO();
+        datas.setCompany(companies);
         
         if (bindingResult.hasErrors()) {
-            model.addAttribute("fail", 1);
-            return "addComputer";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad format");
         }
         
         Computer computerToAdd = Mappator.computerToAdd(addcomputerdto.getComputerName(), addcomputerdto.getIntroduced(), addcomputerdto.getDiscontinued(), addcomputerdto.getCompanyId());
@@ -68,13 +59,10 @@ public class AddComputer {
             workCompu.createComputer(computerToAdd);
         } else {
             slf4jLogger.error("Fail to add a computer");
-            model.addAttribute("fail", 1);
-            return "addComputer";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail to add a computer");
         }
-        model.addAttribute("added", 1);
-
-        return "addComputer";
-        
+        datas.setComputers(addcomputerdto);
+        return ResponseEntity.status(HttpStatus.OK).body(datas);
     }
 }
 

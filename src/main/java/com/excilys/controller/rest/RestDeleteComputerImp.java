@@ -1,20 +1,22 @@
-package com.excilys.controller;
+package com.excilys.controller.rest;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.excilys.controller.rest.RestDeleteComputer;
 import com.excilys.service.ComputerService;
 
-
-@Controller
-public class DeleteComputer {
+@RestController
+@RequestMapping("/rest/")
+public class RestDeleteComputerImp implements RestDeleteComputer {
 
     @Autowired
     private ComputerService workCompu;
@@ -23,7 +25,7 @@ public class DeleteComputer {
      * The post version of delete a computer.
      */
     @RequestMapping(value="deleteComputer", method = RequestMethod.POST)
-    public ModelAndView deleteComputer(HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> deleteComputer(HttpServletRequest request) throws IOException {
         String params = request.getParameterValues("selection")[0]; 
      
         String result[] = (params.split(",")); 
@@ -32,10 +34,10 @@ public class DeleteComputer {
             try {
                 workCompu.deleteComputer(Long.parseLong(c));
             } catch (NumberFormatException e) {
-                return new ModelAndView("redirect:/dashboard");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible to delete");
             }
         }
        
-        return new ModelAndView("redirect:/dashboard?retourn=2");
+        return ResponseEntity.status(HttpStatus.OK).body("Computer(s) deleted !");
     }
 }

@@ -14,8 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class Admin {
+public class ConnectionApp {
 
+    /*
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public ModelAndView adminPage() {
 
@@ -26,7 +27,7 @@ public class Admin {
 
         return model;
 
-    }
+    }*/
     
     @RequestMapping(value="/logout", method = RequestMethod.GET)
     public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
@@ -34,6 +35,6 @@ public class Admin {
         if (auth != null){    
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+        return "redirect:/login?logout";
     }
 }

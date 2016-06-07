@@ -21,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth)
             throws Exception {
+        // TODO for update : add roles in DB?
         for (User u : userServ.getAllUsers()) {
             if (u.getName().equals("root")) {
                 auth.inMemoryAuthentication().withUser(u.getName()).password(u.getPassword())
@@ -29,15 +30,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 auth.inMemoryAuthentication().withUser(u.getName()).password(u.getPassword())
                 .roles("USER");
             }
-        }
-        
-        
+        }   
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            //.httpBasic() => Basir for dialogue box login
+            //.httpBasic() => Basic for dialogue box login
                 //.and()
                     .authorizeRequests()
                         .antMatchers("/admin").access("hasRole('ADMIN')")
@@ -48,6 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/addComputer") .access("hasRole('ADMIN') or hasRole('USER')")
                         .antMatchers("/addComputerForm") .access("hasRole('ADMIN') or hasRole('USER')")
                         .antMatchers("/deleteComputer") .access("hasRole('ADMIN') or hasRole('USER')")
+                        /*.antMatchers("/rest/") .access("hasRole('ADMIN') or hasRole('USER')")
+                        .antMatchers("/rest/dashboard") .access("hasRole('ADMIN') or hasRole('USER')")
+                        .antMatchers("/rest/editComputer") .access("hasRole('ADMIN') or hasRole('USER')")
+                        .antMatchers("/rest/editComputerForm") .access("hasRole('ADMIN') or hasRole('USER')")
+                        .antMatchers("/rest/addComputer") .access("hasRole('ADMIN') or hasRole('USER')")
+                        .antMatchers("/rest/addComputerForm") .access("hasRole('ADMIN') or hasRole('USER')")
+                        .antMatchers("/rest/deleteComputer") .access("hasRole('ADMIN') or hasRole('USER')")*/
                 .and()
                     .formLogin().loginPage("/login").permitAll()
                 .and()

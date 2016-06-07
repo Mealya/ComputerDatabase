@@ -1,4 +1,4 @@
-package com.excilys.controller.validator;
+package com.excilys.controller.dtomapper;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 
-public class Validator {
+public class Mappator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Validator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Mappator.class);
     
     /**
      * Validate the parameters for a new computer.
@@ -21,7 +21,7 @@ public class Validator {
      * @param company Parameter of the computer
      * @return The computer who need to be added
      */
-    public static Computer validateComputerAdd(String name, String intro, String disco, String company) {
+    public static Computer computerToAdd(String name, String intro, String disco, String company) {
         Computer computer = new Computer();
         
         if (name == null) {
@@ -81,8 +81,8 @@ public class Validator {
      * @param company Parameter of the computer
      * @return The computer who need to be edited
      */
-    public static Computer validateComputerEdit(String id, String name, String intro, String disco, String company) {
-        Computer compu = validateComputerAdd(name, intro, disco, company);
+    public static Computer computerToEdit(String id, String name, String intro, String disco, String company) {
+        Computer compu = computerToAdd(name, intro, disco, company);
         
         if (compu == null) {
             return null;
@@ -97,6 +97,7 @@ public class Validator {
         }
     }
     
+    @Deprecated
     public static Computer validateCompany(Computer c, String company) {
         Company compTemp = null;
         try {

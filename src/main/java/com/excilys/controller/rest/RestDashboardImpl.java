@@ -1,6 +1,5 @@
-package com.excilys.controller;
+package com.excilys.controller.rest;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,22 +7,25 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.excilys.controller.Dashboard;
+import com.excilys.controller.rest.RestDashboard;
+import com.excilys.dto.rest.DashboardRestDTO;
 import com.excilys.model.Computer;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.OrderType;
 
-@Controller
-@Configuration
-public class Dashboard {
- 
-    private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
+@RestController
+@RequestMapping("/rest/")
+public class RestDashboardImpl implements RestDashboard {
+    
+private final Logger slf4jLogger = LoggerFactory.getLogger(Dashboard.class);
     
     private ComputerService workCompu;
     
@@ -33,11 +35,8 @@ public class Dashboard {
         this.workCompu = computerService;
     }
     
-    /**
-     * The get version of the dashboard.
-     */
     @RequestMapping(value={"/", "dashboard"}, method = RequestMethod.GET)
-    public ModelAndView dashboardView(ModelMap model, HttpServletRequest request) throws IOException {
+    public ResponseEntity<?> dashboardView(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("dashboard");
         
@@ -52,7 +51,7 @@ public class Dashboard {
                 page--;
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for page " + e.getMessage());
-                return modelAndView;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
         }
 
@@ -62,7 +61,7 @@ public class Dashboard {
                 size = Integer.parseInt(request.getParameter("size"));
             } catch (NumberFormatException e) {
                 slf4jLogger.info("Bad parameter for size " + e.getMessage());
-                return modelAndView;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
         }
         /* Récupération de l'ordre de tri */
@@ -71,7 +70,7 @@ public class Dashboard {
             orderBy = OrderType.fromString(request.getParameter("orderby"));
             if (orderBy == null) {
                 slf4jLogger.info("Bad parameter for orderby");
-                return modelAndView;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad order type");
             }
         }
 
@@ -102,10 +101,12 @@ public class Dashboard {
             computers = workCompu.getSetComputer(page, size);
         }
         
+        DashboardRestDTO datas = new DashboardRestDTO();
+        
         /* Attributs de retour suite aux requêtes */
-        model.addAttribute("computers", computers);
-        model.addAttribute("nbComputers", computersLong);
-        model.addAttribute("currentURL", request.getRequestURL());
+        datas.setComputers(computers);
+        datas.setNbComputers(computersLong);
+        datas.setCurrent_url(request.getRequestURL().toString());
 
         if (request.getQueryString() != null) {
             String urlParam = request.getQueryString();
@@ -115,14 +116,16 @@ public class Dashboard {
                 for (String s : result) {
                     urlParam += s;
                 }
-                model.addAttribute("currentParams", "?" + urlParam);
+                datas.setCurrent_url("?" + urlParam);
             } else {
-                model.addAttribute("currentParams", "?" + urlParam + "&");
+                datas.setCurrent_url("?" + urlParam + "&");
             }
         } else {
-            model.addAttribute("currentParams", "?");
+            datas.setCurrent_url("?");
 
         }
-        return modelAndView;
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(datas);
     }
 }

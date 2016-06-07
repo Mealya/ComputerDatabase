@@ -1,32 +1,33 @@
-package com.excilys.controller;
+package com.excilys.controller.rest;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.excilys.controller.EditComputer;
 import com.excilys.controller.dtomapper.Mappator;
+import com.excilys.controller.rest.RestDeleteComputer;
 import com.excilys.dto.EditComputerDTO;
+import com.excilys.dto.rest.EditComputerRestDTO;
 import com.excilys.model.Company;
 import com.excilys.model.Computer;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 
-@Controller
-public class EditComputer {
-
+@RestController
+@RequestMapping("/rest/")
+public class RestEditComputerImp implements RestDeleteComputer {
     private final Logger slf4jLogger = LoggerFactory
             .getLogger(EditComputer.class);
 
@@ -36,61 +37,54 @@ public class EditComputer {
     @Autowired
     private ComputerService workCompu;
     
-    /**
-     * The get version of edit a computer.
-     */
+
     @RequestMapping(value="editComputerForm", method = RequestMethod.GET)
-    public String editComputerView(ModelMap model, HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    public ResponseEntity<?> editComputerView(HttpServletRequest request) {
         int id = -1;
         try {
             id = Integer.parseInt(request.getParameter("id"));
         } catch (NumberFormatException e) {
             slf4jLogger.info("Bad parameter for id : " + request.getParameter("id"));
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return "redirect:dashboard";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad parameter id");
         }
         if (id <= 0) {
             slf4jLogger.info("Request with id : " + id);
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            return "redirect:dashboard";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID is invalid");
         }
-
-        model.addAttribute("id", id);
+        EditComputerRestDTO datas = new EditComputerRestDTO();
+        
+        datas.setId("" + id);
 
 
         List<Company> companies = workCompt.getCompanies();
-        model.addAttribute("companies", companies);
+        datas.setCompanies(companies);
         Computer temp = workCompu.getComputer((long) id);
         if (temp.getName() != null) {
-            model.addAttribute("name", temp.getName());
+            datas.setComputerName(temp.getName());
         }
         if (temp.getIntro() != null) {
-            model.addAttribute("intro", temp.getIntro());
+            datas.setIntroduced(temp.getIntro().toString());
         }
         if (temp.getDisco() != null) {
-            model.addAttribute("disco", temp.getDisco());
+            datas.setDiscontinued(temp.getDisco().toString());
         }
         if (temp.getComp() != null) {
-            model.addAttribute("idCompa", temp.getComp().getId());
+            datas.setCompanyId("" + temp.getComp().getId());
         }
 
-        return "editComputer";
+        return ResponseEntity.status(HttpStatus.OK).body(datas);
     }
 
-    /**
-     * The post version of edit a computer.
-     */
+
     @RequestMapping(value="editComputer", method = RequestMethod.POST)
-    public ModelAndView editComputer(HttpServletRequest request, @Valid EditComputerDTO editcomputerdto, BindingResult bindingResult)
-            throws IOException {
+    public ResponseEntity<?> editComputer(HttpServletRequest request, @Valid EditComputerDTO editcomputerdto, BindingResult bindingResult) {
         
         //TODO : when no ID in form
         if (bindingResult.hasErrors()) {
             /*for(ObjectError e : bindingResult.getAllErrors()){
                 System.out.println(e);
             }*/
-            return new ModelAndView("redirect:/editComputerForm?id="+editcomputerdto.getId());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Computer is invalid");
         }
         
         Computer computer = Mappator.computerToEdit(editcomputerdto.getId(), editcomputerdto.getComputerName(), editcomputerdto.getIntroduced(), editcomputerdto.getDiscontinued(), editcomputerdto.getCompanyId());
@@ -99,9 +93,9 @@ public class EditComputer {
             workCompu.updateComputer(computer);
         } else {
             slf4jLogger.warn("Fail to edit a computer");
-            return new ModelAndView("redirect:/editComputerForm");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fail to edit computer");
         }
     
-        return new ModelAndView("redirect:/dashboard?retourn=1");
+        return ResponseEntity.status(HttpStatus.OK).body("Computer edited");
     }
 }

@@ -14,50 +14,52 @@
 
 </head>
   <body>
-  <header class="navbar navbar-inverse navbar-fixed-top">
+	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="/ComputerDatabaseMaven/dashboard">
 				Application - Computer Database </a>
 		</div>
 	</header>
 	<section id="main">
-	<div class="container">
-	<div class="row">
-	    <div tiles:fragment="content">
-	        <form name="f" th:action="@{/login}" method="post">      
-	                 
-	            <fieldset>
-	            <legend>Please Login</legend> 
-	            	<c:if test="${param.error ne null}">
-						<div class="alert alert-danger">    
-	                    	Invalid username and password.
-	                	</div>
-					</c:if>
-	                <c:if test="${param.logout ne null}">
-						<div th:if="${param.logout != null}" class="alert alert-info"> 
-	                    	You have been logged out.
-	                	</div>
-					</c:if>
-	                
-					<div class="form-group">
-		                <label for="username">Username</label>
-		                <input type="text" id="username" name="username"/>       
-	                </div> 
-	                <div class="form-group">
-		                <label for="password">Password</label>
-		                <input type="password" id="password_default" name="password_default"/>    
-		                <input type="hidden" id="password" name="password"/>    
-	                </div> 
-	                <div class="form-actions">
-	                    <button id="cmd_valider" type="submit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-log-in"></span>&nbsp; Log in</button>
-	                </div>
-	            </fieldset>
-	        </form>
-	    </div>
-	    </div>
-	    </div>
-    </section>
-    
+		<div class="container">
+			<div class="row">
+				<div tiles:fragment="content">
+					<form name="f" th:action="@{/login}" method="post">
+						<fieldset>
+							<legend>Please Login</legend>
+							<c:if test="${param.error ne null}">
+								<div class="alert alert-danger">Invalid username or/and
+									password.</div>
+							</c:if>
+							<c:if test="${param.logout ne null}">
+								<div th:if="${param.logout != null}" class="alert alert-info">
+									You have been logged out.</div>
+							</c:if>
+							<noscript>
+								<div class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> You need to activate Javascript to log in !</div>
+							</noscript>
+							<div class="form-group">
+								<label for="username">Username</label> <input type="text"
+									id="username" name="username" />
+							</div>
+							<div class="form-group">
+								<label for="password">Password</label> <input type="password"
+									id="password_default" name="password_default" /> <input
+									type="hidden" id="password" name="password" />
+							</div>
+							<div class="form-actions">
+								<button id="cmd_valider" type="submit"
+									class="btn btn-primary btn-sm">
+									<span class="glyphicon glyphicon-log-in"></span>&nbsp; Log in
+								</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
 	<script src="vues/raw/js/jquery.min.js"></script>
 	<script src="vues/raw/js/bootstrap.min.js"></script>
 	<script src="vues/raw/js/validation.js"></script>

@@ -40,7 +40,8 @@ public class Cli {
 
             switch (choix) {
             case 1:
-                /*
+                // Do nothing now
+                /* 
                  * //compt.setConnexion(tool.getConnection(computerDBName));
                  * Pageable<Computer> page = new Pageable<Computer>(
                  * workingDB.getComputers()); tool.closeConnect(computerDBName);
@@ -192,6 +193,7 @@ public class Cli {
 }
 
 /*
+ * OLD Test script
  * for (Computer c : workingDB.getComputers()) {
  * System.out.println(c.toString()); } tool.closeConnect(computerDBName);
  * 
