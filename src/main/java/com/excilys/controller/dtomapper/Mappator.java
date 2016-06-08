@@ -86,7 +86,11 @@ public class Mappator {
         
         if (compu == null) {
             return null;
-        } else {         
+        } else {
+            if (id == null) {
+                LOGGER.warn("Bad entry for company id : null");
+                return null;
+            }
             try {
                 compu.setId(Long.parseLong(id));
             } catch (NumberFormatException e) {

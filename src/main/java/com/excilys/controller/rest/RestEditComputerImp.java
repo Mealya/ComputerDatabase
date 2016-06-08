@@ -77,18 +77,14 @@ public class RestEditComputerImp implements RestDeleteComputer {
 
 
     @RequestMapping(value="editComputer", method = RequestMethod.POST)
-    public ResponseEntity<?> editComputer(HttpServletRequest request, @Valid EditComputerDTO editcomputerdto, BindingResult bindingResult) {
+    public ResponseEntity<?> editComputer(HttpServletRequest request) {
+
+        Computer computer = Mappator.computerToEdit(request.getParameter("id"),
+                                                    request.getParameter("computerName"),
+                                                    request.getParameter("introduced"),
+                                                    request.getParameter("discontinued"),
+                                                    request.getParameter("companyId"));
         
-        //TODO : when no ID in form
-        if (bindingResult.hasErrors()) {
-            /*for(ObjectError e : bindingResult.getAllErrors()){
-                System.out.println(e);
-            }*/
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Computer is invalid");
-        }
-        
-        Computer computer = Mappator.computerToEdit(editcomputerdto.getId(), editcomputerdto.getComputerName(), editcomputerdto.getIntroduced(), editcomputerdto.getDiscontinued(), editcomputerdto.getCompanyId());
-         
         if (computer != null) {
             workCompu.updateComputer(computer);
         } else {
@@ -96,6 +92,6 @@ public class RestEditComputerImp implements RestDeleteComputer {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fail to edit computer");
         }
     
-        return ResponseEntity.status(HttpStatus.OK).body("Computer edited");
+        return ResponseEntity.status(HttpStatus.OK).body(computer);
     }
 }

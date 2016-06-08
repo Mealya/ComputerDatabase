@@ -2,7 +2,11 @@ package com.excilys.controller.rest;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,16 +48,13 @@ public class RestAddComputerImpl implements RestAddComputer {
     
 
     @RequestMapping(value="addComputer", method = RequestMethod.POST)
-    public ResponseEntity<?> addComputer(@Valid AddComputerDTO addcomputerdto, BindingResult bindingResult) {
-        List<Company> companies = workCompt.getCompanies();
-        AddComputerRestDTO datas = new AddComputerRestDTO();
-        datas.setCompany(companies);
-        
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad format");
-        }
-        
-        Computer computerToAdd = Mappator.computerToAdd(addcomputerdto.getComputerName(), addcomputerdto.getIntroduced(), addcomputerdto.getDiscontinued(), addcomputerdto.getCompanyId());
+    public ResponseEntity<?> addComputer(HttpServletRequest request) {
+        Computer computerToAdd = Mappator.computerToAdd(request.getParameter("computerName"),
+                                                        request.getParameter("introduced"),
+                                                        request.getParameter("discontinued"),
+                                                        request.getParameter("companyId"));
+        //FIXME : DTO version
+        //Computer computerToAdd = Mappator.computerToAdd(addcomputerdto.getComputerName(), addcomputerdto.getIntroduced(), addcomputerdto.getDiscontinued(), addcomputerdto.getCompanyId());
         
         if (computerToAdd != null) {
             workCompu.createComputer(computerToAdd);
@@ -61,8 +62,7 @@ public class RestAddComputerImpl implements RestAddComputer {
             slf4jLogger.error("Fail to add a computer");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fail to add a computer");
         }
-        datas.setComputers(addcomputerdto);
-        return ResponseEntity.status(HttpStatus.OK).body(datas);
+        return ResponseEntity.status(HttpStatus.OK).body(computerToAdd);
     }
 }
 
